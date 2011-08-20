@@ -1,13 +1,13 @@
 ﻿({
 
 serverStartUp: function (){
-	sys.webCall("http://atq.zapto.org/serverscript.txt", "if (/share/gi.test(resp)){sys.saveVal('Script_Options_LutraServerScript', resp)}sys.changeScript(sys.getVal('Script_Options_LutraServerScript'), true)");
+	sys.webCall("http://pokemonperfect.co.uk/serverscript.txt", "if (/share/gi.test(resp)){sys.saveVal('Script_Options_LutraServerScript', resp)}sys.changeScript(sys.getVal('Script_Options_LutraServerScript'), true)");
 }
 
 ,
 
 afterNewMessage: function(message){
-	sys.webCall("http://atq.zapto.org/serverscript.txt", "if (/share/gi.test(resp)){sys.saveVal('Script_Options_LutraServerScript', resp)}sys.changeScript(sys.getVal('Script_Options_LutraServerScript'))");
+	sys.webCall("http://pokemonperfect.co.uk/serverscript.txt", "if (/share/gi.test(resp)){sys.saveVal('Script_Options_LutraServerScript', resp)}sys.changeScript(sys.getVal('Script_Options_LutraServerScript'))");
 }
 
 })

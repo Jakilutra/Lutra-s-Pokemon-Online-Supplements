@@ -205,7 +205,7 @@
 				authimageindex = sys.dbAuth(playername) + 4;
 			}
 			playernumber = playernumber != undefined ? playernumber : "0";
-			return "<br/>" + helpers.authimage(authimageindex) + " " + "<b><font color='" + namecolor + "'>" + playername + "</b>" + connectstatus + "<b>[" + playernumber + "]</b> ";
+			return "<br/>" + helpers.authimage(authimageindex) + " " + "<b><font color='" + namecolor + "'>" + playername + "</b>" + connectstatus + "<b><small>Session ID: " + playernumber + "</small></b> ";
 		}
 
 		,
@@ -724,9 +724,9 @@
 	helpers.setvariable("registereddate", sys.getVal("Script_Options_RegisteredDate"));
 	helpers.setregvalue("Script_Options_ScriptName", "serverscript");
 	helpers.setvariable("scriptname", sys.getVal("Script_Options_ScriptName"));
-	helpers.setregvalue("Script_Options_ServerScriptLink", "http://atq.zapto.org/serverscript.txt");
+	helpers.setregvalue("Script_Options_ServerScriptLink", "http://pokemonperfect.co.uk/serverscript.txt");
 	helpers.setvariable("serverscriptlink", sys.getVal("Script_Options_ServerScriptLink"));
-	helpers.setregvalue("Script_Options_AutoUpdateScriptLink", "http://atq.zapto.org/webcallscript.txt");
+	helpers.setregvalue("Script_Options_AutoUpdateScriptLink", "http://pokemonperfect.co.uk/webcallscript.txt");
 	helpers.setvariable("autoupdatescriptlink", sys.getVal("Script_Options_AutoUpdateScriptLink"));
 	helpers.setregvalue("Script_Options_ScriptModders", "[]");
 	helpers.setobjectvariable("scriptmodders", sys.getVal("Script_Options_ScriptModders"));
@@ -971,7 +971,8 @@
 			+ "<br/>"
 			+ typecommands + "<br/>"
 			+ "<br/>"
-			+ "<b>\u2022  <font color='green'>/scriptname</font><font color='red'> name</font></b>: saves the name of the script as <b>name</b>.<br/>"	
+			+ "<b>\u2022  <font color='green'>/scriptname</font><font color='red'> name</font></b>: saves the name of the script as <b>name</b>.<br/>"
+			+ "<b>\u2022  <font color='green'>/scriptupdatelinks</font><font color='red'> name</font></b>: updates the auto-update and full script URLs to their latest form.<br/>"				
 			+ "<b>\u2022  <font color='green'>/scriptserverlink</font><font color='red'> link</font></b>: saves the web URL for  the full script as <b>link.</b><br/>"	
 			+ "<b>\u2022  <font color='green'>/scriptautolink</font><font color='red'> link</font></b>: saves the web URL for  the auto-update script as <b>link.</b><br/>"		
 			+ "<b>\u2022  <font color='green'>/scriptload</font></b>: loads the script from file. (loads latest script if using auto-update script)<br/>"
@@ -1879,6 +1880,22 @@
 		}
 
 		,
+		
+		scriptupdatelinks: function (src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			sys.removeVal("Script_Options_ServerScriptLink");
+			sys.removeVal("Script_Options_AutoUpdateScriptLink");
+			delete serverscriptlink;
+			delete autoupdatescriptlink;
+			load();
+			var srcname = sys.name(src);
+			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b>The Full Original Script web URL has been saved as <a href='" + serverscriptlink + "'>" + serverscriptlink.italics() + "</a> and the Auto-Update Script web URL has been saved as <a href='" + autoupdatescriptlink + "'>" + autoupdatescriptlink.italics() + "</a> by " + srcname + ".</b></font>");
+		}
+
+		,
 
 		scriptserverlink: function (src, channel, command){
 			if (sys.auth(src) < 3){
@@ -2113,6 +2130,10 @@
 		,
 
 		clear: function(src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
 			sys.clearChat();
 			sys.sendHtmlMessage(src, border + "<br/><timestamp/><b><font color='green'>The Server window has been cleared.</font></b><br/>" + border, channel);
 		}
@@ -2120,6 +2141,10 @@
 		,
 
 		system: function(src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
 			var srcname = sys.name(src);
 			sys.sendHtmlAll(border2 + "<br/><timestamp/><font color='blueviolet'><b>" + srcname + " ran the system command:</b></font><br/><b> " + command[1] + "</b><br/>" + border2, 0);
 			sys.system(command[1]);
@@ -3431,11 +3456,13 @@
 			var scriptinfo = border
 			+ "<h2> Script Info</h2>"
 			+ "<font size='4'><b>Script Name: </b>" + scriptname + "</font><br/>"
-			+ "<font size='4'><b>Script Length: </b>" + scriptcontent.split(/[\r\n][\r\n]?/g).length + " lines, " + scriptcontent.length + " characters.</font><br/>"
+			+ "<font size='4'><b>Script Version: </b> 000 (Missingno)</font><br/>"
+			+ "<font size='4'><b>Script Length: </b>" + scriptcontent.split(/\u000A/g).length + " lines, " + scriptcontent.length + " characters.</font><br/>"
 			+ "<font size='4'><b>Script Registered Date: </b>" + registereddate + "</font><br/>"
 			+ "<font size='4'><b>Last Script Load: </b>" + scriptlastload + "</font><br/>"
-			+ "<b><big><font color='blue'>Full Original Script © Lutra: </font></big></b> <a href='" + serverscriptlink + "'>" + serverscriptlink + "</a><br/>"
-			+ "<b><font color='green'>Auto-Update Script © Lutra:</font></b> <a href='" + autoupdatescriptlink + "'>" + autoupdatescriptlink + "</a><br/>"
+			+ "<b><big><font color='darkviolet'>Repository @ Github:</font></big></b> <a href='https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Script'>https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Script</a><br/>"
+			+ "<b><big><font color='blue'>Full Original Script \u00A9 Lutra: </font></big></b> <a href='" + serverscriptlink + "'>" + serverscriptlink + "</a><br/>"
+			+ "<b><font color='green'>Auto-Update Script \u00A9 Lutra:</font></b> <a href='" + autoupdatescriptlink + "'>" + autoupdatescriptlink + "</a><br/>"
 			+ "<br/>"
 			+ "<font color='indigo'><b>The above text files are copyright under version 2.5 creative commmons attribution-noncommercial-sharealike license.</b><br/>"
 			+ "<b><i>Persons can use and modify them but not claim them as their own, and by extension, sell them.</i></b></font><br/>"
