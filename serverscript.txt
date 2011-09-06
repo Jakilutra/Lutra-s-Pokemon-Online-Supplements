@@ -1,4 +1,4 @@
-(load = function () {
+﻿(load = function () {
 	global = this;
 	helpers = new Object();
 	helpers = { 
@@ -1391,7 +1391,7 @@
 			+ "<br/>"
 			+ typecommands + "<br/>"
 			+ "<br/>"
-			+ "<b>\u2022  <font color='green'>/exportteam</font></b>: displays your exported team.<br/>"
+			+ "<b>\u2022  <font color='green'>/team</font></b>: displays your exported team.<br/>"
 			+ "<b>\u2022  <font color='green'>/rankings</font><font color='red'> player</font></b>: displays <b>player</b>'s rank for each tier.<br/>"
 			+ " \u2013 <b>player</b> is any player in the members database.<br/>"
 			+ "<b>\u2022  <font color='green'>/playersonline</font></b>: displays the players online list.<br/>"
@@ -3235,16 +3235,24 @@
 
 		,
 
-		exportteam: function(src, channel, command){
+		team: function(src, channel, command){
 			var slot, srcname = sys.name(src), gen = sys.gen(src);
-			var viewteammessage = border
-			+ "<h2>" + srcname + "'s Gen" + gen + " Team</h2>";
+			var viewteammessage = border + "<br/>"
+			+ "<b><font size='5'>" + srcname + "'s Gen" + gen + " Team</font></b><br/>";
+			+ "<table>";
+			var id = sys.teamPoke(src, 0);
+			if (id != 0){
+				var gender = sys.teamPokeGender(src, 0), gendername = ({ 2: "female", 1: "male", 0: "neutral"}[gender]), item = sys.teamPokeItem(src, 0);
+				viewteammessage += "<tr><td rowspan='1'><br/><br/><br/><img src='pokemon:num=" + id + "&shiny=false&" + "gender=" + gendername + "&gen=" + gen + "'/><br/>"
+				+ "<img src='item:" + item + "'/></td>";
+			}
+			viewteammessage += "<td rowspan='6'>"
 			for (slot = 0; slot < 6; slot++){
 				var id = sys.teamPoke(src, slot);
 				if (id == 0){
 					break;
 				}
-				var name = sys.pokemon(id), nick = sys.teamPokeNick(src, slot), gender = sys.teamPokeGender(src, slot), genderletter = ({ 2: "(F)", 1: "(M)", 0: ""}[gender]),	 item = sys.teamPokeItem(src, slot), itemname = sys.item(item);
+				var name = sys.pokemon(id), nick = sys.teamPokeNick(src, slot), gender = sys.teamPokeGender(src, slot), gendername = ({ 2: "female", 1: "male", 0: "neutral"}[gender]), genderletter = ({ 2: "(F)", 1: "(M)", 0: ""}[gender]),	 item = sys.teamPokeItem(src, slot), itemname = sys.item(item);
 				viewteammessage += nick + " (" + name + ") " + genderletter + " @ " + itemname + "<br/>";
 				if (gen > 2){
 					var ability = sys.teamPokeAbility(src, slot), abilityname = sys.ability(ability);
@@ -3253,7 +3261,7 @@
 				var ivs = new Array(), evs = new Array(), stat = {5: " Spd", 4: " SDef", 3: " SAtk", 2: " Def", 1: " Atk", 0: " HP"}, statslot;
 				ivs.push(gen);
 				for (statslot = 0; statslot < 6; statslot++){
-					var ivstat = sys.teamPokeDV(src, slot, statslot);	
+					var ivstat = sys.teamPokeDV(src, slot, statslot);
 					if (statslot < 4){
 						ivs.push(ivstat);
 					}
@@ -3266,7 +3274,7 @@
 					if (statslot == 6){
 						ivs[4] = ivstat;
 					}			
-					var evstat = sys.teamPokeEV(src, slot, statslot);			
+					var evstat = sys.teamPokeEV(src, slot, statslot);
 					if (evstat != 0){
 						evs.push(evstat + stat[statslot]);
 					}
@@ -3290,26 +3298,25 @@
 						var hptype = sys.hiddenPowerType.apply(null,ivs), hptypename = sys.type(hptype);
 						movename = "Hidden Power [" + hptypename + "]";
 					}
-					viewteammessage+= "- " + movename +  "<br/>";
+					viewteammessage+= "- " + movename + "<br/>";
 				}
 				viewteammessage += "<br/>";
 			}
-			viewteammessage += "<timestamp/><br/>" 
+			viewteammessage += "</td></tr>";
+			for (slot = 1; slot < 6; slot++){
+				var id = sys.teamPoke(src, slot);
+				if (id == 0){
+					break;
+				}
+				var gender = sys.teamPokeGender(src, slot), gendername = ({ 2: "female", 1: "male", 0: "neutral"}[gender]), item = sys.teamPokeItem(src, slot);
+				viewteammessage += "<tr><td rowspan='1'><br/><br/><img src='pokemon:num=" + id + "&shiny=false&" + "gender=" + gendername + "&gen=" + gen + "'/><br/>"
+				+ "<img src='item:" + item + "'/></td></tr>";
+			}			
+			viewteammessage += "</table><timestamp/><br/>" 
 			+ border;
-			print(viewteammessage);
 			sys.sendHtmlMessage(src, viewteammessage, channel);
 		}
 
-		,
-
-		sendexportteam: function(src, channel, command){
-		}
-
-		,
-
-		requestexportteam: function(src, channel, command){
-		}
-	
 		,
 
 		rankings: function (src, channel, command){
