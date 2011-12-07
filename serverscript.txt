@@ -1667,6 +1667,9 @@
 			+ "<br/>"
 			+ typecommands + "<br/>"
 			+ "<br/>"
+			+ "<b>\u2022  <font color='green'>/mp</font></b>: displays a scripted control panel with you as the target. (My Panel)<br/>"
+			+ "<b>\u2022  <font color='green'>/myaliases</font></b>: displays aliases for your current IP Address if recorded.<br/>"
+			+ "<b>\u2022  <font color='green'>/myips</font></b>: displays IP addresses for your current alias if recorded.<br/>"
 			+ "<b>\u2022  <font color='green'>/team</font></b>: displays your exported team.<br/>"
 			+ "<b>\u2022  <font color='green'>/rankings</font><font color='red'> player</font></b>: displays <b>player</b>'s rank for each tier.<br/>"
 			+ " \u2013 <b>player</b> is any player in the members database.<br/>"
@@ -3946,6 +3949,91 @@
 
 		,
 
+		disconnect: function(src, channel, command){
+			sys.kick(src);
+		}
+
+		,
+
+		mp: function(src, channel, command){
+			var srcip = sys.ip(src), srcname = sys.name(src), srcips = helpers.ips(srcname), aliases = sys.aliases(srcip), aliasesindex, authlevel = sys.dbAuth(srcname), registered = sys.dbRegistered(srcname), mutestatus = "";
+			registered = registered === true ? "<b><font color='green'>Yes</font></b>": "<b><font color='red'>No</font></b>";
+			for (aliasesindex in aliases){
+				aliases[aliasesindex] = members[aliases[aliasesindex]];
+			}
+			if (helpers.mutecheck(srcname)){
+				mutestatus = "<font color='blue'> [Muted] </font>";
+			}
+			var mpmessage = border
+			+ "<h2>My Panel" + mutestatus + "</h2>"
+			+ "<b>Name:</b>" 
+			+ helpers.connectstatus(srcname) + "<br/>"
+			+ "<b>Aliases:</b><br/>"
+			+ aliases + "<br/>"
+			+ "<b>Authority:</b><br/>" 
+			+ "\u2022 " + global["AuthLevel" + authlevel + "Name"] + "<br/>"
+			+ "<b>IP Address:</b><br/>"
+			+ "\u2022 " + srcip + "<br/>"
+			+ "<b>IP Aliases:</b><br/>"
+			+ "\u2022 " + String(srcips).replace(/,/g, ", ") + "<br/>"
+			+ "<b>Name Registered:</b><br/>"
+			+ "\u2022 " + registered + "<br/>"
+			+ "<br/>"
+			+ "<b>Type:</b> <b><font color='red'>/disconnect</font></b> to disconnect yourself.<b><font color='red'> /unregister</font></b> to clear your password.<br/>"
+			+ "<br/>"
+			+ "<timestamp/><br/>"
+			+ border;
+			sys.sendHtmlMessage(src, mpmessage, channel);
+		}
+
+		,
+
+		myaliases: function (src, channel, command){
+			var srcip = sys.ip(src);
+			if (!helpers.ipcheck(srcip)){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to obtain any aliases because they haven't been recorded for your IP address.</i>", channel);
+				return;
+			}
+			var aliasesindex, aliases = iplist[srcip], aliaseslist = new Array();
+			for (aliasesindex in aliases){
+				aliaseslist[aliasesindex] = members[aliases[aliasesindex]];
+			}
+			var myaliasesdisplay = border
+			+ "<h2>My Aliases</h2>"
+			+ String(aliaseslist).replace(/,/g, ", ") + "." + "<br/>"
+			+ "<br/>"
+			+ "<b>Latest Alias:</b> " + antimemberlist[srcip] + "<br/>"
+			+ "<br/>"
+			+ "<timestamp/><br/>"
+			+ border;
+			sys.sendHtmlMessage(src, myaliasesdisplay, channel);
+		}
+
+		,
+
+		myips: function (src, channel, command){
+			var srcname = sys.name(src);
+			if (!helpers.aliascheck(srcname)){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to obtain IP addresses for your alias because they haven't been recorded.</i>", channel);
+				return;
+			}
+			var ipsindex, ips = aliaslist[srcname.toLowerCase()], ipslist = new Array();
+			for (ipsindex in ips){
+				ipslist[ipsindex] = ips[ipsindex];
+			}
+			var myipsdisplay = border
+			+ "<h2> My IP Addresses</h2>"
+			+ String(ipslist).replace(/,/g, ", ") + "<br/>"
+			+ "<br/>"
+			+ "<b>Latest IP address:</b> " + sys.ip(src) + "<br/>"
+			+ "<br/>"
+			+ "<timestamp/><br/>"
+			+ border;
+			sys.sendHtmlMessage(src, myipsdisplay, channel);
+		}
+
+		,
+
 		team: function(src, channel, command){
 			helpers.exportteam(src, src, channel);
 		}
@@ -4098,7 +4186,7 @@
 			var scriptinfo = border
 			+ "<h2> Script Info</h2>"
 			+ "<font size='4'><b>Script Name: </b>" + scriptname + "</font><br/>"
-			+ "<font size='4'><b>Script Version: </b> 001.1 (Bulbasaur hatches)</font><br/>"
+			+ "<font size='4'><b>Script Version: </b> 001.3 (Bulbasaur learns Growl)</font><br/>"
 			+ "<font size='4'><b>Script Length: </b>" + scriptcontent.split(/\u000A/g).length + " lines, " + scriptcontent.length + " characters.</font><br/>"
 			+ "<font size='4'><b>Script Registered Date: </b>" + registereddate + "</font><br/>"
 			+ "<font size='4'><b>Last Script Load: </b>" + scriptlastload + "</font><br/>"
@@ -4133,8 +4221,10 @@
 			+ "<tr><td>/ckick command.</td><td>Yes</td></tr>"
 			+ "<tr><td>/stats - gets information on wins, losses and win ratio for each unique team.</td><td>No</td></tr>"
 			+ "</table>"
-			+ "<h3> Changelogs</h3>"
-			+ "Coming next version...<br/>"
+			+ "<h3> Changelogs - From 1.1 to 1.3</h3>"
+			+ "\u2022 <b><font color='green'>ADDED</font></b> My Panel command [/mp] - a control panel that targets only source<br/>"
+			+ "\u2022 <b><font color='green'>ADDED</font></b> My Aliases command [/myaliases] - getaliases that targets only source<br/>"
+			+ "\u2022 <b><font color='green'>ADDED</font></b> My IPs command [/myips] - getips that targets only source<br/>"
 			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
@@ -4161,12 +4251,6 @@
 			+ border;
 			sys.sendHtmlMessage(src, regchannelslistmessage, channel);
 			
-		}
-
-		,
-
-		disconnect: function(src, channel, command){
-			sys.kick(src);
 		}
 
 		,
