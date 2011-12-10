@@ -893,9 +893,11 @@
 		,
 
 		tourmembersnumber: function(name, channel){
-			var tourmembersnumber = tour[channel].tourmembers.indexOf(name);
-			if (tourmembersnumber != -1){
-				return tourmembersnumber;
+			if (tour[channel].tourmode != 0){
+				var tourmembersnumber = tour[channel].tourmembers.indexOf(name);
+				if (tourmembersnumber != -1){
+					return tourmembersnumber;
+				}
 			}
 		}
 
@@ -953,6 +955,7 @@
 	helpers.setvariable("floodplayers", new Array());
 	helpers.setvariable("silence", 0);
 	helpers.setvariable("shutdown", false);
+	helpers.setvariable("battlesonline", new Object());
 	helpers.setvariable("battlers", new Array());
 	helpers.setregvalue("RangeBanEx_List", "{}");
 	helpers.setobjectvariable("rangebanexlist", sys.getVal("RangeBanEx_List"));
@@ -996,6 +999,10 @@
 	helpers.setvariableprocedure("port", "configload");
 	helpers.setregvalue("Authority_Options_TourAuthLevel1List", "[]");
 	helpers.setobjectvariable("tourauth", sys.getVal("Authority_Options_TourAuthLevel1List"));
+	helpers.setregvalue("Battle_Record", battlers.length/2);
+	helpers.setvariable("battlerecord", sys.getVal("Battle_Record"));
+	helpers.setregvalue("Total_Battles", 0);
+	helpers.setvariable("totalbattles", sys.getVal("Total_Battles"));
 	helpers.setregvalue("Player_Record", sys.numPlayers());
 	helpers.setvariable("playerrecord", sys.getVal("Player_Record"));
 	helpers.setregvalue("Channel_Record", helpers.channelcount());
@@ -1674,6 +1681,7 @@
 			+ "<b>\u2022  <font color='green'>/rankings</font><font color='red'> player</font></b>: displays <b>player</b>'s rank for each tier.<br/>"
 			+ " \u2013 <b>player</b> is any player in the members database.<br/>"
 			+ "<b>\u2022  <font color='green'>/playersonline</font></b>: displays the players online list.<br/>"
+			+ "<b>\u2022  <font color='green'>/battlesonline</font></b>: displays the battles online list.<br/>"
 			+ "<b>\u2022  <font color='green'>/channelsonline</font></b>: displays the channels online list.<br/>"
 			+ "<b>\u2022  <font color='green'>/auths</font></b>: displays the auth list of the server.<br/>"
 			+ "<b>\u2022  <font color='green'>/memorystate</font></b>: displays the server's memory state.<br/>"
@@ -4087,6 +4095,27 @@
 
 		,
 
+		battlesonline: function (src, channel, command){
+			var battle;
+			var battlesmessage = border
+			+ "<h2>Battles Online</h2>"
+			+ "<br/>"
+			+ "<table border='3' cellspacing='0' cellpadding='5'><tr bgcolor='MediumSlateBlue'><th>Battle Number</th><th>Tier</th><th>Runtime</th><th>Player 1</th><th>Player 2</th></tr>";
+			for (battle in battlesonline){
+				var battleruntime = helpers.converttime(new Date() - battlesonline[battle].starttime);
+				battlesmessage += "<tr bgcolor='MediumSlateBlue'><td>" + battle + "</td><td>" + battlesonline[battle].tier + "</td><td>" + battleruntime + "</td><td>" + sys.name(battlesonline[battle].p1) + "</td><td>" + sys.name(battlesonline[battle].p2) + "</td></tr>";
+			}
+			battlesmessage += "</table><br/>"
+			+ "<br/>"
+			+ "<b>Total Battles Online: </b>" + Object.keys(battlesonline).length + "<br/>"
+			+ "<br/>"
+			+ "<timestamp/><br/>"
+			+ border;
+			sys.sendHtmlMessage(src, battlesmessage, channel);			
+		}
+
+		,
+
 		channelsonline: function (src, channel, command){
 			var channelsonline = sys.channelIds(), channelsonlineindex;
 			var channelsmessage = border
@@ -4162,8 +4191,8 @@
 			+ "<font color='red'><b>Record Number of Players Online: </b></font>" + Number(playerrecord) +  "<br/>"
 			+ "<font color='red'><b>Current Number of Players Online: </b></font>" + sys.numPlayers()
 			+ "<font color='indigo'><h3><u>Battles</u></h3></font>"
-			+ "<font color='indigo'><b>Total Number of Battles Registered: </b></font><br/>"
-			+ "<font color='indigo'><b>Record Number of Battles Hosted: </b></font><br/>"
+			+ "<font color='indigo'><b>Total Number of Battles Registered: </b></font>" + totalbattles + "<br/>"
+			+ "<font color='indigo'><b>Record Number of Battles Hosted: </b></font>" + battlerecord + "<br/>"
 			+ "<font color='indigo'><b>Current Number of Battles Hosted: </b></font>" + (battlers.length/2)
 			+ "<font color='blue'><h3><u>Channels</u></h3></font>"
 			+ "<font color='blue'><b>Total Number of Channels Registered: </b></font>" + registeredchannels.length + "<br/>"
@@ -4186,7 +4215,7 @@
 			var scriptinfo = border
 			+ "<h2> Script Info</h2>"
 			+ "<font size='4'><b>Script Name: </b>" + scriptname + "</font><br/>"
-			+ "<font size='4'><b>Script Version: </b> 001.3 (Bulbasaur learns Growl)</font><br/>"
+			+ "<font size='4'><b>Script Version: </b> 001.7(Bulbasaur learns Leech Seed)</font><br/>"
 			+ "<font size='4'><b>Script Length: </b>" + scriptcontent.split(/\u000A/g).length + " lines, " + scriptcontent.length + " characters.</font><br/>"
 			+ "<font size='4'><b>Script Registered Date: </b>" + registereddate + "</font><br/>"
 			+ "<font size='4'><b>Last Script Load: </b>" + scriptlastload + "</font><br/>"
@@ -4221,10 +4250,10 @@
 			+ "<tr><td>/ckick command.</td><td>Yes</td></tr>"
 			+ "<tr><td>/stats - gets information on wins, losses and win ratio for each unique team.</td><td>No</td></tr>"
 			+ "</table>"
-			+ "<h3> Changelogs - From 1.1 to 1.3</h3>"
-			+ "\u2022 <b><font color='green'>ADDED</font></b> My Panel command [/mp] - a control panel that targets only source<br/>"
-			+ "\u2022 <b><font color='green'>ADDED</font></b> My Aliases command [/myaliases] - getaliases that targets only source<br/>"
-			+ "\u2022 <b><font color='green'>ADDED</font></b> My IPs command [/myips] - getips that targets only source<br/>"
+			+ "<h3> Changelogs - From 001.3 to 001.7</h3>"
+			+ "\u2022 <b><font color='green'>ADDED</font></b> /battlesonline<br/>"
+			+ "\u2022 <b><font color='blue'>IMPROVED</font></b> /serverinfo - added battle record and total number of battles<br/>"
+			+ "\u2022 <b><font color='blue'>IMPROVED</font></b> helpers.tourmembersnumber - made it check if a tour was in progress to fix an error<br/>"
 			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
@@ -6845,6 +6874,11 @@
 	,
 
 	battleSetup: function (src, trgt, battle){
+		battlesonline[battle] = new Object();
+		battlesonline[battle].p1 = src;
+		battlesonline[battle].p2 = trgt;
+		battlesonline[battle].starttime = new Date();
+		battlesonline[battle].tier = sys.tier(src) == sys.tier(trgt) ? sys.tier(src) : "None";
 	}
 
 	,
@@ -6857,6 +6891,12 @@
 	afterBattleStarted: function(src, trgt, clauses, rated, mode){
 		battlers.push(src);
 		battlers.push(trgt);
+		if (battlers.length/2 > battlerecord){
+			battlerecord = battlers.length/2;
+			sys.saveVal("Battle_Record", battlerecord);
+		}
+		totalbattles++;
+		sys.saveVal("Total_Battles", totalbattles);
 		var channelids = sys.channelIds(), channelidsindex;
 		for (channelidsindex in channelids){
 			if (tour[channelids[channelidsindex]].tourmode == 2){
@@ -6898,6 +6938,7 @@
 	afterBattleEnded: function(winner, loser, result, battle){
 		battlers.splice(battlers.indexOf(winner), 1); 
 		battlers.splice(battlers.indexOf(loser), 1);
+		delete battlesonline[battle];
 		var channelids = sys.channelIds(), channelidsindex;
 		for (channelidsindex in channelids){
 			if (tour[channelids[channelidsindex]].tourmode == 2){
