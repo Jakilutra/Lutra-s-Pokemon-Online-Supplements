@@ -194,7 +194,7 @@
 		connectstatus: function (playername){
 			var playernumber = sys.id(playername), authimageindex;
 			var connectstatus = playernumber == undefined ? " <font color='red'><b><small>Offline</small></b></font> " : " <font color='green'><b><small>Online</small></b></font> ";
-			var namecolor = playernumber == undefined ? "#000000" : helpers.namecolor(playernumber);
+			var namecolor = playernumber == undefined ? "none" : helpers.namecolor(playernumber);
 			if (sys.battling(playernumber) == true){
 				authimageindex = sys.dbAuth(playername) + 8;
 			}
@@ -278,7 +278,7 @@
 		,
 
 		converttoseconds: function (unit, time){
-			return({"minutes": time*60 , "minute": time*60, "hours": time*3600, "hour": time*3600, "days": time*86400,"day": time*86400}[unit] || time);
+			return({"minutes": time*60 , "minute": time*60, "hours": time*3600, "hour": time*3600, "days": time*86400,"day": time*86400, "weeks": time*604800, "week": time*604800, "months": time*2592000 , "month": time*2592000, "year": time*31536000 , "years": time*31536000}[unit] || time);
 		}
 
 		,
@@ -291,6 +291,12 @@
 				unit = unit + "s";
 			}
 			return unit;
+		}
+
+		,
+
+		nottimeunit: function(unit){
+			return unit != "seconds" && unit != "second" && unit != "minutes" && unit != "minute" && unit != "hours" && unit != "hour" && unit != "days" && unit != "day" && unit != "weeks" && unit != "week" && unit != "months" && unit != "month" && unit != "years" && unit != "year";
 		}
 
 		,
@@ -309,18 +315,16 @@
 
 		configload: function(){
 			var config = sys.getFileContent("config").split("\n"), configindex;
-			var portregexp = new RegExp("server_port","g"); var serverregexp = new RegExp("server_name","g"); var statusregexp = new RegExp("server_private","g");
-			port = "unknown"; servername = "unknown"; status = "unknown";
+			var portregexp = new RegExp("server_port","g"), serverregexp = new RegExp("server_name","g");
+			port = "unknown";
+			servername = "unknown"; 
 			for (configindex in config){
 				if (portregexp.test(config[configindex]) == true){
 					port = config[configindex].substr(12);
 				}
 				if (serverregexp.test(config[configindex]) == true){
-					servername = config[configindex].substring(12);
+					servername = config[configindex].substring(12).replace(/\\xe9/g, "é");
 				}	
-				if (statusregexp.test(config[configindex]) == true){
-					status = config[configindex].substring(15) == 0 ? "public" : "private";
-				}			
 			}
 		}
 
@@ -403,7 +407,9 @@
 			channelsonline[0].ReadyForTour = "off";
    		channelsonline[0].ForceTourBattles = "on";
    		channelsonline[0].AutoStartBattles = "on";
-   		channelsonline[0].EnforceTourClauses = "off";   
+   		channelsonline[0].EnforceTourClauses = "off";  
+   		channelsonline[0].combinecharacters = "off";
+   		channelsonline[0].reversecharacters = "off"; 
 			tour = new Object();
 			tour[0] = new Object();
 			tour[0].tourmode = 0;
@@ -433,6 +439,12 @@
 			}
 			if (channelsregistered["|main|"].EnforceTourClauses != undefined){
 				channelsonline[0].EnforceTourClauses = channelsregistered["|main|"].EnforceTourClauses;
+			}
+			if (channelsregistered["|main|"].combinecharacters != undefined){
+				channelsonline[0].combinecharacters = channelsregistered["|main|"].combinecharacters;
+			}
+			if (channelsregistered["|main|"].reversecharacters != undefined){
+				channelsonline[0].reversecharacters = channelsregistered["|main|"].reversecharacters;
 			}
 			if (channelsregistered["|main|"].owners != undefined){
 				channelsonline[0].owners = channelsregistered["|main|"].owners;
@@ -631,6 +643,10 @@
 				sys.changePokeGender(receiver, slot, gender);
 				sys.changePokeItem(receiver, slot, item);
 				sys.changePokeLevel(receiver, slot, level);
+				if (gen > 1){
+					var shiny = sys.teamPokeShine(sender, slot);
+					sys.changePokeShine(receiver, slot, shiny);
+				}
 				if (gen > 2){
 					var ability = sys.teamPokeAbility(sender, slot), nature = sys.teamPokeNature(sender, slot);
 					sys.changePokeAbility(receiver, slot, ability);
@@ -638,8 +654,9 @@
 				}
 				var statslot;
 				for (statslot = 0; statslot < 6; statslot++){
-					var ivstat = sys.teamPokeDV(sender, slot, statslot);
+					var ivstat = sys.teamPokeDV(sender, slot, statslot), evstat = sys.teamPokeEV(sender, slot, statslot);
 					sys.setTeamPokeDV(receiver, slot, statslot, ivstat);
+					sys.changeTeamPokeEV(receiver, slot, statslot, evstat);
 				}
 				var moveslot;
 				for (moveslot = 0; moveslot < 4; moveslot++){
@@ -928,6 +945,10 @@
 			return (index1 % 2 == 0 && index2 != index1 + 1) || (index1 % 2 == 1 && index1 != index2 + 1) ? true: false;
 		}
 	}
+	helpers.setregvalue("Tiers_Options_TiersName", "servertiers");
+	helpers.setvariable("tiersname", sys.getVal("Tiers_Options_TiersName"));
+	helpers.setregvalue("Tiers_Options_TiersLinks", '{"po":"http://pokemonperfect.co.uk/po_tiers.xml","smogon":"http://pokemonperfect.co.uk/smogon_tiers.xml"}');
+	helpers.setobjectvariable("tierslinks", sys.getVal("Tiers_Options_TiersLinks"));
 	helpers.setregvalue("Script_Options_RegisteredDate", String(new Date()));
 	helpers.setvariable("registereddate", sys.getVal("Script_Options_RegisteredDate"));
 	helpers.setregvalue("Script_Options_ScriptName", "serverscript");
@@ -938,7 +959,7 @@
 	helpers.setvariable("autoupdatescriptlink", sys.getVal("Script_Options_AutoUpdateScriptLink"));
 	helpers.setregvalue("Script_Options_ScriptModders", "[]");
 	helpers.setobjectvariable("scriptmodders", sys.getVal("Script_Options_ScriptModders"));
-	helpers.setregvalue("Script_Options_ScriptThanked", '["coyotte508","Lamperi","Intel_iX","Mystra","NeO","Juno","nesan","kupo", "TheUnknownOne", "GaryTheGengar"]');
+	helpers.setregvalue("Script_Options_ScriptThanked", '["coyotte508","Lamperi","Intel_iX","Mystra","NeO","Juno","nesan","kupo", "TheUnknownOne", "SkarmPiss", "GaryTheGengar"]');
 	helpers.setobjectvariable("scriptthanked", sys.getVal("Script_Options_ScriptThanked"));
 	helpers.setregvalue("Script_Options_ScriptContributors", "[]");
 	helpers.setobjectvariable("scriptcontributors", sys.getVal("Script_Options_ScriptContributors"));
@@ -946,6 +967,8 @@
 	helpers.setobjectvariable("messagecommands", sys.getVal("Commands_Options_MessageCommands"));
 	helpers.setregvalue("Variable_Options_VariableChanges", "on");
 	helpers.setvariable("variablechanges", sys.getVal("Variable_Options_VariableChanges"));
+	helpers.setvariable("serverversion", sys.serverVersion());
+	helpers.setvariable("status", sys.isServerPrivate() ? "private" : "public");
 	helpers.setvariable("open", true);
 	helpers.setvariable("playersonline", new Object());
 	helpers.setregvalue("Flood_Options_FloodTime", 10);
@@ -955,6 +978,8 @@
 	helpers.setvariable("floodplayers", new Array());
 	helpers.setvariable("silence", 0);
 	helpers.setvariable("shutdown", false);
+	helpers.setregvalue("Event_Options_FindBattleMessage", "on");
+	helpers.setvariable("findbattlemessage", sys.getVal("Event_Options_FindBattleMessage"));
 	helpers.setvariable("battlesonline", new Object());
 	helpers.setvariable("battlers", new Array());
 	helpers.setregvalue("RangeBanEx_List", "{}");
@@ -1020,6 +1045,11 @@
 	helpers.setvariable("registeredchannelslimit", sys.getVal("Channel_Options_RegisteredChannelsLimit"));
 	helpers.setregvalue("Main_Channel", "{}");
 	helpers.setvariableprocedure("channelsregistered", "channelsregisteredload");
+	helpers.setregvalue("Quasi_English", "off");
+	helpers.setvariable("quasienglish", sys.getVal("Quasi_English"));
+	helpers.setvariable("future", new Object());
+	helpers.setregvalue("Future_Limit", "5");
+	helpers.setvariable("futurelimit", sys.getVal("Future_Limit"));
 	border = "<font color='Cornflowerblue'><b>\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB</b></font>";
 	border2 = "<font color='MediumBlue'><b>\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB</b></font>";
 	border3 = "<font color='DarkBlue'><b>\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB\u00BB</b></font>";
@@ -1059,12 +1089,16 @@
 			+ "<h2>Chat Options</h2>"
 			+ "<br/>"
 			+ "<font color='maroon'><b>\u2022  The Server topic is currently " + helpers.escapehtml(servertopic).italics() + "</b></font><br/>"
+			+ "<font color='green'><b>\u2022  Quasi-English characters are currently turned " + quasienglish + ".</b></font><br/>"
+			+ "<font color='indigo'><b>\u2022 The Future Limit is currently set to " + futurelimit + " messages.</b></font><br/>" 
 			+ "<h3>Chat Commands</h3>"
 			+ "<br/>"
 			+ typecommands + "<br/>"
 			+ "<br/>"
 			+ "<b>\u2022  <font color='green'>/tempservertopic</font><font color='red'> topic</font></b>: changes the server topic to <b>topic</b> for the duration the server is open for. <b>topic</b> is any text. If <b>topic</b> is <i>off</i>, turns the server topic feature off. If <b>topic</b> is <i>default</i>, changes the server topic to <i>Enjoy your stay at " + servername + "</i><br/>" 
-			+ "<b>\u2022  <font color='green'>/servertopic</font><font color='red'> topic</font></b>: changes the server topic to <b>topic. </b><b>topic</b> is any text. If <b>topic</b> is <i>off</i>, turns the server topic feature off. If <b>topic</b> is <i>default</i>, changes the server topic to <i>Enjoy your stay at " + servername + "</i><br/>" 
+			+ "<b>\u2022  <font color='green'>/servertopic</font><font color='red'> topic</font></b>: changes the server topic to <b>topic. </b><b>topic</b> is any text. If <b>topic</b> is <i>off</i>, turns the server topic feature off. If <b>topic</b> is <i>default</i>, changes the server topic to <i>Enjoy your stay at " + servername + "</i><br/>"
+			+ "<b>\u2022  <font color='green'>/quasienglish</font><font color='red'> status</font></b>: if <b>status</b> is <i>on</i>, players can use characters resembling english ones in their names; if <b>status</b> is <i>off</i>, they cannot use them in their names.<br/>"
+			+ "<b>\u2022  <font color='green'>/futurelimit</font><font color='red'> number</font></b>: sets the maximum limit of future messages to <b>number</b>.<br/>"
 			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
@@ -1114,7 +1148,7 @@
 			+ helperslist + "<br/>"
 			+ "<br/>"
 			+ "<b>Total Number of Helpers:</b> " + helperstotal
-			+ "<h3>Helpers Commands</h3>"
+			+ "<h3>Helpers Option Commands</h3>"
 			+ "<br/>"
 			+ typecommands + "<br/>"
 			+ "<br/>"
@@ -1126,11 +1160,31 @@
 
 		,
 
+		sessionoptions: function(src, channel, command){
+			var sessionlist = "<b><small>" + String(Object.keys(SESSION)).replace(/,/g, ", ") + ".</small></b>", sessiontotal = Object.keys(SESSION).length;
+			var sessionoptionsdisplay = border
+			+ "<h2>SESSION Options</h2>"
+			+ "<h3><u>SESSION Keys List</u></h3>"
+			+ sessionlist + "<br/>"
+			+ "<br/>"
+			+ "<b>Total Number of Session keys:</b> " + sessiontotal
+			+ "<h3>Session Option Commands</h3>"
+			+ "<br/>"
+			+ typecommands + "<br/>"
+			+ "<br/>"
+			+ "<br/>"
+			+ "<timestamp/><br/>"
+			+ border;
+			sys.sendHtmlMessage(src, sessionoptionsdisplay, channel);			
+		}
+
+		,
+
 		dboptions: function(src, channel, command){
 			var dboptionsdisplay = border
 			+ "<h2>Database Options</h2>"
 			+ "<br/>"
-			+ "<h3>Database Commands</h3>"
+			+ "<h3>Database Option Commands</h3>"
 			+ "<br/>"
 			+ typecommands + "<br/>"
 			+ "<br/>"
@@ -1139,7 +1193,8 @@
 			+ "<b>\u2022  <font color='green'>/exportladders</font></b>: exports the tier ratings database.<br/>"
 			+ "<b>\u2022  <font color='green'>/changerating</font><font color='red'> player</font><font color='blue'>*tier</font><font color='blueviolet'>*rating</font></b>: changes the rating of <b>player</b> in <b>tier</b> to <b>rating</b>.<br/>"
 			+ "<b>\u2022  <font color='green'>/exportmembers</font></b>: exports the member database.<br/>"
-			+ "<b>\u2022  <font color='green'>/clearpass</font><font color='red'> player</font></b>: clears <b>player</b>'s password.<b> player</b> is any player in the member database.<br/>" 
+			+ "<b>\u2022  <font color='green'>/clearpass</font><font color='red'> player</font></b>: clears <b>player</b>'s password.<b> player</b> is any player in the member database.<br/>"
+			+ "<b>\u2022  <font color='green'>/deleteplayer</font><font color='red'> player</font></b>: deletes <b>player</b> from the database for next startup.<b> player</b> is any player in the member database.<br/>"  
 			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
@@ -1148,25 +1203,58 @@
 
 		,
 
-		connectoptions: function(src, channel, command){
+		runoptions: function(src, channel, command){
 			var openorclosed = open === true? "open" : "closed";
-			var connectoptionsdisplay = border
-			+ "<h2>Connect Options</h2>"
+			var runoptionsdisplay = border
+			+ "<h2>Run Options</h2>"
 			+ "<br/>"
 			+ "<b><font color='red'>\u2022  The Server is currently " + openorclosed + " to player connections.</font></b><br/>"
 			+ "<b>\u2022  The Server is currently " + status + ".</b><br/>"	
-			+ "<h3>Connect Option Commands</h3>"
+			+ "<h3>Run Option Commands</h3>"
 			+ "<br/>" 
 			+ typecommands + "<br/>"
 			+ "<br/>"
 			+ "<b>\u2022  <font color='green'>/open</font></b>: opens the server to all player connections.<br/>"
 			+ "<b>\u2022  <font color='green'>/close</font></b>: closes the server to all player connections except 127.0.0.1.<br/>"	
 			+ "<b>\u2022  <font color='green'>/public</font></b>: changes the server to public.<br/>"
-			+ "<b>\u2022  <font color='green'>/private</font></b>: changes the server to private.<br/>"	
+			+ "<b>\u2022  <font color='green'>/private</font></b>: changes the server to private.<br/>"
+			+ "<b>\u2022  <font color='green'>/disconnectall</font></b>: disconnects all players online from the server.<br/>"
+			+ "<b>\u2022  <font color='green'>/lockout</font></b>: disconnects all players online from the server and closes the server to all player connections except 127.0.0.1.<br/>"
+			+ "<b>\u2022  <font color='green'>/shutdown</font></b> or <b><font color='green'>/shutdown</b></font><font color='red'><b> number</b></font><font color='blue'><b>*unit</b></font>: shuts the server down immediately or in <b>number</b> <b>unit</b>. <b>number</b> is any non-negative value. <b>unit</b> is either seconds, minutes, hours, days, weeks, months or years.<br/>"
+			+ "<b>\u2022  <font color='green'>/cancelshutdown</b></font>: Cancels a planned shutdown.<br/>"	
 			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
-			sys.sendHtmlMessage(src, connectoptionsdisplay, channel);
+			sys.sendHtmlMessage(src, runoptionsdisplay, channel);
+		}
+
+		,
+
+		tiersoptions: function(src, channel, command){
+			var tierslinksindex, tierslinklist = "";
+			for (tierslinksindex in tierslinks){
+				tierslinklist += "<b>\u2022 " + tierslinksindex + ": <i><a href='" + tierslinks[tierslinksindex] + "'>" + tierslinks[tierslinksindex] + "</a></i></b><br/>";
+			}
+			var tiersoptionsdisplay = border
+			+ "<h2>Tiers Options</h2>"
+			+ "<br/>"
+			+ "<font color='green'><b>\u2022  The tiers name is currently known as " + tiersname.italics() + ".</b></font><br/>"
+			+ tierslinklist
+			+ "<h3>Tiers Option Commands</h3>"
+			+ "<br/>"
+			+ typecommands + "<br/>"
+			+ "<br/>"
+			+ "<b>\u2022  <font color='green'>/tiersname</font><font color='red'> name</font></b>: saves the name of the tiers as <b>name</b>.<br/>"
+			+ "<b>\u2022  <font color='green'>/tierslinksupdate</font></b>: updates the tierslinks object for possible new URLs (clears any keys added by /tierslinkwrite).<br/>"	
+			+ "<b>\u2022  <font color='green'>/tiersload</font></b>: loads the tiers from file.<br/>"
+			+ "<b>\u2022  <font color='green'>/tiersimport</font><font color='red'> file</font></b>: loads the tiers from <b>file</b> within the PO server folder and overwrites.<br/>"
+			+ "<b>\u2022  <font color='green'>/tiersexport</font></b>: exports the tiers to " + tiersname + ".xml<br/>"
+			+ "<b>\u2022  <font color='green'>/tiersinstall</font><font color='red'> key</font></b>: downloads the tiers via the link stored under <b>key</b> and loads the tiers from file.<br/>"
+			+ "<b>\u2022  <font color='green'>/tierslast</font></b>: loads your last tiers before you loaded another tiers by command.<br/>"
+			+ "<br/>"
+			+ "<timestamp/><br/>"
+			+ border;
+			sys.sendHtmlMessage(src, tiersoptionsdisplay, channel);			
 		}
 
 		,
@@ -1186,7 +1274,7 @@
 			+ typecommands + "<br/>"
 			+ "<br/>"
 			+ "<b>\u2022  <font color='green'>/scriptname</font><font color='red'> name</font></b>: saves the name of the script as <b>name</b>.<br/>"
-			+ "<b>\u2022  <font color='green'>/scriptupdatelinks</font><font color='red'> name</font></b>: updates the auto-update and full script URLs to their latest form.<br/>"		
+			+ "<b>\u2022  <font color='green'>/scriptupdatelinks</font></b>: updates the auto-update and full script URLs to their latest form.<br/>"		
 			+ "<b>\u2022  <font color='green'>/scriptserverlink</font><font color='red'> link</font></b>: saves the web URL for  the full script as <b>link.</b><br/>"	
 			+ "<b>\u2022  <font color='green'>/scriptautolink</font><font color='red'> link</font></b>: saves the web URL for  the auto-update script as <b>link.</b><br/>"		
 			+ "<b>\u2022  <font color='green'>/scriptload</font></b>: loads the script from file. (loads latest script if using auto-update script)<br/>"
@@ -1197,21 +1285,79 @@
 			+ "<b>\u2022  <font color='green'>/scriptfull</font></b>: loads the latest full script.<br/>"
 			+ "<b>\u2022  <font color='green'>/scriptautoupdate</font></b>: loads the latest auto-update script.<br/>"
 			+ "<b>\u2022  <font color='green'>/scriptlast</font></b>: loads your last script before you loaded another script by command.<br/>"
-			+ "<b>\u2022  <font color='green'>/scriptmod</font></b>: declares the current script as your modification of the original script.<br/>"
-			+ "<b>\u2022  <font color='gray'>/scriptmodded</font><font color='red'> name</font></b>: declares the current script as <b>name</b>'s modification of the original script.<br/>"
-			+ "<b>\u2022  <font color='gray'>/scriptdemod</font></b>: undeclares the current script as your modification of the original script.<br/>"
-			+ "<b>\u2022  <font color='gray'>/scriptdemodded</font><font color='red'> name</font></b>: undeclares the current script as <b>name</b>'s modification of the original script.<br/>"
-			+ "<b>\u2022  <font color='green'>/scriptunmod</font></b>: undeclares the current script as a modification of the original script.<br/>"
+			+ "<b>\u2022  <font color='green'>/scriptmod</font></b> or <b><font color='gray'>/scriptmod</font><font color='red'> name</font></b>: declares the current script as your modification of the original script.<br/>"
+			+ "<b>\u2022  <font color='gray'>/scriptdemod</font></b> or <b><font color='gray'>/scriptdemod</font><font color='red'> name</font></b>: undeclares the current script as your modification of the original script.<br/>"
+			+ "<b>\u2022  <font color='green'>/scriptunmod</font></b>: undeclares the current script as a modification of the original script and clears all names added with /scriptmod.<br/>"
+			+ "<b>\u2022  <font color='gray'>/scriptupdatethanks</font></b>: updates the special thanks list of the script (clears any additional done with /scriptthank).<br/>"
 			+ "<b>\u2022  <font color='gray'>/scriptthank</font><font color='red'> name</font></b>: adds <b>name</b> to the script special thanks list.<br/>"
 			+ "<b>\u2022  <font color='gray'>/scriptdethank</font><font color='red'> name</font></b>: removes <b>name</b> from the script special thanks list.<br/>"
-			+ "<b>\u2022  <font color='gray'>/scriptunthank</font></b>: clears all additional names added to the script special thanks list.<br/>"
+			+ "<b>\u2022  <font color='gray'>/scriptupdatecontribs</font></b>: updates the contributors to the script (clears any additional done with /scriptcontrib).<br/>"
 			+ "<b>\u2022  <font color='gray'>/scriptcontrib</font><font color='red'> name</font></b>: adds <b>name</b> as a contributor to the script.<br/>"
 			+ "<b>\u2022  <font color='gray'>/scriptdecontrib</font><font color='red'> name</font></b>: removes <b>name</b> as a contributor to the script.<br/>"
-			+ "<b>\u2022  <font color='gray'>/scriptuncontrib</font><font color='red'> name</font></b>: clears all additional names added as contributors to the script.<br/>"
 			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
 			sys.sendHtmlMessage(src, scriptoptionsdisplay, channel);
+		}
+
+		,
+
+		sysoptions: function(src, channel, command){
+			var syslist = "<b><small>", systotal = 0, sysindex;
+			for (sysindex in sys){
+				if (typeof sys[sysindex] === "function"){
+					syslist += sysindex + ", ";
+					systotal++;
+				}
+			}			
+			syslist = syslist.substring(0, syslist.length-2) + ".</small></b>";
+			var sysoptionsdisplay = border
+			+ "<h2>Sys Options</h2>"
+			+ "<h3><u>Scripting Functions List</u></h3>"
+			+ syslist + "<br/>"
+			+ "<br/>"
+			+ "<b>Total Number of Scripting Functions:</b> " + systotal + "<br/>"  
+			+ "<h3>Sys Option Commands</h3>"
+			+ "<br/>" 
+			+ typecommands + "<br/>"
+			+ "<br/>"
+			+ "<b>\u2022  <font color='green'>/sys</font><font color='red'> function_path</font><font color='blue'>*parameters</font></b>: calls the function located at <b>function_path</b> with <b>parameters</b>. <b>function_path</b> is the path from sys where the function is stored. <b>parameters</b> must be separated by: <i>,</i><br/>"
+			+ "<br/>"
+			+ "<timestamp/><br/>"
+			+ border;
+			sys.sendHtmlMessage(src, sysoptionsdisplay, channel);
+		}
+
+		,
+
+		eventoptions: function(src, channel, command){
+			var eventslist = "<b><small>", eventstotal = Object.keys(script).length, acteventstotal = 0, eventsindex;
+			for (eventsindex in script){
+				if (String(script[eventsindex]).split("{\u000A\t}").length == 1){
+					eventslist += "<font color='green'>" + eventsindex + "</font>, ";
+					acteventstotal++;
+					continue;
+				}
+				eventslist += eventsindex + ", ";
+			}
+			eventslist = eventslist.substring(0, eventslist.length-2) + ".</small></b>";
+			var eventoptionsdisplay = border
+			+ "<h2>Event Options</h2>"
+			+ "<h3><u>Events List</u></h3>"
+			+ eventslist + "<br/>"
+			+ "<br/>"
+			+ "<font color='blue'><b>\u2022 The Find Battle event message is currently turned " + findbattlemessage + ".</b></font><br/>"
+			+ "<br/>"
+			+ "<b><font color='green'>Total Number of Active Events:</font></b> " + acteventstotal + "<br/>" 
+			+ "<b>Total Number of Events:</b> " + eventstotal + "<br/>" 
+			+ "<br/>" 
+			+ typecommands + "<br/>"
+			+ "<br/>"
+			+ "<b>\u2022  <font color='green'>/findbattlemessage</font><font color='red'> status</font></b>: if <b>status</b> is <i>on</i>, shows Find Battle event message in the main chat in all channels; if <b>status</b> is <i>off</i>, the message isn't shown.<br/>"
+			+ "<br/>"
+			+ "<timestamp/><br/>"
+			+ border;
+			sys.sendHtmlMessage(src, eventoptionsdisplay, channel);
 		}
 
 		,
@@ -1225,45 +1371,12 @@
 				}
 			}
 			propslist = propslist.substring(0, propslist.length-2) + ".</small></b>";
-			var eventslist = "<b><small>", eventstotal = Object.keys(script).length, acteventstotal = 0, eventsindex;
-			for (eventsindex in script){
-				if (String(script[eventsindex]).split("{\u000A\t}").length == 1){
-					eventslist += "<font color='green'>" + eventsindex + "</font>, ";
-					acteventstotal++;
-					continue;
-				}
-				eventslist += eventsindex + ", ";
-			}
-			eventslist = eventslist.substring(0, eventslist.length-2) + ".</small></b>";
-			var syslist = "<b><small>", systotal = 0, sysindex;
-			for (sysindex in sys){
-				if (typeof sys[sysindex] === "function"){
-					syslist += sysindex + ", ";
-					systotal++;
-				}
-			}
-			for (sysindex in sys.db){
-				if (typeof sys.db[sysindex] === "function"){
-					syslist += "db." + sysindex + ", ";
-					systotal++;
-				}
-			}				
-			syslist = syslist.substring(0, syslist.length-2) + ".</small></b>";
 			var executiveoptionsdisplay = border 
 			+ "<h2> Executive Options </h2>"
 			+ "<h3><u>Unenumerable Global Property List</u></h3>"
 			+ propslist + "<br/>"
 			+ "<br/>"
-			+ "<b>Total Number of Unenumerable Global Properties:</b> " + propstotal + "<br/>"  
-			+ "<h3><u>Events List</u></h3>"
-			+ eventslist + "<br/>"
-			+ "<br/>"
-			+ "<b><font color='green'>Total Number of Active Events:</font></b> " + acteventstotal + "<br/>" 
-			+ "<b>Total Number of Events:</b> " + eventstotal + "<br/>"  
-			+ "<h3><u>Scripting Functions List</u></h3>"
-			+ syslist + "<br/>"
-			+ "<br/>"
-			+ "<b>Total Number of Scripting Functions:</b> " + systotal + "<br/>"  
+			+ "<b>Total Number of Unenumerable Global Properties:</b> " + propstotal + "<br/>"   
 			+ "<br/>"
 			+ typecommands + "<br/>"
 			+ "<br/>"
@@ -1271,8 +1384,7 @@
 			+ "<b>\u2022  <font color='gray'>/exec</font><font color='red'> status</font></b>: if <b>status</b> is <i>on</i>, shows script evaluations/executions in the main chat in all channels; if <b>status</b> is <i>off</i>, the evaluations/executions aren't shown.<br/>"
 			+ "<b>\u2022  <font color='green'>/eval</font><font color='red'> string</font></b>: evaluates/executes <b>string</b>. <b>string</b> is a JavaScript expression, variable, statement or sequence of statements.<br/>"
 			+ "<b>\u2022  <font color='gray'>/evallater</font><font color='red'> string</font><font color='blue'>*number</font><font color='blue violet'>*unit</font></b>: evaluates/executes <b>string</b> in <b> time unit</b>. <b>string</b> is a JavaScript expression, variable, statement or sequence of statements. <b>number</b> is any non-negative value.<b> unit</b> is either seconds, minutes, hours or days.<br/>"
-			+ "<b>\u2022  <font color='gray'>/webcall</font><font color='red'> web_URL</font><font color='blue'>*string</font></b>: calls <b>web_URL</b> and evaluates/executes <b>string</b> when the reply is received. The reply is stored in the resp variable. <b>string</b> is a JavaScript expression, variable, statement or sequence of statements.<br/>"
-			+ "<b>\u2022  <font color='gray'>/sys</font><font color='red'> function_path</font><font color='blue'>*parameters</font></b>: calls the function located at <b>function_path</b> with <b>parameters</b>. <b>function_path</b> is the path from sys where the function is stored. <b>parameters</b> must be separated by: <i>,</i><br/>"
+			+ "<b>\u2022  <font color='gray'>/webcall</font><font color='red'> web_URL</font><font color='blue'>*string</font></b>: calls <b>web_URL</b> and evaluates/executes <b>string</b> when the reply is received. The reply is stored in the resp global variable. <b>string</b> is a JavaScript expression, variable, statement or sequence of statements.<br/>"
 			+ "<b>\u2022  <font color='green'>/print</font><font color='red'> data</font></b>: prints <b>data</b> on the server window. <b>data</b> is a global variable, object, string, number or boolean.<br/>"
 			+ "<b>\u2022  <font color='green'>/clear</font></b>: clears the server window.<br/>"
 			+ "<b>\u2022  <font color='green'>/system</font><font color='red'> command</font></b>: runs <b>command</b> on the underlying operating system.<br/>"
@@ -1321,8 +1433,6 @@
 			+ "<b>\u2022  <font color='green'>/set</font><font color='red'> variable</font><font color='blue'>*data</font></b>: creates a variable called <b>variable</b> storing <b>data</b>.<br/>"
 			+ "<b>\u2022  <font color='green'>/save</font><font color='red'> variable</font><font color='blue'>*data</font></b>: creates/overwrites a variable called <b>variable</b> storing <b>data</b>.<br/>"
 			+ "<b>\u2022  <font color='green'>/delete</font><font color='red'> variable</font></b>: deletes <b>variable</b>.<br/>"
-			+ "<b>\u2022  <font color='green'>/setpa</font><font color='red'> player_array</font></b>: sets a player array called <b>player_array</b>.<br/>"
-			+ "<b>\u2022  <font color='green'>/unsetpa</font><font color='red'> player_array</font></b>: unsets <b>player_array.</b><br/>"
 			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
@@ -1379,6 +1489,18 @@
 		,
 
 		authoptions: function (src, channel, command){
+			helpers.setautharray("mods", 1);
+   		helpers.setautharray("admins", 2);
+			helpers.setautharray("owners", 3);
+			var touradmins = new Array(), tourauthindex;
+			for (tourauthindex in tourauth){
+				if (members[tourauth[tourauthindex]] !== undefined){
+					touradmins.push(members[tourauth[tourauthindex]]);
+				}
+				else {
+					touradmins.push(tourauth[tourauthindex]);
+				}
+			}
 			var authoptionsdisplay = border
 			+ "<h2>Authority Options</h2>"
 			+ "<br/>"
@@ -1386,26 +1508,32 @@
 			+ "<font color ='#FF6900'>\u2022  Server Auth level 2 is currently known as " + helpers.escapehtml(AuthLevel2Name).italics() + ".</font><br/>"
 			+ "<font color='blue'>\u2022  Server Auth level 1 is currently known as " + helpers.escapehtml(AuthLevel1Name).italics() + ".</font><br/>"
 			+ "<font color='red'>\u2022  Server Auth level 0 is currently known as " + helpers.escapehtml(AuthLevel0Name).italics() + ".</font><br/>"
- 			+ "<font color='green'>\u2022  Tournament Auth level 1 is currently known as " + helpers.escapehtml(TourAuthLevel1Name).italics() + ".</font><br/>"
-			+ "<font color='maroon'> \u2022  Tournament Auth level 0 is currently known as " + helpers.escapehtml(TourAuthLevel0Name).italics() + ".</font><br/>"
+ 			+ "<font color='green'>\u2022  Server Tournament Auth level 1 is currently known as " + helpers.escapehtml(TourAuthLevel1Name).italics() + ".</font><br/>"
+			+ "<font color='maroon'> \u2022  Server Tournament Auth level 0 is currently known as " + helpers.escapehtml(TourAuthLevel0Name).italics() + ".</font><br/>"
  			+ "<font color='indigo'>\u2022  Channel Auth level 3 is currently known as " + helpers.escapehtml(ChannelAuthLevel3Name).italics() + ".</font><br/>"
  			+ "<font color='coral'>\u2022  Channel Auth level 2 is currently known as " + helpers.escapehtml(ChannelAuthLevel2Name).italics() + ".</font><br/>"
  			+ "<font color='royalblue'>\u2022  Channel Auth level 1 is currently known as " + helpers.escapehtml(ChannelAuthLevel1Name).italics() + ".</font><br/>"
  			+ "<font color='crimson'>\u2022  Channel Auth level 0 is currently known as " + helpers.escapehtml(ChannelAuthLevel0Name).italics() + ".</font><br/>"
  			+ "<font color='mediumseagreen'>\u2022  Channel Tournament Auth level 1 is currently known as " + helpers.escapehtml(ChannelTourAuthLevel1Name).italics() + ".</font><br/>"
-			+ "<font color='brown'> \u2022  Channel Tournament Auth level 0 is currently known as " + helpers.escapehtml(ChannelTourAuthLevel0Name).italics() + ".</font></b>"
+			+ "<font color='brown'> \u2022  Channel Tournament Auth level 0 is currently known as " + helpers.escapehtml(ChannelTourAuthLevel0Name).italics() + ".</font></b><br/>"
+			+ "<br/>"
+			+ "<b><font color='blueviolet'>" + AuthLevel3Name + "s</font>: <small>" + String(owners) + "</small></b><br/>"
+			+ "<b><font color='#FF6900'>" + AuthLevel2Name + "s</font>: <small>" + String(admins) + "</small></b><br/>"
+			+ "<b><font color='blue'>" + AuthLevel1Name + "s</font>: <small>" + String(mods) + "</small></b><br/>"
+			+ "<b><font color='green'>" + TourAuthLevel1Name + "s</font>: <small>" + String(touradmins) + "</small></b>"
 			+ "<h3>Authority Option Commands</h3>"
 			+ "<br/>"
 			+ typecommands + "<br/>"
 			+ "<br/>"
-			+ "<b>\u2022  <font color='green'>/AuthLevelName</font><font color='red'> old name</font><font color='blue'>*new name</font></b>: changes <b>old name</b> to <b>new name</b>.<br/>"
-			+ "\u2013 <b>old name</b> is the name of an auth level and <b>new name</b> is any non-plural text.<br/>"
-			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(AuthLevel3Name)) + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(AuthLevel3Name) + "</b>.<br/>"
-			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(AuthLevel2Name)) + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(AuthLevel2Name) + "</b>.<br/>"
-			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(AuthLevel1Name)) + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(AuthLevel1Name) + "</b>.<br/>"
-			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(AuthLevel0Name)) + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(AuthLevel0Name) + "</b>.<br/>"
-			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(TourAuthLevel1Name)) + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(TourAuthLevel1Name) + "</b>.<br/>"
-			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(TourAuthLevel0Name)) + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(TourAuthLevel0Name) + "</b>.<br/>"
+			+ "<b>\u2022  <font color='green'>/authlevelname</font><font color='red'> old name</font><font color='blue'>*new name</font></b>: changes <b>old name</b> to <b>new name</b>. <b>old name</b> is the name of an auth level and <b>new name</b> is any non-plural text.<br/>"
+			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(AuthLevel3Name)).toLowerCase() + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(AuthLevel3Name) + "</b>.<br/>"
+			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(AuthLevel2Name)).toLowerCase() + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(AuthLevel2Name) + "</b>.<br/>"
+			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(AuthLevel1Name)).toLowerCase() + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(AuthLevel1Name) + "</b>.<br/>"
+			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(AuthLevel0Name)).toLowerCase() + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(AuthLevel0Name) + "</b>.<br/>"
+			+ "<b>\u2022  <font color='green'>/clearauths</font></b>: clears the server auth list.<br/>"
+			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(TourAuthLevel1Name)).toLowerCase() + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(TourAuthLevel1Name) + "</b>.<br/>"
+			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(TourAuthLevel0Name)).toLowerCase() + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(TourAuthLevel0Name) + "</b>.<br/>"
+			+ "<b>\u2022  <font color='green'>/cleartourauths</font></b>: clears the server tournament auth list.<br/>"
 			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
@@ -1460,24 +1588,6 @@
 			+ "<timestamp/><br/>"
 			+ border;
 			sys.sendHtmlMessage(src, arboptionsdisplay, channel);			
-		}
-
-		,
-
-		runoptions: function(src, channel, command){
-			var runoptionsdisplay = border
-			+ "<h2>Run Options</h2>"
-			+ "<br/>"
-			+ "<h3>Run Commands</h3>"
-			+ "<br/>"
-			+ typecommands + "<br/>"
-			+ "<br/>"
-			+ "<b>\u2022  <font color='green'>/shutdown</b></font><font color='red'><b> number</b></font><font color='blue'><b>*unit</b></font>: shuts the server down in <b>number</b> <b>unit</b>. <b>number</b> is any non-negative value. <b>unit</b> is either seconds, minutes, hours or days.<br/>"
-			+ "<b>\u2022  <font color='green'>/cancelshutdown</b></font>: Cancels a planned shutdown.<br/>"
-			+ "<br/>"
-			+ "<timestamp/><br/>"
-			+ border;
-			sys.sendHtmlMessage(src, runoptionsdisplay, channel);			
 		}
 
 		,
@@ -1658,6 +1768,9 @@
 			+ "<br/>"
 			+ "<b>\u2022  <font color='green'>/idle</font></b>: sets your status to idle on the server.<br/>"
 			+ "<b>\u2022  <font color='green'>/goback</font></b>: sets your status to active on the server.<br/>"
+			+ "<b>\u2022  <font color='green'>/changetier</font><font color='red'> tier</font></b>: changes your tier to <b>tier</b>.<br/>"
+			+ "<b>\u2022  <font color='green'>/changeavatar</font><font color='red'> number</font></b>: changes your avatar to avatar <b>number</b>. <b>number</b> is greater than or equal to 1 and less than or equal to 263. If <b>number</b> is out of this range, the avatar is blank.<br/>"
+			+ "<b>\u2022  <font color='green'>/changeinfo</font><font color='red'> html</font></b>: changes your trainer information to <b>html</b>.<br/>"
 			+ "<b>\u2022  <font color='green'>/unregister</font></b>: clears the password associated with your name.<br/>"
 			+ "<b>\u2022  <font color='green'>/disconnect</font></b>: disconnects you from the server.<br/>"
 			+ "<br/>"
@@ -1678,14 +1791,15 @@
 			+ "<b>\u2022  <font color='green'>/myaliases</font></b>: displays aliases for your current IP Address if recorded.<br/>"
 			+ "<b>\u2022  <font color='green'>/myips</font></b>: displays IP addresses for your current alias if recorded.<br/>"
 			+ "<b>\u2022  <font color='green'>/team</font></b>: displays your exported team.<br/>"
-			+ "<b>\u2022  <font color='green'>/rankings</font><font color='red'> player</font></b>: displays <b>player</b>'s rank for each tier.<br/>"
-			+ " \u2013 <b>player</b> is any player in the members database.<br/>"
+			+ "<b>\u2022  <font color='green'>/rankings</font></b> or <b><font color='green'>/rankings</font><font color='red'> player</font></b>: displays  your rank or <b>player</b>'s rank for each tier. <b>player</b> is any player in the members database.<br/>"
 			+ "<b>\u2022  <font color='green'>/playersonline</font></b>: displays the players online list.<br/>"
 			+ "<b>\u2022  <font color='green'>/battlesonline</font></b>: displays the battles online list.<br/>"
 			+ "<b>\u2022  <font color='green'>/channelsonline</font></b>: displays the channels online list.<br/>"
 			+ "<b>\u2022  <font color='green'>/auths</font></b>: displays the auth list of the server.<br/>"
 			+ "<b>\u2022  <font color='green'>/memorystate</font></b>: displays the server's memory state.<br/>"
 			+ "<b>\u2022  <font color='green'>/serverinfo</font></b>: displays server information.<br/>"
+			+ "<b>\u2022  <font color='green'>/playerinfo</font></b> or <b><font color='green'>/playerinfo</font><font color='red'> player</font></b>: displays  your or <b>player</b>'s player information. <b>player</b> is any player in the members database.<br/>"
+			+ "<b>\u2022  <font color='green'>/sprite</font><font color='red'> Pokémon</font></b> or <b><font color='green'>/sprite</font><font color='red'> Pokémon</font><font color='blue'>*number</font></b>: displays the generation 5 sprite of <b>Pokémon</b> or generation <b>number</b> sprite of <b>Pokémon</b>. <b>Pokémon</b> is a valid Pokémon name and <b>number</b> is a value from 1 to 5.<br/>"
 			+ "<b>\u2022  <font color='green'>/scriptinfo</font></b>: displays script information.<br/>"
 			+ "<b>\u2022  <font color='green'>/latest</font></b>: displays information on latest implemented features and script changes.<br/>"
 			+ "<b>\u2022  <font color='green'>/regchannelslist</font></b>: displays the registered channels list.<br/>"
@@ -1702,11 +1816,15 @@
 			+ "<h2> Channel Chat Options </h2>"
 			+ "<br/>"
 			+ "<font color='indigo'><b>\u2022  The Channel topic is currently " + helpers.escapehtml(channelsonline[channel].topic).italics() + "</b></font><br/>"
+			+ "<font color='red'><b>\u2022  Combining Characters are currently  turned " + channelsonline[channel].combinecharacters + ".</b></font><br/>"
+			+ "<font color='blue'><b>\u2022  Reversing Characters are currently  turned " + channelsonline[channel].reversecharacters + ".</b></font><br/>"
 			+ "<br/>"
 			+ typecommands + "<br/>"
 			+ "<br/>"
 			+ "<b>\u2022  <font color='green'>/temptopic</font><font color='red'> topic</font></b>: changes the channel topic to <b>topic</b> for the duration that the channel is open for. <b>topic</b> is any text. if <b>topic</b> is <i>off</i>, turns the channel topic feature off. If <b>topic</b> is <i>default</i>, changes the channel topic to <i>Welcome to " + sys.channel(channel) + "!</i><br/>"
 			+ "<b>\u2022  <font color='green'>/topic</font><font color='red'> topic</font></b>: changes the channel topic of a registered channel to <b>topic</b>. <b>topic</b> is any text. If <b>topic</b> is <i>off</i>, turns the channel topic feature off. If <b>topic</b> is <i>default</i>, changes the channel topic to <i>Welcome to " + sys.channel(channel) + "!</i><br/>"
+			+ "<b>\u2022  <font color='green'>/combinechar</font><font color='red'> status</font></b>: if <b>status</b> is <i>on</i>, messages can be sent with combine characters in them (can form zalgo); if <b>status</b> is <i>off</i>, they can't be sent.<br/>"
+			+ "<b>\u2022  <font color='green'>/reversechar</font><font color='red'> status</font></b>: if <b>status</b> is <i>on</i>, messages can be sent with reverse characters in them; if <b>status</b> is <i>off</i>, they can't be sent.<br/>"
 			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
@@ -1716,17 +1834,57 @@
 		,
 
 		cauthoptions: function(src, channel, command){
+			var cauth3 = channelsonline[channel].owners, cauth2 = channelsonline[channel].admins, cauth1 = channelsonline[channel].mods, ctourauth = channelsonline[channel].touradmins, authindex, cowners = new Array(), cadmins = new Array(), cmods = new Array(), ctouradmins = new Array();
+			for (authindex in cauth3){
+				if (members[cauth3[authindex]] !== undefined){
+					cowners.push(members[cauth3[authindex]]);
+				}
+				else {
+					cowners.push(cauth3[authindex]);
+				}
+			}
+			for (authindex in cauth2){
+				if (members[cauth2[authindex]] !== undefined){
+					cadmins.push(members[cauth2[authindex]]);
+				}
+				else {
+					cadmins.push(cauth2[authindex]);
+				}
+			}
+			for (authindex in cauth1){
+				if (members[cauth1[authindex]] !== undefined){
+					cmods.push(members[cauth1[authindex]]);
+				}
+				else {
+					cmods.push(cauth1[authindex]);
+				}
+			}
+			for (authindex in ctourauth){
+				if (members[ctourauth[authindex]] !== undefined){
+					ctouradmins.push(members[ctourauth[authindex]]);
+				}
+				else {
+					ctouradmins.push(ctourauth[authindex]);
+				}
+			}
 			var cauthoptionsdisplay = border
 			+ "<h2>Channel Authority Options</h2>"
 			+ "<br/>"
+			+ "<b><font color='indigo'>" + ChannelAuthLevel3Name + "s</font>: <small>" + String(cowners) + "</small></b><br/>"
+			+ "<b><font color='coral'>" + ChannelAuthLevel2Name + "s</font>: <small>" + String(cadmins) + "</small></b><br/>"
+			+ "<b><font color='royalblue'>" + ChannelAuthLevel1Name + "s</font>: <small>" + String(cmods) + "</small></b><br/>"
+			+ "<b><font color='mediumseagreen'>" + ChannelTourAuthLevel1Name + "s</font>: <small>" + String(ctouradmins) + "</small></b>"
+			+ "<h3>Channel Authority Option Commands</h3>"
 			+ typecommands + "<br/>"
 			+ "<br/>"
-			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(ChannelAuthLevel3Name)) + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(ChannelAuthLevel3Name) + "</b> for this channel.<br/>"
-			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(ChannelAuthLevel2Name)) + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(ChannelAuthLevel2Name) + "</b> for this channel.<br/>"
-			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(ChannelAuthLevel1Name)) + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(ChannelAuthLevel1Name) + "</b> for this channel.<br/>"
-			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(ChannelAuthLevel0Name)) + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> to <b>" + helpers.escapehtml(ChannelAuthLevel0Name) + "</b> for this channel.<br/>"
-			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(ChannelTourAuthLevel1Name)) + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(ChannelTourAuthLevel1Name) + "</b> for this channel.<br/>"
-			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(ChannelTourAuthLevel0Name)) + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> to <b>" + helpers.escapehtml(ChannelTourAuthLevel0Name) + "</b> for this channel.<br/>"
+			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(ChannelAuthLevel3Name)).toLowerCase() + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(ChannelAuthLevel3Name) + "</b> for this channel.<br/>"
+			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(ChannelAuthLevel2Name)).toLowerCase() + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(ChannelAuthLevel2Name) + "</b> for this channel.<br/>"
+			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(ChannelAuthLevel1Name)).toLowerCase() + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(ChannelAuthLevel1Name) + "</b> for this channel.<br/>"
+			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(ChannelAuthLevel0Name)).toLowerCase() + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> to <b>" + helpers.escapehtml(ChannelAuthLevel0Name) + "</b> for this channel.<br/>"
+			+ "<b>\u2022  <font color='green'>/clearcauths</font></b>: clears the channel auth for this channel.<br/>"
+			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(ChannelTourAuthLevel1Name)).toLowerCase() + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> existing in member database to <b>" + helpers.escapehtml(ChannelTourAuthLevel1Name) + "</b> for this channel.<br/>"
+			+ "<b>\u2022  <font color='green'>/" + helpers.escapehtml(helpers.removespaces(ChannelTourAuthLevel0Name)).toLowerCase() + "</font><font color='red'> player</font></b>: to change the Auth Level of <b>player</b> to <b>" + helpers.escapehtml(ChannelTourAuthLevel0Name) + "</b> for this channel.<br/>"
+			+ "<b>\u2022  <font color='green'>/clearctourauths</font></b>: clears the tournament auth for this channel.<br/>"
 			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
@@ -1807,7 +1965,8 @@
 			+ "<br/>"
 			+ "<b>\u2022  <font color='green'>/me</font><font color='red'> message</font></b>: sends <font color='" +  color + "'><b><i>*** " + srcname +  " message</i></b></font> into the main chat. <b>message</b> is any text.<br/>"
 			+ "<b>\u2022  <font color='green'>/imp</font><font color='red'> name</font><font color='blue'>*message</font></b>: sends <b><font color='" +  color + "'>name:</font> message <small><i>impersonation by " + srcname + "</i></small></b> into the main chat. <b>name</b> is any text with at most 20 characters. <b>message</b> is any text.<br/>"
-			+ "<b>\u2022  <font color='green'>/future</font><font color='red'> time</font><font color='blue'>*message</font></b>: sends <b>message <small><i>(time seconds ago)</i></small></b> as a chat message in <b>time</b> seconds. <b>time</b> is any value. <b>message</b> is any text.<br/>"
+			+ "<b>\u2022  <font color='green'>/reverse</font><font color='red'> message</font></b>: sends <b>message</b> in reverse into the chat.<br/>"
+			+ "<b>\u2022  <font color='green'>/future</font><font color='red'> time</font><font color='blue'>*unit</font><font color='blueviolet'>*message</font></b>: sends <b>message <small><i>(time unit ago)</i></small></b> as a chat message in <b>time</b> <b>unit</b>. <b>time</b> is any value. <b>unit</b> is either seconds, minutes, hours, days, weeks, months or years. <b>message</b> is any text.<br/>"
 			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
@@ -1958,6 +2117,59 @@
 			servertopic = command[1].toLowerCase() == "default" ? "Enjoy your stay at " + servername + "!" : command[1];
 			sys.saveVal("Server_Topic", servertopic);
 			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> The Server topic has been changed to " + helpers.escapehtml(servertopic).italics() + " by " + srcname + "!</b></font>");
+		}
+
+		,
+
+		quasienglish: function (src, channel, command) {
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			var srcname = sys.name(src); 
+			if (command[1] == "on"){
+				if (quasienglish == "on"){
+					sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to turn quasi-english characters in names on because it is already turned on.</i>", channel);
+					return;
+				}
+				if (quasienglish  == "off"){
+					quasienglish = "on";
+					sys.saveVal("Quasi_English", "on");
+					sys.sendHtmlAll(border3 + "<br/><timestamp/><b><font color='blueviolet'>Quasi-english characters in names has been turned on by " + srcname + ".</font></b><br/>" + border3);
+					return;
+				}
+			}
+			if (command[1] == "off"){
+				if (quasienglish  == "off"){
+					sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to turn quasi-english characters in names off because it is already turned off.</i>", channel);
+					return;
+				}
+				if (quasienglish == "on"){
+					quasienglish = "off";
+					sys.saveVal("Quasi_English", "off");
+					sys.sendHtmlAll(border3 + "<br/><timestamp/><b><font color='blueviolet'>Quasi-english characters in names has been turned off by " + srcname + ".</font></b><br/>" + border3);
+					return;
+				} 
+			}
+			sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, <b>on</b> or <b>off</b> are the only valid arguments for the " + command[0] + " command.</i>", channel); 
+		}
+
+		,
+
+		futurelimit: function (src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			var limit = parseInt(command[1]);
+			if (isNaN(limit)){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you must specify a number as the future limit.</i>", channel);
+				return;
+			}
+			var srcname = sys.name(src);
+			futurelimit = limit;
+			sys.saveVal("Future_Limit", limit);
+			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> The future limit has been set to " + futurelimit + " by " + srcname + ".</b></font>", 0);				
 		}
 
 		,
@@ -2176,6 +2388,194 @@
 
 		,
 
+		disconnectall: function(src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			var srcname = sys.name(src), playerids = sys.playerIds(), playerid;
+			sys.sendHtmlAll(border3 + "<br/><timestamp/><b>" + srcname + " has disconnected all players from the server.</b><br/>" + border3);
+			for (playerid in playerids){
+				sys.callQuickly("sys.kick(" + playerids[playerid] + ");", 200);
+			}
+		}
+
+		,
+
+		lockout: function(src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			var srcname = sys.name(src), playerids = sys.playerIds(), playerid;
+			open = false;
+			sys.sendHtmlAll(border3 + "<br/><timestamp/><b>" + srcname + " has locked out all players from the server.</b><br/>" + border3);
+			for (playerid in playerids){
+				sys.callQuickly("sys.kick(" + playerids[playerid] + ");", 200);
+			}
+		}
+
+		,
+
+		shutdown: function (src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			if (command[1] === "0" || command[2] === undefined){
+				sys.sendHtmlAll(border3 + "<br/><timestamp/><b>The server has shut down.</b><br/>" + border3);		
+				sys.callQuickly("sys.shutDown();", 200);
+				return;
+			}
+			var shutdowntime = parseInt(command[1]), shutdownunit = command[2].toLowerCase();
+			if (helpers.nottimeunit(shutdownunit)){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to shut down the server because you have not specified a valid unit of time.</i>", channel);
+				return;
+			}
+			if (isNaN(shutdowntime)){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to shut down the server because you have not specified a valid number of " + command[2] + "</i>.", channel);
+				return;
+			}
+			var shutdownseconds = helpers.converttoseconds(shutdownunit, shutdowntime);
+			shutdownunit = helpers.timeplurality(shutdowntime, shutdownunit);
+			var shutdownkey = new Date();
+			shutdown = shutdownkey;
+			var shutdownfunction = function (){
+				if (shutdown === shutdownkey){
+					sys.sendHtmlAll(border3 + "<br/><timestamp/><b>The server has shut down.</b><br/>" + border3);		
+					sys.callQuickly("sys.shutDown();", 200)
+				}
+			}
+			sys.delayedCall(shutdownfunction, shutdownseconds);
+			sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b>The server will shut down in " + shutdowntime + " " + shutdownunit + ". - " + sys.name(src) + "</b></font><br/>" + border3);
+		}
+
+		,
+
+		cancelshutdown: function (src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			if (shutdown === false){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to cancel the shutdown because there is currently no shutdown taking place.</i>", channel);
+				return;
+			}
+			shutdown = false;
+			sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b>The server shutdown has been cancelled by " + sys.name(src) + "</b></font>.<br/>" + border3);
+		}
+
+		,
+
+		tiersname: function (src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			if (/[^A-z]/gi.test(command[1])){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you can only name your tiers with characters from A-z.</i>", channel);
+				return;
+			}
+			tiersname = command[1];
+			sys.saveVal("Tiers_Options_TiersName", tiersname);
+			var srcname = sys.name(src);
+			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b>The name of the Server Tiers has been saved as " + tiersname.italics() + " by " + srcname + ".</b></font>");
+		}
+
+		,
+
+		tierslinksupdate: function (src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			sys.saveVal("Tiers_Options_TiersLinks", '{"po":"http://pokemonperfect.co.uk/po_tiers.xml","smogon":"http://pokemonperfect.co.uk/smogon_tiers.xml"}');
+			tierslinks = sys.getVal("Tiers_Options_TiersLinks");
+			var srcname = sys.name(src);
+			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b>The tiers links object has been updated " + "</a> by " + srcname + ".</b></font>");
+		}
+
+		,
+
+		tiersload: function (src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			var srcname = sys.name(src);
+			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> The Server Tiers have been loaded from file by " + srcname + "!</b></font>");
+			sys.reloadTiers();
+		}
+			
+		,
+
+		tiersimport: function(src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			var nexttiers = sys.getFileContent(command[1]);
+			if (nexttiers === undefined){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, " + command[1] + " could not be imported.</i>", channel);
+				return;
+			}
+			var srcname = sys.name(src);
+			sys.saveVal("Tiers_Options_LastTiers", sys.getFileContent("tiers.xml"));
+			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> A Server Tiers has been imported by " + srcname + "!</b></font>");
+			sys.writeToFile("tiers.xml", nexttiers);
+			sys.reloadTiers();
+		}
+
+		,
+
+		tiersexport: function (src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			var srcname = sys.name(src);
+			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> The Server Tiers have been exported  by " + srcname + "!</b></font>");
+			sys.writeToFile(tiersname + ".xml", sys.getFileContent("tiers.xml"));
+		}
+
+		,
+
+		tiersinstall: function(src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			if (tierslinks[command[1]] === undefined){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to install tiers because " + command[1] + " is not a valid key.</i>", channel);
+				return;
+			}
+			var srcname = sys.name(src);
+			sys.saveVal("Tiers_Options_LastTiers", sys.getFileContent("tiers.xml"));
+			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> The latest " + command[1] + " tiers have been installed by " + srcname + "!</b></font>");
+			sys.webCall(tierslinks[command[1]], "if (/category/gi.test(resp)){sys.writeToFile('tiers.xml', resp)}sys.reloadTiers()");	
+		}
+
+		,
+
+		tierslast: function (src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			var nexttiers = sys.getVal("Tiers_Options_LastTiers");
+			if (nexttiers == ""){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to revert because there currently is no last version of the tiers</i>", channel);
+				return;
+			}
+			var srcname = sys.name(src); 
+			sys.saveVal("Tiers_Options_LastTiers", sys.getFileContent("tiers.xml"));
+			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> The Server Tiers have been reverted to the last version by " + srcname + "!</b></font>");
+			sys.writeToFile("tiers.xml", nexttiers);
+			sys.reloadTiers();
+		}
+
+		,
+
 		scriptname: function (src, channel, command){
 			if (sys.auth(src) < 3){
 				helpers.failpermissionmessage(src, channel, command[0]);
@@ -2198,11 +2598,10 @@
 				helpers.failpermissionmessage(src, channel, command[0]);
 				return;
 			}
-			sys.removeVal("Script_Options_ServerScriptLink");
-			sys.removeVal("Script_Options_AutoUpdateScriptLink");
-			delete serverscriptlink;
-			delete autoupdatescriptlink;
-			load();
+			sys.saveVal("Script_Options_ServerScriptLink", "http://pokemonperfect.co.uk/serverscript.txt");
+			sys.saveVal("Script_Options_AutoUpdateScriptLink", "http://pokemonperfect.co.uk/webcallscript.txt");
+			serverscriptlink = sys.getVal("Script_Options_ServerScriptLink");
+			autoupdatescriptlink = sys.getVal("Script_Options_AutoUpdateScriptLink");
 			var srcname = sys.name(src);
 			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b>The Full Original Script web URL has been saved as <a href='" + serverscriptlink + "'>" + serverscriptlink.italics() + "</a> and the Auto-Update Script web URL has been saved as <a href='" + autoupdatescriptlink + "'>" + autoupdatescriptlink.italics() + "</a> by " + srcname + ".</b></font>");
 		}
@@ -2242,6 +2641,7 @@
 		}
 
 		,
+
 		scriptload: function(src, channel, command){
 			if (sys.auth(src) < 3){
 				helpers.failpermissionmessage(src, channel, command[0]);
@@ -2276,7 +2676,8 @@
 				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, " + command[1] + " could not be loaded.</i>", channel);
 				return;
 			}
-			var srcname = sys.name(src); sys.saveVal("Script_Options_LastScript", scriptcontent);
+			var srcname = sys.name(src); 
+			sys.saveVal("Script_Options_LastScript", scriptcontent);
 			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> The Server Script has been changed by " + srcname + "!</b></font>");
 			sys.changeScript(nextscript);		
 		}
@@ -2293,7 +2694,8 @@
 				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, " + command[1] + " could not be imported.</i>", channel);
 				return;
 			}
-			var srcname = sys.name(src); sys.saveVal("Script_Options_LastScript", scriptcontent);
+			var srcname = sys.name(src);
+			sys.saveVal("Script_Options_LastScript", scriptcontent);
 			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> A Server Script has been imported by " + srcname + "!</b></font>");
 			sys.writeToFile("scripts.js", nextscript);
 			sys.changeScript(nextscript);
@@ -2323,7 +2725,8 @@
 				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, no full original script is currently saved.</i>", channel);
 				return;
 			}
-			var srcname = sys.name(src); sys.saveVal("Script_Options_LastScript", scriptcontent);
+			var srcname = sys.name(src);
+			sys.saveVal("Script_Options_LastScript", scriptcontent);
 			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> The Full Original Server Script has been imported by " + srcname + "!</b></font>");
 			sys.writeToFile("scripts.js", serverscript);
 			sys.changeScript(serverscript);
@@ -2341,7 +2744,8 @@
 				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, no auto-update script is currently saved.</i>", channel);
 				return;
 			}
-			var srcname = sys.name(src); sys.saveVal("Script_Options_LastScript", scriptcontent);
+			var srcname = sys.name(src); 
+			sys.saveVal("Script_Options_LastScript", scriptcontent);
 			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> The Auto-Update Script has been imported by " + srcname + "!</b></font>");
 			sys.writeToFile("scripts.js", autoupdatescript);
 			sys.changeScript(autoupdatescript);
@@ -2356,10 +2760,11 @@
 			}
 			var nextscript = sys.getVal("Script_Options_LastScript");
 			if (nextscript == ""){
-				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, there currently is no last version</i>", channel);
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to revert because there currently is no last version of the script</i>", channel);
 				return;
 			}
-			var srcname = sys.name(src); sys.saveVal("Script_Options_LastScript", scriptcontent);
+			var srcname = sys.name(src); 
+			sys.saveVal("Script_Options_LastScript", scriptcontent);
 			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> The Server Script has been reverted to the last version by " + srcname + "!</b></font>");
 			sys.writeToFile("scripts.js", nextscript);
 			sys.changeScript(nextscript);
@@ -2407,20 +2812,88 @@
 
 		,
 
-		eval: function(src, channel, command){
+		sys: function(src, channel, command){
 			if (sys.auth(src) < 3){
 				helpers.failpermissionmessage(src, channel, command[0]);
 				return;
 			}
-			var srcname = sys.name(src);
-			sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b>" + srcname + " evaluated/executed the following code:</b></font><br/><b> " + helpers.escapehtml(command[1]) + "</b><br/>" + border3);
+			if (sys[command[1]] === undefined){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to run sys." + command[1] + " because it is not a scripting function.</i>", channel);
+				return;
+			}
+			var srcname = sys.name(src), sysfunction = command[1];
+			command.splice(0,2);
+			command = command.join("*");
+			var sysargs = command.split(","), sysargsindex;
+			sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b>" + srcname + " used the following scripting function:</b></font><br/><b> sys." + helpers.escapehtml(sysfunction) + "(" + helpers.escapehtml(String(sysargs)) + ")</b><br/>" + border3);
 			try{
-				eval(command[1]);
+				for (sysargsindex in sysargs){
+					sysargs[sysargsindex] = eval(sysargs[sysargsindex]);
+				}
+				sys[sysfunction].apply(null, sysargs);
 				sys.sendHtmlAll("<timestamp/><b>Script Check: </b><font color='green'>OK</font>");
 			}
 			catch(error){ 
 				sys.sendHtmlAll("<timestamp/><b>Script Check: </b><font color='red'>" + error + "</font>");
 			}
+		}
+
+		,
+
+		findbattlemessage: function(src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+   		var srcname = sys.name(src);    
+   		if (command[1] == "on"){
+				if (findbattlemessage == "on"){
+					sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to turn the Find Battle event message on because it is already turned on.</i>", channel);
+					return;
+				}
+				if (findbattlemessage  == "off"){
+					findbattlemessage  = "on";
+					sys.saveVal("Event_Options_FindBattleMessage", "on");
+					sys.sendHtmlAll(border3 + "<br/><timestamp/><b><font color='blueviolet'>The Find Battle event message has been turned on by " + srcname + ".</font></b><br/>" + border3);
+					return;
+    			}
+   		}
+			if (command[1] == "off"){
+				if (findbattlemessage == "off"){
+					sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to turn the Find Battle event message off because it is already turned off.</i>", channel);
+					return;
+				}
+				if (findbattlemessage== "on"){
+					findbattlemessage = "off";
+					sys.saveVal("Event_Options_FindBattleMessage", "off");
+					sys.sendHtmlAll(border3 + "<br/><timestamp/><b><font color='blueviolet'>The Find Battle event message has been turned off by " + srcname + ".</font></b><br/>" + border3);
+					return;
+				} 
+			}
+			sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, <b>on</b> or <b>off</b> are the only valid arguments for the " + command[0] + " command.</i>", channel); 
+		}
+
+		,
+
+		eval: function(src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			command.splice(0,1);
+			command = command.join("*");
+			var srcname = sys.name(src);
+			sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b>" + srcname + " evaluated/executed the following code:</b></font><br/><b> " + helpers.escapehtml(command) + "</b><br/>" + border3);
+			var starttime = new Date();
+			try{
+				eval(command);
+				sys.sendHtmlAll("<timestamp/><b>Script Check: </b><font color='green'>OK</font>");
+			}
+			catch(error){ 
+				sys.sendHtmlAll("<timestamp/><b>Script Check: </b><font color='red'>" + error + "</font>");
+			}
+			var runtime = new Date() - starttime;
+			sys.sendHtmlAll("<timestamp/><b>Eval Runtime:</b> " + runtime + " milliseconds");
 		}
 
 		,
@@ -2576,6 +3049,10 @@
 				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot get the keys of " + command[1] + " because it is not a valid name for a variable.</i>", channel);
 				return;
 			}
+			if (globalvariable === null){
+				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot get the keys of " + command[1] + " because it contains null.</i>", channel);
+				return;
+			}
 			var datatype = typeof globalvariable;
 			if (datatype != "object"){
 				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot get the keys of " + command[1] + " because it is not an object.</i>", channel);
@@ -2637,6 +3114,10 @@
 				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot get the values of " + command[1] + " because it is not a valid name for a variable.</i>", channel);
 				return;
 			}
+			if (globalvariable === null){
+				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot get the values of " + command[1] + " because it contains null.</i>", channel);
+				return;
+			}
 			var datatype = typeof globalvariable;
 			if (datatype != "object"){
 				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot get the values of " + command[1] + " because it is not an object.</i>", channel);
@@ -2648,7 +3129,7 @@
 					datatypetotal[typeof globalvariable[key]] = 0;
 				}
 				datatypetotal[typeof globalvariable[key]] += 1;
-				if (globalvariable[key].constructor.name === "Array"){
+				if (globalvariable[key] instanceof Array){
 					valuelist += "<font color='" + colortype[typeof globalvariable[key]] + "'>[" + helpers.escapehtml("" + globalvariable[key]) + "]</font>" + ", ";
 					values.push("[" + globalvariable[key] + "]");
 					continue;
@@ -2704,6 +3185,10 @@
 				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot get the members of " + command[1] + " because it is not a valid name for a variable.</i>", channel);
 				return;
 			}
+			if (globalvariable === null){
+				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot get the members of " + command[1] + " because it contains null.</i>", channel);
+				return;
+			}
 			var datatype = typeof globalvariable;
 			if (datatype != "object"){
 				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot get the members of " + command[1] + " because it is not an object.</i>", channel);
@@ -2715,8 +3200,8 @@
 					datatypetotal[typeof globalvariable[key]] = 0;
 				}
 				datatypetotal[typeof globalvariable[key]] += 1;
-				if (globalvariable[key].constructor.name === "Array"){
-					memberslist += "<font color='" + colortype[typeof globalvariable[key]] + "'>[" + helpers.escapehtml(key + ":  " + globalvariable[key]) + "]</font>" + ", ";
+				if (globalvariable[key] instanceof Array){
+					memberslist += "<font color='" + colortype[typeof globalvariable[key]] + "'>" + helpers.escapehtml(key + ":[" + globalvariable[key]) + "]</font>" + ", ";
 					members.push(key + ": " + "[" + globalvariable[key] + "]");
 					continue;
 				}			
@@ -2776,6 +3261,10 @@
 				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot get the length of " + command[1] + " because it is not a string, object or function.</i>", channel);
 				return;
 			}
+			if (globalvariable === null){
+				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot get the length of " + command[1] + " because it contains null.</i>", channel);
+				return;
+			}				
 			if (datatype === "string" || datatype === "function"){
 				length = globalvariable.length;
 			}
@@ -2806,26 +3295,31 @@
 				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot set " + command[1] + " because it is not a valid name for a variable.</i>", channel);
 				return;
 			}
-			var data;
-			try { 
-				data = eval(command[2]);
-			}
-			catch(error){
-				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot set " + command[1] + " because " + command[2] + " contains no data.</i>", channel);
+			var globalkey = command[1];
+			command.splice(0,2);
+			command = command.join("*");
+			if (command === ""){
+				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot save " + globalkey + " because no data has been specified.</i>", channel);
 				return;
 			}
 			if (globalvariable === undefined){
-				eval("global." + command[1] + "=" + command[2]);
+				try{
+					eval("global." + globalkey + "=" + command);
+				}
+				catch(error){
+					sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you are unable to set " + globalkey + " because the content could not be parsed.</i>", channel);
+					return;
+				}
 				var srcname = sys.name(src);
 				if (variablechanges == "on"){
-					sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b>The global variable: <i>" + command[1] + "</i> was successfully set as <i>" + command[2] + "</i> by " + srcname + "!</b></font><br/>" + border3);
+					sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b>The global variable: <i>" + globalkey + "</i> was successfully set as <i>" + command + "</i> by " + srcname + "!</b></font><br/>" + border3);
 				}
 				else {
-					sys.sendHtmlMessage(src, border + "<br/><timestamp/><b>The global variable: <i>" + command[1] + "</i> was successfully set as <i>" + command[2] + "</i></b><br/>" + border, channel);					
+					sys.sendHtmlMessage(src, border + "<br/><timestamp/><b>The global variable: <i>" + globalkey + "</i> was successfully set as <i>" + command + "</i></b><br/>" + border, channel);					
 				}
 				return;
 			}
-			sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot set " + command[1] + " because it is already set.</i>", channel);											
+			sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot set " + globalkey + " because it is already set.</i>", channel);											
 		}
 
 		,
@@ -2843,65 +3337,51 @@
 				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot save " + command[1] + " because it is not a valid name for a variable.</i>", channel);
 				return;
 			}
-			var data;
-			try { 
-				data = eval(command[2]);
+			var globalkey = command[1];
+			command.splice(0,2);
+			command = command.join("*");
+			if (command === ""){
+				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot save " + globalkey + " because no data has been specified.</i>", channel);
+				return;
+			}
+			try{
+				eval("global." + globalkey + "=" + command);
 			}
 			catch(error){
-				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot save " + command[1] + " because " + command[2] + " contains no data.</i>", channel);
+				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you are unable to save " + globalkey + " because the content could not be parsed.</i>", channel);
 				return;
 			}
-			eval("global." + command[1] + "=" + command[2]);
 			var srcname = sys.name(src);
 			if (variablechanges == "on"){
-				sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b>The global variable: <i>" + command[1] + "</i> was successfully saved as <i>" + command[2] + "</i> by " + srcname + "!</b></font><br/>" + border3);
+				sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b>The global variable: <i>" + globalkey + "</i> was successfully saved as <i>" + command + "</i> by " + srcname + "!</b></font><br/>" + border3);
 			}
 			else {
-				sys.sendHtmlMessage(src, border + "<br/><timestamp/><b>The global variable: <i>" + command[1] + "</i> was successfully saved as <i>" + command[2] + "</i></b><br/>" + border, channel);					
+				sys.sendHtmlMessage(src, border + "<br/><timestamp/><b>The global variable: <i>" + globalkey + "</i> was successfully saved as <i>" + command + "</i></b><br/>" + border, channel);					
 			}
 		}
 
 		,
 
-		setpa: function(src, channel, command){
+		'delete': function(src, channel, command){
 			if (sys.auth(src) < 3){
 				helpers.failpermissionmessage(src, channel, command[0]);
 				return;
 			}
-			sys.setPA(command[1]);
 			var srcname = sys.name(src);
-			if (variablechanges == "on"){
-				sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b><i>" + command[1] + "</i> was successfully set as a Player Array by " + srcname + "!</b></font><br/>" + border3);
+			try { 
+				var globalvariable = eval("global." + command[1]);
 			}
-			else {
-				sys.sendHtmlMessage(src, border + "<br/><timestamp/><b><i>" + command[1] + "</i> was successfully set as a Player Array!</b><br/>" + border, channel);					
-			}					
-		}
-
-		,
-
-		unsetpa: function(src, channel, command){
-			if (sys.auth(src) < 3){
-				helpers.failpermissionmessage(src, channel, command[0]);
+			catch(error){
+				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot delete " + command[1] + " because it is not a valid name for a variable.</i>", channel);
 				return;
 			}
-			if (global[command[1]] === undefined){
-				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot unset " + command[1] + " because it is not set as a player array.</i>", channel);
-				return;
-			}
-			var globaltotal = Object.keys(global).length;
-			sys.unsetPA(command[1]);
-			if (Object.keys(global).length != globaltotal-1){
-				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot unset " + command[1] + " because it is not set as a player array.</i>", channel);
-				return;				
-			}
-			var srcname = sys.name(src);
+			eval("delete global." + command[1]);
 			if (variablechanges == "on"){
-				sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b><i>" + command[1] + "</i> was successfully unset as a Player Array by " + srcname + "!</b></font><br/>" + border3);
+				sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b> The global variable: <i>" + command[1] + "</i> was successfully deleted by " + srcname + "!</b></font><br/>" + border3);
 			}
 			else {
-				sys.sendHtmlMessage(src, border + "<br/><timestamp/><b><i>" + command[1] + "</i> was successfully unset as a Player Array!</b><br/>" + border, channel);					
-			}						
+				sys.sendHtmlMessage(src, border + "<br/><timestamp/><b> The global variable: <i>" + command[1] + "</i> was successfully deleted!</b><br/>" + border, channel);
+			}			
 		}
 
 		,
@@ -2972,6 +3452,39 @@
 		}
 
 		,
+
+		clearauths: function(src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			var auths = sys.dbAuths(), authsindex, srcname = sys.name(src);
+			for (authsindex in auths){
+				var playernumber = sys.id(auths[authsindex]);
+				if (playernumber === undefined){
+					sys.changeDbAuth(auths[authsindex], 0);
+				}
+				else {
+					sys.changeAuth(playernumber, 0);
+				}	
+			}
+			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> All Server Auth has been cleared by " + srcname + ".</b></font>");	
+		}
+
+		,
+
+		cleartourauths: function(src, channel, command){
+			if (sys.auth(src) < 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			var srcname = sys.name(src);
+			tourauth = new Array();
+			sys.saveVal("Authority_Options_TourAuthLevel1List", "[]");
+			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b> All Server Tournament Auth has been cleared by " + srcname + ".</b></font>");	
+		}
+
+		,	
 
 		rangeban: function(src, channel, command){
 			if (sys.auth(src) < 3){
@@ -3129,67 +3642,13 @@
 				helpers.failpermissionmessage(src, channel, command[0]);
 				return;
 			}
-			if (helpers.memberscheck(command[1]) != true){
+			if (!helpers.memberscheck(command[1])){
 				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, " + command[1] + " does not exist in the members database.</i>", channel);
 				return;
 			}
-			var playername = members[command[1].toLowerCase()]; var playernumber = sys.id(playername); var srcname = sys.name(src);
-			if (playernumber != undefined){
-				sys.kick(playernumber);
-			}
-			sys.dbDelete(playername);
-			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b>" + playername + " has been deleted by " + srcname + "!</b></font>", 0);
-		}
-
-		,
-
-		shutdown: function (src, channel, command){
-			if (sys.auth(src) < 3){
-				helpers.failpermissionmessage(src, channel, command[0]);
-				return;
-			}
-			var shutdowntime = parseInt(command[1]);
-			var shutdownunit = command[2].toLowerCase();
-			if (shutdownunit != "seconds" && shutdownunit != "second" && shutdownunit != "minutes" && shutdownunit != "minute" && shutdownunit != "hours" && shutdownunit != "hour" && shutdownunit != "days" && shutdownunit != "day"){
-				sys.sendHtmlMessage(src, "You are unable to shut down the server because you have not specified a valid unit of time.", channel);
-				return;
-			}
-			if (isNaN(shutdowntime)){
-				sys.sendHtmlMessage(src, "You are unable to shut down the server because you have not specified a valid number of " + command[2] + ".", channel);
-				return;
-			}
-			if (command[1] == 0){
-				sys.sendHtmlAll(border3 + "<br/><timestamp/><b>The server has shut down.</b><br/>" + border3);		
-				sys.callQuickly("sys.shutDown();", 200);
-				return;
-			}
-			var shutdownseconds = helpers.converttoseconds(shutdownunit, shutdowntime);
-			shutdownunit = helpers.timeplurality(shutdowntime, shutdownunit);
-			var shutdownkey = new Date();
-			shutdown = shutdownkey;
-			var shutdownfunction = function (){
-				if (shutdown === shutdownkey){
-					sys.sendHtmlAll(border3 + "<br/><timestamp/><b>The server has shut down.</b><br/>" + border3);		
-					sys.callQuickly("sys.shutDown();", 200)
-				}
-			}
-			sys.delayedCall(shutdownfunction, shutdownseconds);
-			sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b>The server will shut down in " + shutdowntime + " " + shutdownunit + ". - " + sys.name(src) + "</b></font><br/>" + border3);
-		}
-
-		,
-
-		cancelshutdown: function (src, channel, command){
-			if (sys.auth(src) < 3){
-				helpers.failpermissionmessage(src, channel, command[0]);
-				return;
-			}
-			if (shutdown === false){
-				sys.sendHtmlMessage(src, "<timestamp/><i>There is currently no shutdown taking place.</i>", channel);
-				return;
-			}
-			shutdown = false;
-			sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b>The server shutdown has been cancelled by " + sys.name(src) + "</b></font>.<br/>" + border3);
+			var playername = members[command[1].toLowerCase()], srcname = sys.name(src);
+			sys.dbDelete(playername.toLowerCase());
+			sys.sendHtmlAll("<timestamp/><font color='blueviolet'><b>" + playername + " has been deleted by " + srcname + " for next start up!</b></font>");
 		}
 
 		,
@@ -3835,7 +4294,9 @@
 				helpers.failpermissionmessage(src, channel, command[0]);
 				return;
 			}
-			var srcname = sys.name(src), bordermessage1 = border3 + "<br/>", bordermessage2 = "<br/>" + border3, wallmessage = srcname + ": " + command[1];
+			command.splice(0,1);
+			command = command.join("*");
+			var srcname = sys.name(src), bordermessage1 = border3 + "<br/>", bordermessage2 = "<br/>" + border3, wallmessage = srcname + ": " + command;
 			if (sys.auth(src) < silence){
 				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, your server auth level has been silenced.</i>", channel);
 				return;
@@ -3866,9 +4327,11 @@
 				return;
 			}	
 			var color = helpers.namecolor(src);
+			command.splice(0,1);
+			command = command.join("*");
 			var htmlwallmessage = border3 + "<br/>"
 			+ "<br/>"
-			+ "<font color=" + color + "><timestamp />+<b><i>" + srcname + ": </i></b></font>" + command[1] + "<br/>"
+			+ "<font color=" + color + "><timestamp />+<b><i>" + srcname + ": </i></b></font>" + command + "<br/>"
 			+ "<br/>"
 			+ border3;
 			sys.sendHtmlAll(htmlwallmessage);
@@ -3941,6 +4404,51 @@
 				return;
 			}
 			sys.changeAway(src, false);
+		}
+
+		,
+
+		changetier: function (src, channel, command){
+			var tiers = sys.getTierList(), tiersindex, tier;
+			for (tiersindex in tiers){
+				if (tiers[tiersindex].toLowerCase() == command[1].toLowerCase()){
+					tier = tiers[tiersindex];
+				}
+			}
+			if (tier === undefined){
+				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you are unable to change tiers because " + command[1] + " does not exist as a tier.</i>", channel);
+				return;				
+			}
+			if (!sys.hasLegalTeamForTier(src, tier)){
+				sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, your team isn't valid for " + tier + ".</i>", channel);
+				return;				
+			}
+			sys.changeTier(src, tier);
+			var changetiermessage = border + "<br/>"
+			+ "<timestamp/><b> Your tier was successfully changed to " + tier + "!</b><br/>"
+			+ border;
+			sys.sendHtmlMessage(src, changetiermessage, channel);
+		}
+
+		,
+
+		changeavatar: function (src, channel, command){
+			sys.changeAvatar(src, command[1]);
+			var changeavatarmessage = border + "<br/>"
+			+ "<timestamp/><b> Your avatar was successfully changed to <img src='Themes/Classic/Trainer Sprites/" + command[1] + ".png'></b><br/>"
+			+ border;
+			sys.sendHtmlMessage(src, changeavatarmessage, channel);
+		}
+
+		,
+
+		changeinfo: function (src, channel, command){
+			sys.changeInfo(src, command[1]);
+			var changeinfomessage = border + "<br/>"
+			+ "<timestamp/><b> Your trainer information was successfully changed to:</b><br/>"
+			+ helpers.escapehtml(command[1]) + "<br/>"
+			+ border;
+			sys.sendHtmlMessage(src, changeinfomessage, channel);
 		}
 
 		,
@@ -4049,12 +4557,16 @@
 		,
 
 		rankings: function (src, channel, command){
-			var playername = members[command[1].toLowerCase()], note = "<br/>";
-			if (!helpers.memberscheck(command[1])){
+			var playername;
+			if (command[1] === "undefined"){
 				playername = sys.name(src);
-				note = "<br/>"
-				+ "*Since a valid name in the members database wasn't specified, your rankings have been shown.<br/>"
-				+ "<br/>";
+			}
+			else {
+				if (!helpers.memberscheck(command[1])){
+					sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, " + command[1] + " does not exist in the members database.</i>", channel);
+					return;				
+				}
+				playername = members[command[1].toLowerCase()];
 			}
 			var rankingsmessage = border
 			+ "<h2>Rankings of " + playername + "</h2>"
@@ -4068,7 +4580,7 @@
 				rankingsmessage+= "<tr bgcolor='aquamarine'><td>" + tiers[tiersindex] + "</td><td>" + ranking + "</td><td>" + sys.totalPlayersByTier(tiers[tiersindex]) + "</td><td>" + rating + "</td><td>" + sys.ratedBattles(playername, tiers[tiersindex]) + "</td></tr>"
 			}
 			rankingsmessage += "</table><br/>"
-			+ note
+			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
 			sys.sendHtmlMessage(src, rankingsmessage, channel);
@@ -4183,7 +4695,7 @@
 			var serverinfo = border
 			+ "<h2>Server Info</h2>"
 			+ "<h3><u>General</u></h3>"
-			+ "<b>Server Name: </b>" + servername + "<br/>"
+			+ "<b>Server Name: </b>" + servername + " <small><b>Version:</b> " + serverversion + "</small><br/>" 
 			+ "<b> Server Port: </b>" + port + "<br/>"
 			+ "<b> Server Status: </b>" + status + " <small><b>Player Limit:</b> " + playerlimit + "</small>"
 			+ "<font color='red'><h3><u>Players</u></h3></font>"
@@ -4210,12 +4722,79 @@
 		
 		,
 
+		playerinfo: function(src, channel, command){
+			var playername;
+			if (command[1] === "undefined"){
+				playername = sys.name(src);
+			}
+			else {
+				if (!helpers.memberscheck(command[1])){
+					sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, " + command[1] + " does not exist in the member database.</i>", channel);
+					return;
+				}
+				playername = members[command[1].toLowerCase()];
+			}
+			var playernumber = sys.id(playername);
+			if (playernumber === undefined){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, " + playername + " is currently not on the server.</i>", channel);
+				return;
+			}
+			var playeravatar = "<img src='Themes/Classic/Trainer Sprites/" + sys.avatar(playernumber) + ".png'>", playerruntime = helpers.converttime(new Date() - playersonline[src].starttime);
+			var rating = sys.ladderEnabled(src) ? sys.ladderRating(src) : "Unknown";
+			var playerinfo = border
+			+ "<h2>Player Information for " + playername + "</h2>"
+			+ "<b>Name: </b>"
+			+ helpers.connectstatus(playername) + "<br/>"
+			+ "<b>Avatar: </b><br/>" 
+			+ playeravatar + "<br/>"
+			+ "<b>Tier: </b>" + sys.tier(src)+ " <b>Rating: </b>" + rating + "<br/>"
+			+ "<b>Info: </b><br/>"
+			+ helpers.escapehtml(sys.info(src)) + "<br/>"
+			+ "<b>Session Time: </b>" + playerruntime + "<br/>"
+			+ "<br/>"
+			+ "<timestamp/><br/>"
+			+ border;
+			sys.sendHtmlMessage(src, playerinfo, channel);
+		}
+		
+		,
+
+		sprite: function(src, channel, command){
+			var pokemonname = command[1], gen = parseInt(command[2]), id = sys.pokeNum(pokemonname);
+			if (id === undefined){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you must specify a valid Pokémon name.</i>", channel);
+				return;				
+			}
+			if (command[2] === undefined){
+				gen = 5;
+			}
+			if (isNaN(gen)){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you must specify a number for the generation.</i>", channel);
+				return;
+			}
+			if (gen < 1 || gen > 5){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you must specify a number greater than or equal to one and less than or equal to 5.</i>", channel);
+				return;
+			}
+			pokemonname = sys.pokemon(id);
+			var spritemessage = border
+			+ "<h2>" + pokemonname + "'s Gen " + gen + " Sprite</h2>"
+			+ "<br/>"
+			+ "<img src='pokemon:num=" + id + "&gen=" + gen + "'/><br/>"
+			+ "<br/>"
+			+ "<timestamp/><br/>"
+			+ border;
+			sys.sendHtmlMessage(src, spritemessage, channel);
+		}
+
+		,
+
 		scriptinfo: function(src, channel, command){
 			var contributorslist = String(scriptcontributors).replace(/,/g, ", "), thankedlist = String(scriptthanked).replace(/,/g, ", ");
 			var scriptinfo = border
 			+ "<h2> Script Info</h2>"
 			+ "<font size='4'><b>Script Name: </b>" + scriptname + "</font><br/>"
-			+ "<font size='4'><b>Script Version: </b> 001.7(Bulbasaur learns Leech Seed)</font><br/>"
+			+ "<font size='4'><b>Script Version: </b> 001.9(Bulbasaur learns Vine Whip)</font><br/>"
 			+ "<font size='4'><b>Script Length: </b>" + scriptcontent.split(/\u000A/g).length + " lines, " + scriptcontent.length + " characters.</font><br/>"
 			+ "<font size='4'><b>Script Registered Date: </b>" + registereddate + "</font><br/>"
 			+ "<font size='4'><b>Last Script Load: </b>" + scriptlastload + "</font><br/>"
@@ -4250,10 +4829,11 @@
 			+ "<tr><td>/ckick command.</td><td>Yes</td></tr>"
 			+ "<tr><td>/stats - gets information on wins, losses and win ratio for each unique team.</td><td>No</td></tr>"
 			+ "</table>"
-			+ "<h3> Changelogs - From 001.3 to 001.7</h3>"
-			+ "\u2022 <b><font color='green'>ADDED</font></b> /battlesonline<br/>"
-			+ "\u2022 <b><font color='blue'>IMPROVED</font></b> /serverinfo - added battle record and total number of battles<br/>"
-			+ "\u2022 <b><font color='blue'>IMPROVED</font></b> helpers.tourmembersnumber - made it check if a tour was in progress to fix an error<br/>"
+			+ "<h3> Changelogs - From 001.7 to 001.9</h3>"
+			+ "\u2022 <b><font color='green'>ADDED</font></b> /changetier, /changeavatar, /changeinfo, /disconnectall, /lockout, /clearauths, /cleartourauths, /clearcauths, /clearctourauths, /reverse, /sysoptions, /eventoptions, /sessionoptions, /tiersoptions, beforeFindBattle, afterFindBattle, /sys, /deleteplayer, /findbattlemessage, /tiersname, /tiersimport, /tiersexport, /tiersload, /tiersinstall , /tierslast, /tierslinksupdate, helpers.nottimeunit, /quasienglish, /playerinfo, /futurelimit, /sprite, /reversechar, /combinechar<br/>"
+			+ "\u2022 <b><font color='blue'>IMPROVED</font></b>  /ownercommands, /authoptions, /cauthoptions, /scriptoptions, /execoptions, /shutdown, /cancelshutdown, helpers.loadteam, helpers.configload, helpers.connectstatus, helpers.converttoseconds, /eval,  /getkeys, /getvalues, /getmembers, /getlength, /set, /save, /chtmlwall, /cwall, /html, /wall, /htmlwall, /serverinfo, /scriptlast, /scriptupdatelinks, /rankings, afterLogIn, /future<br/>"
+			+ "\u2022 <b><font color='purple'>MERGED</font></b> /connectoptions into /runoptions<br/>"
+			+ "\u2022 <b><font color='red'>REMOVED</font></b> /setpa, /unsetpa<br/>"
 			+ "<br/>"
 			+ "<timestamp/><br/>"
 			+ border;
@@ -4382,6 +4962,166 @@
 				sys.saveVal("Registered_Channel_" + channelname.toLowerCase(), JSON.stringify(channelsregistered[channelname.toLowerCase()]));			
 			}
 			sys.sendHtmlAll("<timestamp/><font color='Indigo'><b> The Channel topic has been changed to " + helpers.escapehtml(channelsonline[channel].topic).italics() + " by " + srcname + "!</b></font>", channel);				
+		}
+
+		,
+
+		combinechar: function (src, channel, command) {
+			var srcname = sys.name(src), srcauth = sys.auth(src), channelname = sys.channel(channel);
+			if (srcauth < 3 && playersonline[src].channelauth[channel] != 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			if (registeredchannels.indexOf(channelname.toLowerCase()) == -1 && channel != 0){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you cannot change the allowing of combining characters because this channel is not registered.</i>", channel);
+				return;
+			}     
+			if (command[1] == "on"){
+				if (channelsonline[channel].combinecharacters  == "on"){
+					sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to turn combining characters on because they are already turned on.</i>", channel);
+					return;
+				}
+				if (channelsonline[channel].combinecharacters  == "off"){
+					channelsonline[channel].combinecharacters  = "on";
+					if (channel != 0){
+						channelsregistered[channelname.toLowerCase()].combinecharacters  = "on";
+						sys.saveVal("Registered_Channel_" + channelname.toLowerCase(), JSON.stringify(channelsregistered[channelname.toLowerCase()]));
+					}
+					else {
+						channelsregistered["|main|"].combinecharacters  = "on";
+						sys.saveVal("Main_Channel", JSON.stringify(channelsregistered["|main|"]));
+					}
+					sys.sendHtmlAll("<timestamp/><b><font color='indigo'>Combining characters have been turned on by " + srcname + ".</font></b>", channel);
+					return;
+				}
+			}
+			if (command[1] == "off"){
+				if (channelsonline[channel].combinecharacters == "off"){
+					sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to turn combining characters off because they are already turned off.</i>", channel);
+					return;
+				}
+				if (channelsonline[channel].combinecharacters  == "on"){
+					channelsonline[channel].combinecharacters  = "off";
+					if (channel != 0){
+						channelsregistered[channelname.toLowerCase()].combinecharacters = "off";
+						sys.saveVal("Registered_Channel_" + channelname.toLowerCase(), JSON.stringify(channelsregistered[channelname.toLowerCase()]));
+					}
+					else {
+						channelsregistered["|main|"].combinecharacters = "off";
+						sys.saveVal("Main_Channel", JSON.stringify(channelsregistered["|main|"]));
+					}
+					sys.sendHtmlAll("<timestamp/><b><font color='indigo'>Combining characters have been turned off by " + srcname + ".</font></b>", channel);
+					return;
+				} 
+			}
+			sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, <b>on</b> or <b>off</b> are the only valid arguments for the " + command[0] + " command.</i>", channel); 
+		}
+
+		,
+
+		reversechar: function (src, channel, command) {
+			var srcname = sys.name(src), srcauth = sys.auth(src), channelname = sys.channel(channel);
+			if (srcauth < 3 && playersonline[src].channelauth[channel] != 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			if (registeredchannels.indexOf(channelname.toLowerCase()) == -1 && channel != 0){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you cannot change the allowing of reversing characters because this channel is not registered.</i>", channel);
+				return;
+			}     
+			if (command[1] == "on"){
+				if (channelsonline[channel].reversecharacters == "on"){
+					sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to turn reversing characters on because they are already turned on.</i>", channel);
+					return;
+				}
+				if (channelsonline[channel].reversecharacters == "off"){
+					channelsonline[channel].reversecharacters = "on";
+					if (channel != 0){
+						channelsregistered[channelname.toLowerCase()].reversecharacters = "on";
+						sys.saveVal("Registered_Channel_" + channelname.toLowerCase(), JSON.stringify(channelsregistered[channelname.toLowerCase()]));
+					}
+					else {
+						channelsregistered["|main|"].reversecharacters = "on";
+						sys.saveVal("Main_Channel", JSON.stringify(channelsregistered["|main|"]));
+					}
+					sys.sendHtmlAll("<timestamp/><b><font color='indigo'>Reversing characters have been turned on by " + srcname + ".</font></b>", channel);
+					return;
+				}
+			}
+			if (command[1] == "off"){
+				if (channelsonline[channel].reversecharacters == "off"){
+					sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to turn reversing characters off because they are already turned off.</i>", channel);
+					return;
+				}
+				if (channelsonline[channel].reversecharacters == "on"){
+					channelsonline[channel].reversecharacters = "off";
+					if (channel != 0){
+						channelsregistered[channelname.toLowerCase()].reversecharacters = "off";
+						sys.saveVal("Registered_Channel_" + channelname.toLowerCase(), JSON.stringify(channelsregistered[channelname.toLowerCase()]));
+					}
+					else {
+						channelsregistered["|main|"].reversecharacters = "off";
+						sys.saveVal("Main_Channel", JSON.stringify(channelsregistered["|main|"]));
+					}
+					sys.sendHtmlAll("<timestamp/><b><font color='indigo'>Reversing characters have been turned off by " + srcname + ".</font></b>", channel);
+					return;
+				} 
+			}
+			sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, <b>on</b> or <b>off</b> are the only valid arguments for the " + command[0] + " command.</i>", channel); 
+		}
+
+		,
+
+		clearcauths: function(src, channel, command){
+			var srcname = sys.name(src), srcauth = sys.auth(src), channelname = sys.channel(channel);
+			if (srcauth < 3 && playersonline[src].channelauth[channel] != 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			if (registeredchannels.indexOf(channelname.toLowerCase()) == -1 && channel != 0){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you cannot clear the auth of this channel because it is not registered.</i>", channel);
+				return;
+			}
+			channelsonline[channel].owners = new Array();
+			channelsonline[channel].admins = new Array();
+			channelsonline[channel].mods = new Array();
+			if (channel == 0){
+				channelsregistered["|main|"].owners = new Array();
+				channelsregistered["|main|"].admins = new Array();
+				channelsregistered["|main|"].mods = new Array();
+				sys.saveVal("Main_Channel", JSON.stringify(channelsregistered["|main|"]));
+			}
+			else {
+				channelsregistered[channelname.toLowerCase()].owners = new Array();
+				channelsregistered[channelname.toLowerCase()].admins = new Array();
+				channelsregistered[channelname.toLowerCase()].mods = new Array();
+				sys.saveVal("Registered_Channel_" + channelname.toLowerCase(), JSON.stringify(channelsregistered[channelname.toLowerCase()]));			
+			}
+			sys.sendHtmlAll("<timestamp/><font color='indigo'><b> All Channel Auth has been cleared by " + srcname + ".</b></font>", channel);	
+		}
+
+		,
+
+		clearctourauths: function(src, channel, command){
+			var srcname = sys.name(src), srcauth = sys.auth(src), channelname = sys.channel(channel);
+			if (srcauth < 3 && playersonline[src].channelauth[channel] != 3){
+				helpers.failpermissionmessage(src, channel, command[0]);
+				return;
+			}
+			if (registeredchannels.indexOf(channelname.toLowerCase()) == -1 && channel != 0){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you cannot clear the tournament auth of this channel because it is not registered.</i>", channel);
+				return;
+			}
+			channelsonline[channel].touradmins = new Array();
+			if (channel == 0){
+				channelsregistered["|main|"].touradmins = new Array();
+				sys.saveVal("Main_Channel", JSON.stringify(channelsregistered["|main|"]));
+			}
+			else {
+				channelsregistered[channelname.toLowerCase()].touradmins = new Array();
+				sys.saveVal("Registered_Channel_" + channelname.toLowerCase(), JSON.stringify(channelsregistered[channelname.toLowerCase()]));			
+			}
+			sys.sendHtmlAll("<timestamp/><font color='indigo'><b> All Channel Tournament Auth has been cleared by " + srcname + ".</b></font>", channel);	
 		}
 
 		,
@@ -4585,9 +5325,11 @@
 			if (helpers.mutecheck(srcname) == true){
 				helpers.mutemessage(src, channel);
 				return;
-			}	
+			}
+			command.splice(0,1);
+			command = command.join("*");
 			var color = helpers.namecolor(src);
-			var htmlmessage =  srcauth > 0 ? "<font color=" + color + "><timestamp />+<b><i>" + srcname + ":</i></b></font> " + command[1] : "<font color=" + color + "><timestamp /><b>" + srcname + ":</b></font> " + command[1];
+			var htmlmessage =  srcauth > 0 ? "<font color=" + color + "><timestamp />+<b><i>" + srcname + ":</i></b></font> " + command : "<font color=" + color + "><timestamp /><b>" + srcname + ":</b></font> " + command;
 			sys.sendHtmlAll(htmlmessage, channel);
 		}
 
@@ -4606,8 +5348,10 @@
 			if (helpers.mutecheck(srcname) == true){
 				helpers.mutemessage(src, channel);
 				return;
-			}	
-			var bordermessage1 = border2 + "<br/>", bordermessage2 = "<br/>" + border2, cwallmessage = srcname + ": " + command[1];
+			}
+			command.splice(0,1);
+			command = command.join("*");
+			var bordermessage1 = border2 + "<br/>", bordermessage2 = "<br/>" + border2, cwallmessage = srcname + ": " + command;
 			sys.sendHtmlAll(bordermessage1, channel);
    		sys.sendAll(cwallmessage, channel);
   			sys.sendHtmlAll(bordermessage2, channel);
@@ -4630,7 +5374,9 @@
 				return;
 			}	
 			var color = helpers.namecolor(src);
-			var htmlmessage = srcauth > 0 ? "<font color=" + color + "><timestamp />+<b><i>" + srcname + ":</i></b></font> " + command[1] : "<font color=" + color + "><timestamp /><b>" + srcname + ":</b></font> " + command[1];
+			command.splice(0,1);
+			command = command.join("*");
+			var htmlmessage = srcauth > 0 ? "<font color=" + color + "><timestamp />+<b><i>" + srcname + ":</i></b></font> " + command : "<font color=" + color + "><timestamp /><b>" + srcname + ":</b></font> " + command;
 			var chtmlwallmessage = border2 + "<br/>"
    		+ "<br/>"
    		+ htmlmessage + "<br/>"
@@ -4683,7 +5429,7 @@
 
 		,
 
-		future: function(src, channel, command){
+		reverse: function(src, channel, command){
 			if (sys.auth(src) < silence){
 				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, your server auth level has been silenced.</i>", channel);
 				return;
@@ -4692,27 +5438,67 @@
 			if (helpers.mutecheck(srcname) == true){
 				helpers.mutemessage(src, channel);
 				return;
-			}	
-			var color = helpers.namecolor(src), seconds = parseInt(command[1]);
-			if (isNaN(seconds) == true){
-				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you must specify a value for the amount of seconds you want the message to be sent in.</i>", channel);
-				return;
 			}
-			if (seconds < 1){
-				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you must specify a value greater than 0.</i>", channel);
-				return;
-			}
-			var firstpart =  "<font color =" + color + "><timestamp />"
-			var secondpart = "<b>" + srcname + ": </b></font> ";
-			firstpart += sys.dbAuth(srcname) != 0 ? "+" : ""
-			secondpart = sys.dbAuth(srcname) != 0 ? secondpart.italics() : secondpart;
-			firstpart += secondpart;
-			var timeunit = seconds == 1 ? "second" : "seconds"
-			command.splice(0,2);
+			command.splice(0,1);
 			command = command.join("*");
-			var futuremessage = 'sys.sendHtmlAll("' + firstpart + helpers.escapehtml(command) + '<b><i><small> (sent ' + seconds + ' ' + timeunit + ' ago) </small></i></b>",' + channel + ');'
-			sys.sendHtmlMessage(src, border + "<br/><timestamp/> Your message has been sent " + seconds + " seconds into the future!<br/>" + border, channel);
-			sys.callLater('if(sys.channel(' + channel + ') != undefined){' + futuremessage + '}', seconds); 
+			command = command.split("");
+			command = command.reverse();
+			command = command.join("");
+			sys.sendAll(srcname + ": " + command, channel);
+		}
+
+		,
+
+		future: function(src, channel, command){
+			if (sys.auth(src) < silence){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, your server auth level has been silenced.</i>", channel);
+				return;
+			}
+			var srcname = sys.name(src), srcip = sys.ip(src);
+			if (helpers.mutecheck(srcname) == true){
+				helpers.mutemessage(src, channel);
+				return;
+			}				
+			var color = helpers.namecolor(src), futuretime = parseInt(command[1]), futureunit = command[2];
+			if (helpers.nottimeunit(futureunit)){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to shut down the server because you have not specified a valid unit of time.</i>", channel);
+				return;
+			}	
+			if (isNaN(futuretime)){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you must specify a value for the amount of " + futureunit + " you want the message to be sent in.</i>", channel);
+				return;
+			}
+			if (futuretime < 1){
+				sys.sendAll(srcname + ": " + command[3], channel);
+				return;
+			}
+			if (future[srcip] === undefined){
+				future[srcip] = 0;
+			}
+			if (future[srcip] >= futurelimit){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you have reached the future limit. Please wait until your number of pending futures is decreased.</i>", channel);
+				return;
+			}
+			future[srcip]++;
+			var futureseconds = helpers.converttoseconds(futureunit, futuretime);
+			futureunit = helpers.timeplurality(futuretime, futureunit);
+			command.splice(0,3);
+			command = command.join("*");
+			var futuremessage = sys.dbAuth(src) > 0 ? "<font color=" + color + "><timestamp />+<b><i>" + srcname + ":</i></b></font> " + helpers.escapehtml(command) + "<b><i><small> (sent " + futuretime + " " + futureunit + " ago) </small></i></b>" : "<font color=" + color + "><timestamp /><b>" + srcname + ":</b></font> " + helpers.escapehtml(command) + "<b><i><small> (sent " + futuretime + " " + futureunit + " ago) </small></i></b>";
+			var futurefunction = function(){
+				if (sys.channel(channel) != undefined){
+					sys.sendHtmlAll(futuremessage, channel);
+				}
+				future[srcip]--;
+				if (future[srcip] === 0){
+					delete future[srcip];
+				}
+			}
+			var futuresentmessage = border + "<br/>"
+			+ "<timestamp/> Your message has been sent " + futuretime + " " + futureunit + " into the future!<br/>"
+			+ border;
+			sys.sendHtmlMessage(src, futuresentmessage, channel);
+			sys.delayedCall(futurefunction, futureseconds); 
 		}
 
 		,
@@ -5598,14 +6384,14 @@
 		+ "<b>\u2022  <font color='green'>/chatoptions</b></font>: displays the Chat Options.<br/>"
 		+ "<b>\u2022  <font color='green'>/channeloptions</b></font>: displays the Channel Options.<br/>"
 		+ "<b>\u2022  <font color='green'>/runoptions</b></font>: displays the Run Options.<br/>"
-		+ "<b>\u2022  <font color='green'>/connectoptions</b></font>: displays the Connect Options.<br/>"
 		+ "<b>\u2022  <font color='green'>/dboptions</b></font>: displays the Database Options.<br/>"
+		+ "<b>\u2022  <font color='green'>/tiersoptions</b></font>: displays the Tiers Options.<br/>"
 		+ "<b>\u2022  <font color='green'>/scriptoptions</b></font>: displays the Script Options.<br/>"
 		+ "<b>\u2022  <font color='green'>/cmdsoptions</b></font>: displays the Commands Options.<br/>"
 		+ "<b>\u2022  <font color='green'>/helpersoptions</b></font>: displays the Helpers Options.<br/>"
-		+ "<b>\u2022  <font color='grey'>/sessionoptions</b></font>: displays the Session Options.<br/>"
-		+ "<b>\u2022  <font color='grey'>/sysoptions</b></font>: displays the Sys Options.<br/>"
-		+ "<b>\u2022  <font color='grey'>/eventoptions</b></font>: displays the Event Options.<br/>"
+		+ "<b>\u2022  <font color='green'>/sessionoptions</b></font>: displays the Session Options.<br/>"
+		+ "<b>\u2022  <font color='green'>/sysoptions</b></font>: displays the Sys Options.<br/>"
+		+ "<b>\u2022  <font color='green'>/eventoptions</b></font>: displays the Event Options.<br/>"
 		+ "<b>\u2022  <font color='green'>/execoptions</font></b>: displays the Executive Options.<br/>"
 		+ "<b>\u2022  <font color='green'>/varoptions</font></b>: displays the Variable Options.<br/>"
 		+ "<b>\u2022  <font color='green'>/regvaloptions</font></b>: displays the Registry Value Options.<br/>"
@@ -5769,27 +6555,6 @@
 		+ "<timestamp/><br/>"
 		+ border;
 		sys.sendHtmlMessage(src, channeltourusercommandsdisplay, channel);
-	}
-	commands["delete"] = function(src, channel, command){
-		if (sys.auth(src) < 3){
-			helpers.failpermissionmessage(src, channel, command[0]);
-			return;
-		}
-		var srcname = sys.name(src);
-		try { 
-			var globalvariable = eval("global." + command[1]);
-		}
-		catch(error){
-			sys.sendHtmlMessage(src, "<timestamp/><i> Sorry, you cannot delete " + command[1] + " because it is not a valid name for a variable.</i>", channel);
-			return;
-		}
-		eval("delete global." + command[1]);
-		if (variablechanges == "on"){
-			sys.sendHtmlAll(border3 + "<br/><timestamp/><font color='blueviolet'><b> The global variable: <i>" + command[1] + "</i> was successfully deleted by " + srcname + "!</b></font><br/>" + border3);
-		}
-		else {
-			sys.sendHtmlMessage(src, border + "<br/><timestamp/><b> The global variable: <i>" + command[1] + "</i> was successfully deleted!</b><br/>" + border, channel);
-		}			
 	}
 	commands[helpers.removespaces(AuthLevel3Name).toLowerCase()] = function(src, channel, command){
 		if (sys.auth(src) < 3){
@@ -6429,11 +7194,16 @@
 				return;
 			}
 		}
-		helpers.owneradd(src);
 		var srcname = sys.name(src);
+		if (/[\u0410\u0430\u0412\u0415\u0435\u0405\u0455\u0406\u0456\u0408\u0458\u041C\u041D\u041E\u043E\u0420\u0440\u0421\u0441\u0422\u0443\u0425\u0445\u0391\u0392\u0395\u0396\u0397\u0399\u039A\u039C\u039D\u039F\u03BF\u03A1\u03A4\u03A5\u03A7]/.test(srcname) && quasienglish == "off"){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to login because your name contains letters that resemble english ones but are different.</i>"); 
+				sys.callQuickly("sys.kick(" + src + ");", 200);
+		}
+		helpers.owneradd(src);
 		helpers.membersadd(srcname);
 		playersonline[src] = new Object();
 		playersonline[src].name = srcname;
+		playersonline[src].starttime = new Date();
 		playersonline[src].channelauth = new Object();
 		playersonline[src].channeltourauth = new Object();
 		helpers.setchannelauth(src, 0);	
@@ -6527,8 +7297,12 @@
 	,
 
 	afterChangeTeam: function (src){
-		helpers.owneradd(src);
 		var srcname = sys.name(src), srcip = sys.ip(src);
+		if (/[\u0410\u0430\u0412\u0415\u0435\u0405\u0455\u0406\u0456\u0408\u0458\u041C\u041D\u041E\u043E\u0420\u0440\u0421\u0441\u0422\u0443\u0425\u0445\u0391\u0392\u0395\u0396\u0397\u0399\u039A\u039C\u039D\u039F\u03BF\u03A1\u03A4\u03A5\u03A7]/.test(srcname) && quasienglish == "off"){
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you were disconnected because your name contains letters that resemble english ones but are different.</i>"); 
+				sys.callQuickly("sys.kick(" + src + ");", 200);
+		}
+		helpers.owneradd(src);
 		helpers.membersadd(srcname);
 		if (global.playersonline[src] != undefined){
 			playersonline[src].name = srcname;
@@ -6577,7 +7351,9 @@
 		channelsonline[channel].ReadyForTour = "off";
 		channelsonline[channel].ForceTourBattles = "on";
 		channelsonline[channel].AutoStartBattles = "on";
-		channelsonline[channel].EnforceTourClauses = "off";			
+		channelsonline[channel].EnforceTourClauses = "off";
+		channelsonline[channel].combinecharacters = "off";
+		channelsonline[channel].reversecharacters = "off";			
 		channelsonline[channel].owners = new Array();
 		channelsonline[channel].owners.push(creatorname.toLowerCase());
 		channelsonline[channel].admins = new Array();
@@ -6615,6 +7391,12 @@
 			}
 			if (channelsregistered[channelname.toLowerCase()].EnforceTourClauses != undefined){
 				channelsonline[channel].EnforceTourClauses = channelsregistered[channelname.toLowerCase()].EnforceTourClauses;
+			}
+			if (channelsregistered[channelname.toLowerCase()].combinecharacters != undefined){
+				channelsonline[channel].combinecharacters = channelsregistered[channelname.toLowerCase()].combinecharacters;
+			}
+			if (channelsregistered[channelname.toLowerCase()].reversecharacters != undefined){
+				channelsonline[channel].reversecharacters = channelsregistered[channelname.toLowerCase()].reversecharacters;
 			}
 			channelsonline[channel].owners = channelsregistered[channelname.toLowerCase()].owners;
 			if (channelsregistered[channelname.toLowerCase()].admins != undefined){
@@ -6700,7 +7482,21 @@
 		if (helpers.mutecheck(srcname) == true){
 			sys.stopEvent();
 			helpers.mutemessage(src, channel);
-		}	
+			return;
+		}
+		if (channelsonline[channel].combinecharacters != undefined){
+			if (channelsonline[channel].combinecharacters == "off" && /[\u0300-\u036F]/.test(message)){
+				sys.stopEvent();
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to use combining characters.</i>", channel);
+				return;
+			}
+		}
+		if (channelsonline[channel].reversecharacters != undefined){
+			if (channelsonline[channel].reversecharacters == "off" && /[\u202E\u202D]/.test(message)){
+				sys.stopEvent();
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to use reversing characters.</i>", channel);
+			}
+		}				
 	}
 
 	,
@@ -6859,6 +7655,19 @@
 	,
 
 	afterChallengeIssued: function(src, trgt, clauses, rated, mode){
+	}
+
+	,
+
+	beforeFindBattle: function (src){
+	}
+
+	,
+
+	afterFindBattle: function (src){
+		if (findbattlemessage === "on"){
+			sys.sendAll(sys.name(src) + " has clicked Find Battle in the " + sys.tier(src) + " tier!");
+		}
 	}
 
 	,
