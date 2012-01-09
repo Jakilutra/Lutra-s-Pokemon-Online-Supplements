@@ -4739,17 +4739,17 @@
 				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, " + playername + " is currently not on the server.</i>", channel);
 				return;
 			}
-			var playeravatar = "<img src='Themes/Classic/Trainer Sprites/" + sys.avatar(playernumber) + ".png'>", playerruntime = helpers.converttime(new Date() - playersonline[src].starttime);
-			var rating = sys.ladderEnabled(src) ? sys.ladderRating(src) : "Unknown";
+			var playeravatar = "<img src='Themes/Classic/Trainer Sprites/" + sys.avatar(playernumber) + ".png'>", playerruntime = helpers.converttime(new Date() - playersonline[playernumber].starttime);
+			var rating = sys.ladderEnabled(playernumber) ? sys.ladderRating(playernumber) : "Unknown";
 			var playerinfo = border
 			+ "<h2>Player Information for " + playername + "</h2>"
 			+ "<b>Name: </b>"
 			+ helpers.connectstatus(playername) + "<br/>"
 			+ "<b>Avatar: </b><br/>" 
 			+ playeravatar + "<br/>"
-			+ "<b>Tier: </b>" + sys.tier(src)+ " <b>Rating: </b>" + rating + "<br/>"
+			+ "<b>Tier: </b>" + sys.tier(playernumber)+ " <b>Rating: </b>" + rating + "<br/>"
 			+ "<b>Info: </b><br/>"
-			+ helpers.escapehtml(sys.info(src)) + "<br/>"
+			+ helpers.escapehtml(sys.info(playernumber)) + "<br/>"
 			+ "<b>Session Time: </b>" + playerruntime + "<br/>"
 			+ "<br/>"
 			+ "<timestamp/><br/>"
