@@ -5484,7 +5484,7 @@
 			futureunit = helpers.timeplurality(futuretime, futureunit);
 			command.splice(0,3);
 			command = command.join("*");
-			var futuremessage = sys.dbAuth(src) > 0 ? "<font color=" + color + "><timestamp />+<b><i>" + srcname + ":</i></b></font> " + helpers.escapehtml(command) + "<b><i><small> (sent " + futuretime + " " + futureunit + " ago) </small></i></b>" : "<font color=" + color + "><timestamp /><b>" + srcname + ":</b></font> " + helpers.escapehtml(command) + "<b><i><small> (sent " + futuretime + " " + futureunit + " ago) </small></i></b>";
+			var futuremessage = sys.dbAuth(srcname) > 0 ? "<font color=" + color + "><timestamp />+<b><i>" + srcname + ":</i></b></font> " + helpers.escapehtml(command) + "<b><i><small> (sent " + futuretime + " " + futureunit + " ago) </small></i></b>" : "<font color=" + color + "><timestamp /><b>" + srcname + ":</b></font> " + helpers.escapehtml(command) + "<b><i><small> (sent " + futuretime + " " + futureunit + " ago) </small></i></b>";
 			var futurefunction = function(){
 				if (sys.channel(channel) != undefined){
 					sys.sendHtmlAll(futuremessage, channel);
