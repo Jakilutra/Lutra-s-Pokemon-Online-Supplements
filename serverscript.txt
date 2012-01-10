@@ -7660,14 +7660,14 @@
 	,
 
 	beforeFindBattle: function (src){
+		if (findbattlemessage === "on"){
+			sys.sendAll(sys.name(src) + " has clicked Find Battle in the " + sys.tier(src) + " tier!");
+		}
 	}
 
 	,
 
 	afterFindBattle: function (src){
-		if (findbattlemessage === "on"){
-			sys.sendAll(sys.name(src) + " has clicked Find Battle in the " + sys.tier(src) + " tier!");
-		}
 	}
 
 	,
