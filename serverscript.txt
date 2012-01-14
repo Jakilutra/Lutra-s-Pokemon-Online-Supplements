@@ -5461,7 +5461,7 @@
 			}				
 			var color = helpers.namecolor(src), futuretime = parseInt(command[1]), futureunit = command[2];
 			if (helpers.nottimeunit(futureunit)){
-				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to shut down the server because you have not specified a valid unit of time.</i>", channel);
+				sys.sendHtmlMessage(src, "<timestamp/><i>Sorry, you are unable to use future because you have not specified a valid unit of time.</i>", channel);
 				return;
 			}	
 			if (isNaN(futuretime)){
