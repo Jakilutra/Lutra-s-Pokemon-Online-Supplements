@@ -1,0 +1,44 @@
+<html>
+<body>
+<script type="text/javascript">
+if (window.XMLHttpRequest){
+	xmlhttp=new XMLHttpRequest();
+}
+else{
+	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+}
+xmlhttp.open("GET","tiers.xml",false);
+xmlhttp.send();
+xmlDoc=xmlhttp.responseXML; 
+var categories = xmlDoc.childNodes[0].getElementsByTagName("category"), categorieslist = "", tierslist = "";
+for (i=0;i<categories.length;i++){
+	if (categories[i].parentNode.parentNode.nodeName !== "category"){
+		var categorieskeys = categories[i].attributes;
+		for (j=0;j<categorieskeys.length;j++){
+			if (categorieskeys[j].name === "name"){
+				var tiers = categories[i].getElementsByTagName("tier");
+				categorieslist += "<th>" + categories[i].attributes[j].nodeValue + "</th>";
+				tierslist += "<td>"
+				for (k=0;k<tiers.length;k++){
+					var tierkeys = tiers[k].attributes;
+					for (l=0;l<tierkeys.length;l++){
+						if (tierkeys[l].name === "name"){
+							var tiername = tierkeys[l].nodeValue;
+							tierslist += "<form action='tierinfo.php?tier=" + encodeURI(tiername) + "' method='post'><input type='submit' value='" + tiername + "'></form>";
+						}
+					}
+				}
+				tierslist += "</td>";
+			}
+		}
+	}
+}
+var display = "<center><h1>Tiers </h1></center>"
++ "<table width='100%'>"
++ "<tr valign='top' align='left'>" + categorieslist + "</tr>"
++ "<tr valign='top' align='left'>" + tierslist + "</tr>" 
++ "</table>";
+document.write(display);
+</script>
+</body>
+</html>
