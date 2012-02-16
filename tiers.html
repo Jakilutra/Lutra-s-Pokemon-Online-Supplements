@@ -2,15 +2,15 @@
 <body>
 <script type="text/javascript">
 if (window.XMLHttpRequest){
-	xmlhttp=new XMLHttpRequest();
+	var xmlhttp = new XMLHttpRequest();
 }
 else{
-	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 }
 xmlhttp.open("GET","tiers.xml",false);
 xmlhttp.send();
-xmlDoc=xmlhttp.responseXML; 
-var categories = xmlDoc.childNodes[0].getElementsByTagName("category"), categorieslist = "", tierslist = "", tierssize = xmlDoc.childNodes[0].getElementsByTagName("tier").length;
+var tiersfile = xmlhttp.responseXML; 
+var categories = tiersfile.childNodes[0].getElementsByTagName("category"), categorieslist = "", tierslist = "", tierssize = tiersfile.childNodes[0].getElementsByTagName("tier").length;
 for (i=0;i<categories.length;i++){
 	if (categories[i].parentNode.parentNode.nodeName !== "category"){
 		var tiers = categories[i].getElementsByTagName("tier"), categorysize = tiers.length;
