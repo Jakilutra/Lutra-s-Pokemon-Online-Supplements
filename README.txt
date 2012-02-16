@@ -6,4 +6,6 @@ To create a rules command, type /writemsgcmd rules*html into the main chat on th
 
 If you host your server directory on a web server with PHP, you can just place tiers.php, tiersinfo.php, ladders.php and ladderinfo.php in your server directory and link to tiers.php and ladders.php to provide easy-to-read tier and ladder information to your users.
 
+ladders.php and ladderinfo.php additionally require you to export ladders (/exportladders or /eval sys.exportTierDatabase();).
+
 N.B. Make sure your chosen scripts.js file, tiers.php, tiersinfo.php, ladders.php and ladderinfo.php are not under any directories such as autoupdatescript/ or fullscript/ when adding them to your own PO server directory.
