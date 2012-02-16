@@ -34,7 +34,7 @@ foreach ($tiers as $tier){
 		. "<tr align='center' valign='top'>" . "<td>" . $gen . "</td>" . "<td>" . $mode . "</td>" . "<td>" . $teamsize . "</td>" . "<td>" . $tier->getAttribute("maxLevel") . "</td>" . "<td>" . $clauses . "</td>" . "<td>" . $banparent . "</td>" . "<td>" . $pokemons . "</td>" . "<td>" . $items . "</td>" . "<td>" . $moves . "</td>" . "<td>" . $restrictno . "</td>" . "<td>" . $restrictpokes . "</td>" . "</tr>" 
 		. "</table>"
 		. "<br/>"
-		. "<center><form action='tiers.html' method='link'><input type='submit' value='Back to Index'></form></center>";
+		. "<center><form action='tiers.php' method='link'><input type='submit' value='Back to Index'></form></center>";
 		echo $display;
 	}
 }
