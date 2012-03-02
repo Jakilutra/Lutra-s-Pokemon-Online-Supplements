@@ -30,4 +30,4 @@ If you host your server directory on a web server with PHP, you can just place `
 
 ### Final Note
 
-Make sure your chosen `scripts.js` file, `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php` and `style.css` are not under any directories such as `autoupdatescript/` or `fullscript/` when adding them to your own PO server directory.
+Make sure your chosen `scripts.js` file, `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php`, `BlueHiddenInnerBall.png` and `style.css` are not under any directories such as `autoupdatescript/` or `fullscript/` when adding them to your own PO server directory.
