@@ -2,6 +2,10 @@
 
 For use with servers of the Online Pokemon Battle Simulator - [Pokemon Online] (https://github.com/coyotte508/pokemon-online)
 
+## Ownership
+
+All content except `BlueHiddenInnerBall.png` was originally created for this repository. `BlueHiddenInnerBall.png` is a modification of `HiddenInnerBall.png` found in the Pokemon Online repository.
+
 ## Instructions
 
 ### Server Scripts
