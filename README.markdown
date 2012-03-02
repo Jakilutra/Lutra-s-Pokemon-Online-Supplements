@@ -16,7 +16,7 @@ To create a rules command, type `/writemsgcmd rules*html` into the main chat on 
 
 If you host your server directory on a web server with PHP, you can just place `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php` and `style.css` in your server directory and link to `tiers.php` and `ladders.php` to provide easy-to-read tier and ladder information to your users.
 
-`ladders.php` and `ladderinfo.php` additionally require you to export ladders (`/exportladders` or `/eval sys.exportTierDatabase();`).
+`ladders.php` and `ladderinfo.php` additionally require you to export ladders (`/exportladders` or `/eval sys.exportTierDatabase();` into the main chat of the server).
 
 ### Final Note
 
