@@ -1,0 +1,38 @@
+<table border="4" style="background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #000, stop:0.25 #1E90FF, stop:0.4 #008000, stop:0.6 #008000, stop:0.75 #DA70D6, stop:1 #000);">
+<tr>
+<td  width ='25%'>
+<div style="background:url(Themes/Classic/Challenge Window/HiddenInnerBall.png);">
+<font size='5' color='beige'><b>Server Info:</b></font><br/>
+<br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/tiers.php" style='color:white'><b> Tiers</b></a></font><br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/ladders.php" style='color:white'><b> Ladders</b></a></font><br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/usage_stats/formatted/index.html" style='color:white'><b> Pokemon Usage Stats</b></a></font><br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/scripts.js" style='color:white'><b>Script</b></a></font><br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/logs/battles/" style='color:white'><b>Battle Logs</b></a></font><br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/logs/chat/" style='color:white'><b>Chat Logs</b></a></font><br/>
+</div>
+</td>
+<td width='50%'>
+<center><h1><u><div style="background:url(Themes/Classic/Challenge Window/HiddenInnerBall.png);"><img src="themes/classic/client/oAvailable.png"><font color='white'> Pokemon Perfect</font><img src="themes/classic/client/oAvailable.png"></div></u></h1>
+<b><i><font color='white'>Pokemon Practice Makes Pokemon Perfect</font></i></b><br/>
+<br/>
+<br/>
+<b><font size='7' color='white'>Advanced Connect: pokemonperfect.co.uk</font></b><br/>
+<br/>
+<br/>
+<b><font size='7' color='white'> <a href="http://www.pokemonperfect.co.uk/forums/forum.php" style='color:white'> Forums</a></font></b>
+</td>
+<td  width ='25%'>
+<div style="background:url(Themes/Classic/Challenge Window/HiddenInnerBall.png);">
+<font size='5' color='beige'><b>Web Info:</b> </font><br/>
+<br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://www.livestream.com/pokemonperfect" style='color:white'><b>Livestream</b></a></font><br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://www.youtube.com/user/PokePerfectMon" style='color:white'><b>Youtube Channel</b></a></font><br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://www.pokemonperfect.co.uk/forums/forumdisplay.php?4-Lutra-s-Server-Script" style='color:white'><b> Lutra's Server Script</b></a></font><br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://www.pokemonperfect.co.uk/forums/forumdisplay.php?19-Tournaments" style='color:white'><b> Tournaments</b></a></font><br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://www.pokemonperfect.co.uk/forums/forumdisplay.php?31-League" style='color:white'><b> League</b></a></font><br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://www.pokemonperfect.co.uk/forums/forumdisplay.php?9-Teams" style='color:white'><b>Teams</b></a></font><br/>
+</div>
+</td>
+</tr>
+</table>

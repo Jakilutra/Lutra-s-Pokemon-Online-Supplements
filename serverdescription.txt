@@ -1,0 +1,7 @@
+<div style="background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #000, stop:0.25 #1E90FF, stop:0.4 #008000, stop:0.6 #008000, stop:0.75 #DA70D6, stop:1 #000);color:#f0f0f0;">
+<center>
+<b><u><font  size='4'> Pokemon Perfect</font></b></u><br/>
+<b><i><font size='1'>Pokemon Practice Makes Pokemon Perfect</font></i></b><br/>
+<b><font size='5'> Advanced Connect: pokemonperfect.co.uk</font></b>
+</center>
+</div>
