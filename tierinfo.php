@@ -40,10 +40,16 @@ foreach ($tiers as $tier){
 		. "<center><h2>" . $tiername . "</h2></center>" 
 		. "<table width='100%'>"
 		. "<tr align='center' valign='top'><th>Generation</th><th>Mode</th><th>Maximum Team Size</th><th>Maximum Level</th><th>Clauses (" . $clausescount . ")</th><th>Ban Parent</th><th>" . $banmode . " Pokemon (" . $pokemonscount . ")</th><th>" . $banmode . " Items (" . $itemscount . ")</th><th>" . $banmode . " Moves (" . $movescount . ")</th><th>Maximum Restricted</th><th>Restricted (" . $restrictcount . ")</th></tr>"
-		. "<tr align='center' valign='top'>" . "<td>" . $gen . "</td>" . "<td>" . $mode . "</td>" . "<td>" . $teamsize . "</td>" . "<td>" . $tier->getAttribute("maxLevel") . "</td>" . "<td>" . $clauses . "</td>" . "<td>" . $banparent . "</td>" . "<td>" . $pokemons . "</td>" . "<td>" . $items . "</td>" . "<td>" . $moves . "</td>" . "<td>" . $restrictno . "</td>" . "<td>" . $restrictpokes . "</td>" . "</tr>" 
+		. "<tr align='center' valign='top'>" . "<td>&nbsp;" . $gen . "</td>" . "<td>&nbsp;" . $mode . "</td>" . "<td>&nbsp;" . $teamsize . "</td>" . "<td>&nbsp;" . $tier->getAttribute("maxLevel") . "</td>" . "<td>&nbsp;" . $clauses . "</td>" . "<td>&nbsp;" . $banparent . "</td>" . "<td>&nbsp;" . $pokemons . "</td>" . "<td>&nbsp;" . $items . "</td>" . "<td>&nbsp;" . $moves . "</td>" . "<td>&nbsp;" . $restrictno . "</td>" . "<td>&nbsp;" . $restrictpokes . "</td>" . "</tr>" 
 		. "</table>"
 		. "<br/>"
 		. "<center><form action='tiers.php' method='link'><input type='submit' value='Back to Index'></form></center>"
+		. "<br/>"
+		. "<center>"
+		. "<table>"
+		. "<tr><th><b>Tiers</b></th><th><a href='ladders.php'>Ladders</a></th></tr>"
+		. "</table>"
+		. "</center>"
 		. "</body>"
 		. "</html>";
 		echo $display;

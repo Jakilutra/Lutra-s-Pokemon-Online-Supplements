@@ -10,7 +10,7 @@ foreach ($categories as $category){
 		$tiers = $category->getElementsByTagName("tier");
 		$categorycount = $tiers->length;
 		$categorieslist .= "<th>" . $category->getAttribute("name") . " (" . $categorycount . ")</th>";
-		$tierslist .= "<td>";
+		$tierslist .= "<td class='noborder'>";
 		foreach($tiers as $tier){
 			$tiername = $tier->getAttribute("name");
 			$tierslist .= "<form action='tierinfo.php?tier=" . urlencode($tiername) . "' method='post'><input type='submit' value='" . $tiername . "'></form>";
@@ -26,10 +26,16 @@ $display = "<html>"
 . "</head>"
 . "<body>"
 . "<center><h1><a href='tiers.php'>Tiers (" . $tierscount . ")</a></h1></center>"
-. "<table width='100%'>"
+. "<table class='noborder' width='100%'>"
 . "<tr valign='top' align='left'>" . $categorieslist . "</tr>"
 . "<tr valign='top' align='left'>" . $tierslist . "</tr>" 
 . "</table>"
+. "<br/>"
+. "<center>"
+. "<table>"
+. "<tr><th><b>Tiers</b></th><th><a href='ladders.php'>Ladders</a></th></tr>"
+. "</table>"
+. "</center>"
 . "</body>"
 . "</html>";
 echo $display;

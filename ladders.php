@@ -58,7 +58,7 @@ foreach ($categories as $category){
 			$filename = "tier_" . $tiername . ".txt";
 			if (file_exists($filename) && file_get_contents($filename) != ""){
 				if ($categorycount == 0){
-					$ladderslist .= "<td>";
+					$ladderslist .= "<td class='noborder'>";
 				}
 				$ladderscount++;
 				$categorycount++;
@@ -87,10 +87,16 @@ $display = "<html>"
 . "<tr align='center'>" . $ladderinfo . "</tr>"
 . "</table>"
 . "<br/>"
-. "<table width='100%'>"
+. "<table class='noborder' width='100%'>"
 . "<tr valign='top' align='left'>" . $categorieslist . "</tr>"
 . "<tr valign='top' align='left'>" . $ladderslist . "</tr>" 
 . "</table>"
+. "<br/>"
+. "<center>"
+. "<table>"
+. "<tr><th><a href='tiers.php'>Tiers</a></th><th><b>Ladders</b></th></tr>"
+. "</table>"
+. "</center>"
 . "</body>"
 . "</html>";
 echo $display;

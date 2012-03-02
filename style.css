@@ -4,14 +4,17 @@
 
 a:link{
 	color:white;
+	text-decoration: none
 }
 
 a:visited {
 	color:white;
+	text-decoration: none
 }
 
 a:hover {
 	color:beige;
+	text-decoration: none
 }
 
 
@@ -28,16 +31,37 @@ h2{
 	font-size: 35px;
 }
 
+table.noborder {
+	background-color: transparent;
+	border:0px solid;
+}
+
+table {
+	border:3px solid black;
+	border-spacing:0px;
+}
+
 th {
+	background-color: MidnightBlue;
+	border:3px solid black;
 	color:white;
 	font-family:Arial;
 	font-size: 25px;
+	padding:10px 10px 10px 10px;
+}
+
+td.noborder {
+	background-color: transparent;
+	border:0px solid;
 }
 
 td {
+	background-color: DarkBlue;
+	border: 3px solid black;
 	color:white;
 	font-family:Arial;
 	font-size: 20px;
+	padding:10px 10px 10px 10px;
 }
 
 input {

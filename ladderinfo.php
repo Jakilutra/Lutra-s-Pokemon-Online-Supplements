@@ -45,6 +45,12 @@ $display = "<html>"
 . "</table>"
 . "<br/>"
 . "<center><form action='ladders.php' method='link'><input type='submit' value='Back to Index'></form></center>"
+. "<br/>"
+. "<center>"
+. "<table>"
+. "<tr><th><a href='tiers.php'>Tiers</a></th><th><b>Ladders</b></th></tr>"
+. "</table>"
+. "</center>"
 . "</body>"
 . "</html>";
 echo $display;
