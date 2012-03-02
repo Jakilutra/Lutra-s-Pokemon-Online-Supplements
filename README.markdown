@@ -10,11 +10,9 @@ Download either `autoupdatescript/scripts.js` (updates the full script every tim
 
 Otherwise, copy and paste the content of `autoupdatescript/webcallscript.txt` or `fullscript/serverscript.txt` into the Scripts window (Options > Scripts)  and click OK to load.
 
-##Announcements and Server Description
+### Announcements and Server Description
 
 Copy and paste the content of `Announcements.txt` and/or `serverdescription.txt` into the Announcement and/or Server Description boxes respectively (Options > Config) and commence editing - if you want to  a starting point for your announcements and/or server description.
-
-## Server Description
 
 ### Rules
 
