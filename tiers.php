@@ -18,10 +18,19 @@ foreach ($categories as $category){
 		$tierslist .= "</td>";
 	}
 }
-$display = "<center><h1>Tiers (" . $tierscount . ")</h1></center>"
+$display = "<html>"
+. "<head>"
+. "<title>Tiers</title>"
+. "<link rel='stylesheet' type='text/css' href='style.css' />"
+. "<meta http-equiv='Content-Type' content='text/html'; charset='utf-8' />"
+. "</head>"
+. "<body>"
+. "<center><h1><a href='tiers.php'>Tiers (" . $tierscount . ")</a></h1></center>"
 . "<table width='100%'>"
 . "<tr valign='top' align='left'>" . $categorieslist . "</tr>"
 . "<tr valign='top' align='left'>" . $tierslist . "</tr>" 
-. "</table>";
+. "</table>"
+. "</body>"
+. "</html>";
 echo $display;
 ?>

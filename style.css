@@ -1,0 +1,72 @@
+﻿body{
+	background: url("http://www.pokemonperfect.co.uk/BlueHiddenInnerBall.png");
+}
+
+a:link{
+	color:white;
+}
+
+a:visited {
+	color:white;
+}
+
+a:hover {
+	color:beige;
+}
+
+
+h1{
+	color:white;
+	font-family:Arial;
+	font-size: 40px;
+}
+
+
+h2{
+	color:white;
+	font-family:Arial;
+	font-size: 35px;
+}
+
+th {
+	color:white;
+	font-family:Arial;
+	font-size: 25px;
+}
+
+td {
+	color:white;
+	font-family:Arial;
+	font-size: 20px;
+}
+
+input {
+	-moz-box-shadow:inset 0px 41px 0px -50px #f5978e;
+	-webkit-box-shadow:inset 0px 41px 0px -50px #f5978e;
+	box-shadow:inset 0px 41px 0px -50px #f5978e;
+	background-color:#f24537;
+	-moz-border-radius:42px;
+	-webkit-border-radius:42px;
+	border-radius:42px;
+	border: 4px solid #d02718;
+	display:inline-block;
+	color:white;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding: 4px;
+	text-decoration:none;
+	text-shadow: 50px #810e05;
+}
+
+input:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #c62d1f), color-stop(1, #f24537) );
+	background:-moz-linear-gradient( center top, #c62d1f 5%, #f24537 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c62d1f', endColorstr='#f24537');
+	background-color:#c62d1f;
+}
+
+input:active {
+	position:relative;
+	top:1px;
+}

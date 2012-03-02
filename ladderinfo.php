@@ -1,4 +1,5 @@
 <?php
+$ladderscount = $_GET["count"];
 $tiername = $_GET["tier"];
 $ladderfile = file("tier_" . $tiername . ".txt");
 $ladderinfo = array();
@@ -29,12 +30,22 @@ for ($i=1;$i <$rankingscount+1;$i++){
 	array_push($standings, "<td>{$i}</td>" . $rankings[$i]);
 }
 $standings = implode("<tr align='left'>", $standings);
-$display = "<center><h1> Ladder for " . $tiername . "</h1></center>"
+$display = "<html>"
+. "<head>"
+. "<title>Ladders</title>"
+. "<link rel='stylesheet' type='text/css' href='style.css' />"
+. "<meta http-equiv='Content-Type' content='text/html'; charset='utf-8' />"
+. "</head>"
+. "<body>"
+. "<center><h1><a href='ladders.php'>Ladders (" . $ladderscount . ")</a></h1></center>"
+. "<center><h2> Ladder for " . $tiername . "</h1></center>"
 . "<table width='100%'>"
 . "<tr align='left'><th>Ranking</th><th>Name</th><th>Number of Battles</th><th>Displayed Rating</th><th>Actual Rating</th></tr>"
 . $standings
 . "</table>"
 . "<br/>"
-. "<center><form action='ladders.php' method='link'><input type='submit' value='Back to Index'></form></center>";
+. "<center><form action='ladders.php' method='link'><input type='submit' value='Back to Index'></form></center>"
+. "</body>"
+. "</html>";
 echo $display;
 ?>
