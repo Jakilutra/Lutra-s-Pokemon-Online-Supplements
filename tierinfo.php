@@ -47,7 +47,7 @@ foreach ($tiers as $tier){
 		. "<br/>"
 		. "<center>"
 		. "<table>"
-		. "<tr><th><b>Tiers</b></th><th><a href='ladders.php'>Ladders</a></th></tr>"
+		. "<tr><th>Tiers</th><td><a href='ladders.php'>Ladders</a></td></tr>"
 		. "</table>"
 		. "</center>"
 		. "</body>"

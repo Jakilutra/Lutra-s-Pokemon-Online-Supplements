@@ -39,6 +39,7 @@ table.noborder {
 table {
 	border:3px solid black;
 	border-spacing:0px;
+	position: relative;
 }
 
 th {
