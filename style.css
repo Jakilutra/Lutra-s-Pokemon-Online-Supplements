@@ -1,34 +1,187 @@
-﻿body{
-	background: url("BlueHiddenInnerBall.png");
+.tier {
+	padding-top:100px;
+	margin-top: 8px;
+	margin-bottom: 0px;
+	float: left;
+	min-width: 130px;
+	background: no-repeat;
 }
 
-a:link{
+.hiddenPower {
+	padding-left: 4px;
+	font-weight: bold;
+}
+
+/* Top 5 pokemon in the tier page */
+.topPokemon {
+	font-weight: bold;
+	margin-bottom: 0px;
+}
+
+/* Lower pokemon in the tier page */
+.lowPokemon {
+	margin-bottom: 0px;
+}
+
+/* Top of a tier page */
+.tierBattleNumber {
+}
+
+/* Top of a pokemon page */
+.pokemonBattleNumber {
+	/*text-align: center;*/
+}
+
+/* Ranks within a pokemon page */
+.pokemonRank {
+	font-weight: bold;
+}
+
+/* Styles <ul> */
+.moveList {
+}
+
+/* Styles <li> */
+.move {
+}
+
+/* Level, item, ability */
+.pokemonTitle {
+	margin-bottom: 0px;
+}
+
+/* Evs, ivs, nature */
+.advanced {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 0.9em;
+}
+
+.smallPercent {
+	padding-left: 4px;
+	font-size: 0.7em;
+}
+
+.button {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin: 0px;
+}
+
+.normal {
+	color: #a8a878;
+}
+.fighting {
+	color: #c03028;
+}
+.flying {
+	color: #a890f0;
+}
+.poison {
+	color: #a040a0;
+}
+.ground {
+	color: #e0c068;
+}
+.rock {
+	color: #b8a038;
+}
+.bug {
+	color: #a8b820;
+}
+.ghost {
+	color: #705898;
+}
+.steel {
+	color: #b8b8d0;
+}
+.fire {
+	color: #f08030;
+}
+.water {
+	color: #6890f0;
+}
+.grass {
+	color: #78c850;
+}
+.electric {
+	color: #f8d030;
+}
+.psychic {
+	color: #f85888;
+}
+.ice {
+	color: #98d8d8;
+}
+.dragon {
+	color: #7038f8;
+}
+.dark {
+	color: #705848;
+}
+.curse {
+	color: #68a090;
+}
+
+.globaltable th, .globaltable td{
+	background: DodgerBlue;
+	font-size: 12px;
+}
+
+
+/* Links */
+a {
 	color:white;
+	font-family:Arial;
 	text-decoration: none
 }
-
-a:visited {
-	color:white;
-	text-decoration: none
-}
-
 a:hover {
 	color:beige;
+	font-family:Arial;
 	text-decoration: none
 }
+a img {
+    border : 0px;
+}
 
+header {
+    display : block;
+    margin : 0px auto;
+	/*text-align: center;*/
+	font-size: 1.2em;
+	font-weight: bold;
+}
 
-h1{
+h1 {
+	text-align: center;
 	color:white;
 	font-family:Arial;
 	font-size: 40px;
 }
 
-
-h2{
+h2 {
 	color:white;
 	font-family:Arial;
 	font-size: 35px;
+}
+
+body {
+	background: url("BlueHiddenInnerBall.png");	
+}
+
+div {
+	margin: 0px;
+}
+
+
+table {
+	border:3px solid black;
+	border-spacing:0px;
+	margin-top: 10px;
+	margin-left: 0px;
+	position: relative;
 }
 
 table.noborder {
@@ -36,10 +189,9 @@ table.noborder {
 	border:0px solid;
 }
 
-table {
-	border:3px solid black;
-	border-spacing:0px;
-	position: relative;
+caption {
+	color:white;
+	font-family:Arial;
 }
 
 th {
@@ -51,11 +203,6 @@ th {
 	padding:10px 10px 10px 10px;
 }
 
-td.noborder {
-	background-color: transparent;
-	border:0px solid;
-}
-
 td {
 	background-color: DarkBlue;
 	border: 3px solid black;
@@ -63,6 +210,21 @@ td {
 	font-family:Arial;
 	font-size: 20px;
 	padding:10px 10px 10px 10px;
+}
+
+td.noborder {
+	background-color: transparent;
+	border:0px solid;
+}
+
+p {
+	color:white;
+	font-family:Arial;	
+}
+
+ul {
+	color:white;
+	font-family:Arial;
 }
 
 input {

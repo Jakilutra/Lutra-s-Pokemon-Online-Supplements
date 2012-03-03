@@ -1,0 +1,24 @@
+page{{
+<html>
+	<head>
+		<title>Usage statistics</title>
+		<link rel="stylesheet" type="text/css" href="../../style.css" />
+		<meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
+	</head>
+	<body>
+		<table>
+			<tr><td><a href='../../tiers.php'>Tiers</a></td><td><a href='../../ladders.php'>Ladders</a></td><th>Usage Statistics</th></tr>
+		</table>
+		<h1><a href="index.html">Usage Statistics</a></h1>
+		<div style="text-align:center;">
+		{tier*}
+		</div>
+	</body>
+</html>
+}}
+
+tier{{
+			<div class="tier" style="background-image:url('poke_img/{imagelink}')">
+				<a href='{tier}/index.html'>{tier}</a>
+			</div>
+}}

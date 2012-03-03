@@ -1,0 +1,28 @@
+page{{
+<html>
+	<head>
+		<title>Tier {tier}</title>
+		<link rel="stylesheet" type="text/css" href="../../../style.css" />
+		<meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
+	</head>
+	<body>
+		<table>
+			<tr><td><a href='../../../tiers.php'>Tiers</a></td><td><a href='../../../ladders.php'>Ladders</a></td><th>Usage Statistics</th></tr>
+		</table>
+		<h1><a href="../index.html">Usage Statistics</a></h1>
+		<h2><a href="index.html"> {tier} </a></h2>
+		<p class='tierbattles'>{battles} battles</p>
+		{toppokemon*}
+		{lowpokemon*}
+	</body>
+</html>
+}}
+
+toppokemon{{
+	<img src='../poke_img/{imagelink}' />
+	<p class='topPokemon'># {rank} - <a href='{pokemonlink}'>{pokemon}</a> ({percentage} %)</p>
+}}
+
+lowpokemon{{
+	<p class='lowPokemon'># {rank} - <img src='../poke_icons/{iconlink}' /> 	<a href='{pokemonlink}'>{pokemon}</a> ({percentage} %)</p>
+}}
