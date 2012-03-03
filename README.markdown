@@ -4,10 +4,11 @@ For use with servers of the Online Pokemon Battle Simulator - [Pokemon Online] (
 
 ## Ownership
 
-All content except `BlueHiddenInnerBall.png`,  `style.css`,  `index.template`, pokemon_page.template and tier_page.template was originally created for this repository. 
+All content except `BlueHiddenInnerBall.png`,  `style.css`,  `index.template`, `pokemon_page.template` and `tier_page.template` was originally created for this repository. 
 
-`BlueHiddenInnerBall.png` is a modification of `HiddenInnerBall.png` from bin/Themes/Classic/Challenge Window in the Pokemon Online repository.
-`style.css`, `index.template`, `pokemon_page.template` and `tier_page.template`  are modified from bin/usage_stats/formatted/ in the Pokemon Online repository.
+`BlueHiddenInnerBall.png` is a modification of `HiddenInnerBall.png` from `bin/Themes/Classic/Challenge Window` in the Pokemon Online repository.
+
+`style.css`, `index.template`, `pokemon_page.template` and `tier_page.template`  are modified from `bin/usage_stats/formatted/` in the Pokemon Online repository.
 
 ## Instructions
 
@@ -34,4 +35,5 @@ If you host your server directory on a web server with PHP, you can just place `
 ### Final Note
 
 Make sure your chosen `scripts.js` file, `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php`, `BlueHiddenInnerBall.png` and `style.css` are not under any directories such as `autoupdatescript/`, `fullscript/`, `usage_stats` or `usage_stats/formatted/` when adding them to your own PO server directory.
+
 The following must be placed under `usage_stats/formatted` in your PO server directory: `index.template`, `pokemon_page.template` and `tier_page.template`.
