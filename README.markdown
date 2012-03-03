@@ -6,7 +6,7 @@ For use with servers of the Online Pokemon Battle Simulator - [Pokemon Online] (
 
 All content except `BlueHiddenInnerBall.png`,  `style.css`,  `index.template`, `pokemon_page.template` and `tier_page.template` was originally created for this repository. 
 
-`BlueHiddenInnerBall.png` is a modification of `HiddenInnerBall.png` from `bin/Themes/Classic/Challenge Window` in the Pokemon Online repository.
+`BlueHiddenInnerBall.png` is a modification of `HiddenInnerBall.png` from `bin/Themes/Classic/Challenge Window/` in the Pokemon Online repository.
 
 `style.css`, `index.template`, `pokemon_page.template` and `tier_page.template`  are modified from `bin/usage_stats/formatted/` in the Pokemon Online repository.
 
