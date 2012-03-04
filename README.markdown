@@ -26,13 +26,13 @@ Copy and paste the content of `Announcements.txt` and/or `serverdescription.txt`
 
 To create a rules command, type `/writemsgcmd rules*html` into the main chat on the server. Copy the content of `rules.html` and replace html with the paste in order to write the default server rules.
 
-### Web Scripts
+### Website
 
 If you host your server directory on a web server with PHP, you can just place `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php` and `style.css` in your server directory and link to `tiers.php` and `ladders.php` to provide easy-to-read tier and ladder information to your users.
 
 `ladders.php` and `ladderinfo.php` additionally require you to export ladders (`/exportladders` or `/eval sys.exportTierDatabase();` into the main chat of the server).
 
-`usage_stats` and its contents provide useful Pokemon usage statistics information via html pages. Download and over-write any existing files in `usage_stats/formatted/` and run `StatsExtracter.exe`to complete the server site.
+`usage_stats` and its contents provide useful Pokemon usage statistics information via html pages. Download and over-write any existing files in `usage_stats/formatted/` and run `StatsExtracter.exe`to complete the server website.
 
 ### Final Note
 
