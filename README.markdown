@@ -13,7 +13,7 @@ All content except `BlueHiddenInnerBall.png`,  `style.css` and `usage_stats/`'s 
 ### Usage Statistics
 
 `style.css`, `index.template`, `pokemon_page.template` and `tier_page.template`  are modified from `bin/usage_stats/formatted/` in the Pokemon Online repository.
-`usage_stats/formatted/poke_img.zip` and `usage_stats/formatted/poke_icons.zip` are copies of `black_white.zip` and `icons.zip` respectively from `bin/db/pokes/`  in the Pokemon Online repository.
+`poke_img.zip` and `poke_icons.zip` are copies of `black_white.zip` and `icons.zip` respectively from `bin/db/pokes/`  in the Pokemon Online repository.
 
 ## Instructions
 
