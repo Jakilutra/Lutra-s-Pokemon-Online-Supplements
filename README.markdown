@@ -4,7 +4,7 @@ For use with servers of the Online Pokemon Battle Simulator - [Pokemon Online] (
 
 ## Ownership
 
-All content except `BlueHiddenInnerBall.png`,  `style.css`,  `index.template` and `usage_stats/`'s content was originally created for this repository. 
+All content except `BlueHiddenInnerBall.png`,  `style.css` and `usage_stats/`'s content was originally created for this repository. 
 
 ### Background
 
