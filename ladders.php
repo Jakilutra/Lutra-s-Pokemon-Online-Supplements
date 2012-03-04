@@ -63,11 +63,11 @@ foreach ($categories as $category){
 				$ladderscount++;
 				$categorycount++;
 				$tiername = $tier->getAttribute("name");
-				$ladderslist .= "<form action='ladderinfo.php?tier=" . urlencode($tiername) . "&count=INSERT_HERE' method='post'><input type='submit' value='" . $tiername . "'></form>";
+				$ladderslist .= "<form action='ladderinfo.php?tier=" . urlencode($tiername) . "&count=INSERT_HERE' method='post'><input type='submit' value='{$tiername}'></form>";
 			}
 		}
 		if ($categorycount != 0){
-			$categorieslist .= "<th>" . $category->getAttribute("name") . " (" . $categorycount . ")</th>";
+			$categorieslist .= "<th>{$category->getAttribute("name")} ({$categorycount})</th>";
 			$ladderslist .= "</td>";
 		}
 	}
@@ -81,18 +81,18 @@ $display = "<html>"
 . "</head>"
 . "<body>"
 . "<table>"
-. "<tr><td><a href='tiers.php'>Tiers</a></td><th>Ladders</th><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td></tr>"
+. "<tr><td><a href='tiers.php'>Tiers</a></td><th>Ladders</th><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td><td><a href='script.php'>Server Script</a></td></tr>"
 . "</table>"
-. "<h1><a href='ladders.php'>Ladders (" . $ladderscount . ")</a></h1>"
+. "<h1><a href='ladders.php'>Ladders ({$ladderscount})</a></h1>"
 . "<center><h2>Ladders Configuration</h2></center>"
 . "<table width='100%'>"
-. "<tr align='center'>" . $laddertinfo . "</tr>"
-. "<tr align='center'>" . $ladderinfo . "</tr>"
+. "<tr align='center'>{$laddertinfo}</tr>"
+. "<tr align='center'>{$ladderinfo}</tr>"
 . "</table>"
 . "<br/>"
 . "<table class='noborder' width='100%'>"
-. "<tr valign='top' align='left'>" . $categorieslist . "</tr>"
-. "<tr valign='top' align='left'>" . $ladderslist . "</tr>" 
+. "<tr valign='top' align='left'>{$categorieslist}</tr>"
+. "<tr valign='top' align='left'>{$ladderslist}</tr>" 
 . "</table>"
 . "</body>"
 . "</html>";

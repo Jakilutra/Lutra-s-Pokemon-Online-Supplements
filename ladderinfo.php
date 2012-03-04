@@ -1,7 +1,7 @@
 <?php
 $ladderscount = $_GET["count"];
 $tiername = $_GET["tier"];
-$ladderfile = file("tier_" . $tiername . ".txt");
+$ladderfile = file("tier_{$tiername}.txt");
 $ladderinfo = array();
 $ratings = array();
 $rankings = array();
@@ -12,10 +12,10 @@ foreach ($ladderfile as $player){
 		array_push($ratings, $player[3]);
 	}
 	if (is_string($ladderinfo[$player[3]])){
-		$ladderinfo[$player[3]] .= "<tr align='left'><td>" . $player[0] . "</td><td>" . $player[1] . "</td><td>" . $player[3] . "</td><td>" . $player[2] . "</td></tr>";
+		$ladderinfo[$player[3]] .= "<tr align='left'><td>{$player[0]}</td><td>{$player[1]}</td><td>{$player[3]}</td><td>{$player[2]}</td></tr>";
 	}
 	else {
-		$ladderinfo[$player[3]] = "<tr align='left'><td>" . $player[0] . "</td><td>" . $player[1] . "</td><td>" . $player[3] . "</td><td>" . $player[2] . "</td></tr>";
+		$ladderinfo[$player[3]] = "<tr align='left'><td>{$player[0]}</td><td>{$player[1]}</td><td>{$player[3]}</td><td>{$player[2]}</td></tr>";
 	}
 }
 sort($ratings, SORT_NUMERIC);
@@ -27,7 +27,7 @@ $rankings = implode("", $rankings);
 $rankings = explode("<tr align='left'>", $rankings);
 $rankingscount = count($rankings)-1;
 for ($i=1;$i <$rankingscount+1;$i++){
-	array_push($standings, "<td>{$i}</td>" . $rankings[$i]);
+	array_push($standings, "<td>{$i}</td>{$rankings[$i]}");
 }
 $standings = implode("<tr align='left'>", $standings);
 $display = "<html>"
@@ -38,10 +38,10 @@ $display = "<html>"
 . "</head>"
 . "<body>"
 . "<table>"
-. "<tr><td><a href='tiers.php'>Tiers</a></td><th>Ladders</th><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td></tr>"
+. "<tr><td><a href='tiers.php'>Tiers</a></td><th>Ladders</th><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td><td><a href='script.php'>Server Script</a></td></tr>"
 . "</table>"
-. "<h1><a href='ladders.php'>Ladders (" . $ladderscount . ")</a></center>"
-. "<center><h2> Ladder for " . $tiername . "</h1></center>"
+. "<h1><a href='ladders.php'>Ladders ({$ladderscount})</a></center>"
+. "<center><h2> Ladder for {$tiername}</h1></center>"
 . "<center>"
 . "<table width='50%'>"
 . "<tr align='left'><th>Ranking</th><th>Name</th><th>Number of Battles</th><th>Displayed Rating</th><th>Actual Rating</th></tr>"
