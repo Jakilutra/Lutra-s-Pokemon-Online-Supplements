@@ -32,6 +32,8 @@ If you host your server directory on a web server with PHP, you can just place `
 
 `ladders.php` and `ladderinfo.php` additionally require you to export ladders (`/exportladders` or `/eval sys.exportTierDatabase();` into the main chat of the server).
 
+`usage_stats` and its contents provide useful Pokemon usage statistics information via html pages. Download and over-write any existing files in `usage_stats/formatted/` and run `StatsExtracter.exe`to complete the server site.
+
 ### Final Note
 
 Make sure your chosen `scripts.js` file, `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php`, `BlueHiddenInnerBall.png` and `style.css` are not under any directories such as `autoupdatescript/`, `fullscript/`, `usage_stats/` or `usage_stats/formatted/` when adding them to your own PO server directory.
