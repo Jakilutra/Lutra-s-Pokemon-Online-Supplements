@@ -4,7 +4,7 @@ For use with servers of the Online Pokemon Battle Simulator - [Pokemon Online] (
 
 ## Ownership
 
-All content except `BlueHiddenInnerBall.png`,  `style.css`,  `index.template`, `pokemon_page.template` and `tier_page.template` was originally created for this repository. 
+All content except `BlueHiddenInnerBall.png`,  `style.css`,  `index.template` and `usage_stats/`'s content was originally created for this repository. 
 
 ### Background
 
@@ -13,6 +13,7 @@ All content except `BlueHiddenInnerBall.png`,  `style.css`,  `index.template`, `
 ### Usage Statistics
 
 `style.css`, `index.template`, `pokemon_page.template` and `tier_page.template`  are modified from `bin/usage_stats/formatted/` in the Pokemon Online repository.
+`usage_stats/formatted/poke_img/` and `usage_stats/formatted/poke_icons/` are copies of `black_white.zip` and `icons.zip` respectively from `bin/db/pokes/`  in the Pokemon Online repository.
 
 ## Instructions
 
@@ -42,4 +43,4 @@ If you host your server directory on a web server with PHP, you can just place `
 
 Make sure your chosen `scripts.js` file, `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php`, `BlueHiddenInnerBall.png` and `style.css` are not under any directories such as `autoupdatescript/`, `fullscript/`, `usage_stats/` or `usage_stats/formatted/` when adding them to your own PO server directory.
 
-The following must be placed under `usage_stats/formatted/` in your PO server directory: `index.template`, `pokemon_page.template` and `tier_page.template`.
+The following must be placed under `usage_stats/formatted/` in your PO server directory: `poke_img/`, `poke_icons/`, `index.template`, `pokemon_page.template` and `tier_page.template`.
