@@ -20,6 +20,7 @@ foreach ($siteconfig as $line){
 			$lines = "N/A";
 			$script = "<i>Hidden</i>";
 		}
+		break;
 	}
 }
 $display = "<html>"
