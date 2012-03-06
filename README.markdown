@@ -33,7 +33,7 @@ To create a rules command, type `/writemsgcmd rules*html` into the main chat on 
 
 ### Website
 
-If you host your server directory on a web server with PHP, you can just place `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php`, `script.php`, `siteconfig.txt` and `style.css` in your server directory and link to `tiers.php`, `ladders.php` and `script.php` to provide easy-to-read tier, ladder and script information to your users.
+If you host your server directory on a web server with PHP, you can place `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php`, `script.php`,  `logs.php`, `siteconfig.txt` and `style.css` in your server directory and link to `tiers.php`, `ladders.php`, `script.php` and `logs.php` to provide easy-to-read tier, ladder, script and logged battle/chat information to your users.
 
 `ladders.php` and `ladderinfo.php` additionally require you to export ladders (`/exportladders` or `/eval sys.exportTierDatabase();` into the main chat of the server).
 
@@ -43,6 +43,6 @@ If you host your server directory on a web server with PHP, you can just place `
 
 ### Final Note
 
-Make sure your chosen `scripts.js` file, `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php`, `script.php`, `siteconfig.txt`, `BlueHiddenInnerBall.png` and `style.css` are not under any directories such as `autoupdatescript/`, `fullscript/`, `usage_stats/` or `usage_stats/formatted/` when adding them to your own PO server directory.
+Make sure your chosen `scripts.js` file, `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php`, `script.php`, `logs.php`, `siteconfig.txt`, `BlueHiddenInnerBall.png` and `style.css` are not under any directories such as `autoupdatescript/`, `fullscript/`, `usage_stats/` or `usage_stats/formatted/` when adding them to your own PO server directory.
 
 The following must be placed under `usage_stats/formatted/` in your PO server directory: `poke_img.zip`, `poke_icons.zip`, `index.template`, `pokemon_page.template` and `tier_page.template`.
