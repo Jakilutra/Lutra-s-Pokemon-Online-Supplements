@@ -13,7 +13,7 @@ foreach ($categories as $category){
 		$tierslist .= "<td class='noborder'>";
 		foreach($tiers as $tier){
 			$tiername = $tier->getAttribute("name");
-			$tierslist .= "<form action='tierinfo.php?tier=" . urlencode($tiername) . "' method='post'><input type='submit' value='{$tiername}'></form>";
+			$tierslist .= "<form action='tierinfo.php?tier=" . rawurlencode($tiername) . "' method='post'><input type='submit' value='{$tiername}'></form>";
 		}
 		$tierslist .= "</td>";
 	}
@@ -26,7 +26,7 @@ $display = "<html>"
 . "</head>"
 . "<body>"
 . "<table>"
-. "<tr><th>Tiers</th><td><a href='ladders.php'>Ladders</a></td><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td><td><a href='script.php'>Server Script</a></td></tr>"
+. "<tr><th>Tiers</th><td><a href='ladders.php'>Ladders</a></td><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td><td><a href='script.php'>Server Script</a></td><td><a href='logs.php'>Logs</a></td></tr>"
 . "</table>"
 . "<h1><a href='tiers.php'>Tiers ({$tierscount})</a></h1>"
 . "<table class='noborder' width='100%'>"

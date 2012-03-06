@@ -63,7 +63,7 @@ foreach ($categories as $category){
 				$ladderscount++;
 				$categorycount++;
 				$tiername = $tier->getAttribute("name");
-				$ladderslist .= "<form action='ladderinfo.php?tier=" . urlencode($tiername) . "&count=INSERT_HERE' method='post'><input type='submit' value='{$tiername}'></form>";
+				$ladderslist .= "<form action='ladderinfo.php?tier=" . rawurlencode($tiername) . "&count=INSERT_HERE' method='post'><input type='submit' value='{$tiername}'></form>";
 			}
 		}
 		if ($categorycount != 0){
@@ -81,7 +81,7 @@ $display = "<html>"
 . "</head>"
 . "<body>"
 . "<table>"
-. "<tr><td><a href='tiers.php'>Tiers</a></td><th>Ladders</th><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td><td><a href='script.php'>Server Script</a></td></tr>"
+. "<tr><td><a href='tiers.php'>Tiers</a></td><th>Ladders</th><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td><td><a href='script.php'>Server Script</a></td><td><a href='logs.php'>Logs</a></td></tr>"
 . "</table>"
 . "<h1><a href='ladders.php'>Ladders ({$ladderscount})</a></h1>"
 . "<center><h2>Ladders Configuration</h2></center>"

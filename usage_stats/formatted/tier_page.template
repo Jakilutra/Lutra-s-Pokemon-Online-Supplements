@@ -7,7 +7,7 @@ page{{
 	</head>
 	<body>
 		<table>
-			<tr><td><a href='../../../tiers.php'>Tiers</a></td><td><a href='../../../ladders.php'>Ladders</a></td><th>Usage Statistics</th><td><a href='../../../script.php'>Server Script</a></td></tr>
+			<tr><td><a href='../../../tiers.php'>Tiers</a></td><td><a href='../../../ladders.php'>Ladders</a></td><th>Usage Statistics</th><td><a href='../../../script.php'>Server Script</a></td><td><a href='../../../logs.php'>Logs</a></td></tr>
 		</table>
 		<h1><a href="../index.html">Usage Statistics</a></h1>
 		<h2><a href="index.html"> {tier} </a></h2>

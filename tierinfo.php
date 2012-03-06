@@ -14,7 +14,7 @@ foreach ($tiers as $tier){
 		$clausescount = count($clauses);
 		$clauses = implode(", ", $clauses);
 		$banparent = $tier->getAttribute("banParent");
-		$banparent = $banparent == "" ? "N/A" : "<form action='tierinfo.php?tier=" . urlencode($banparent) . "' method='post'><input type='submit' value='{$banparent}'></form>";
+		$banparent = $banparent == "" ? "N/A" : "<form action='tierinfo.php?tier=" . rawurlencode($banparent) . "' method='post'><input type='submit' value='{$banparent}'></form>";
 		$banmode = $tier->getAttribute("banMode") == "restrict" ? "Allowed" : "Banned";
 		$pokemons = explode(",", $tier->getAttribute("pokemons"));
 		$pokemonscount = $pokemons == Array(0=> "") ? "0" : count($pokemons);
@@ -37,7 +37,7 @@ foreach ($tiers as $tier){
 		. "</head>"
 		. "<body>"
 		. "<table>"
-		. "<tr><th>Tiers</th><td><a href='ladders.php'>Ladders</a></td><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td><td><a href='script.php'>Server Script</a></td></tr>"
+		. "<tr><th>Tiers</th><td><a href='ladders.php'>Ladders</a></td><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td><td><a href='script.php'>Server Script</a></td><td><a href='logs.php'>Logs</a></td></tr>"
 		. "</table>"
 		. "<h1><a href='tiers.php'>Tiers ({$tierscount})</a></h1>"
 		. "<center><h2>{$tiername}</h2></center>" 

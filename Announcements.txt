@@ -7,9 +7,8 @@
 <font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/tiers.php" style='color:white'><b> Tiers</b></a></font><br/>
 <font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/ladders.php" style='color:white'><b> Ladders</b></a></font><br/>
 <font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/usage_stats/formatted/index.html" style='color:white'><b> Pokemon Usage Stats</b></a></font><br/>
-<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/scripts.js" style='color:white'><b>Script</b></a></font><br/>
-<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/logs/battles/" style='color:white'><b>Battle Logs</b></a></font><br/>
-<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/logs/chat/" style='color:white'><b>Chat Logs</b></a></font><br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/scripts.php" style='color:white'><b>Script</b></a></font><br/>
+<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/logs.php" style='color:white'><b> Logs</b></a></font><br/>
 </div>
 </td>
 <td width='50%'>
@@ -31,7 +30,6 @@
 <font size='5'><b><font color='white'>•</font></b> <a href="http://www.pokemonperfect.co.uk/forums/forumdisplay.php?4-Lutra-s-Server-Script" style='color:white'><b> Lutra's Server Script</b></a></font><br/>
 <font size='5'><b><font color='white'>•</font></b> <a href="http://www.pokemonperfect.co.uk/forums/forumdisplay.php?19-Tournaments" style='color:white'><b> Tournaments</b></a></font><br/>
 <font size='5'><b><font color='white'>•</font></b> <a href="http://www.pokemonperfect.co.uk/forums/forumdisplay.php?31-League" style='color:white'><b> League</b></a></font><br/>
-<font size='5'><b><font color='white'>•</font></b> <a href="http://www.pokemonperfect.co.uk/forums/forumdisplay.php?9-Teams" style='color:white'><b>Teams</b></a></font><br/>
 </div>
 </td>
 </tr>
