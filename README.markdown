@@ -41,7 +41,7 @@ To create a rules command, type `/writemsgcmd rules*html` into the main chat on 
 
 ### Setup
 
-If you host a web server with PHP, you can place the `site/` directory in your PO server directory, make it accessible via the web, and set index.php as your default page (or link to it) to provide easy-to-read tier, ladder, script and logged battle/chat information to your users.
+If you host a web server with PHP, you can place the `site/` directory in your PO server directory, make it accessible via the web, and set index.php as your default page (or link to it directly) to provide easy-to-read tier, ladder, script and logged battle/chat information to your users.
 
 ### Ladders
 
