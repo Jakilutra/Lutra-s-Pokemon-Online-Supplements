@@ -46,7 +46,7 @@ if ($sitepage == "usage_stats"){
 		$nav = str_replace("<td><a href='logs.php'>Logs</a></td>", "<td><a href='../../site/logs.php'>Logs</a></td>", $nav);
 	}
 	else {
-		$nav = str_replace("<td><a href='index.php'>Home/a></td>", "<td><a href='../../../site/index.php'>Home</a></td>", $nav);
+		$nav = str_replace("<td><a href='index.php'>Home</a></td>", "<td><a href='../../../site/index.php'>Home</a></td>", $nav);
 		$nav = str_replace("<td><a href='tiers.php'>Tiers</a></td>", "<td><a href='../../../site/tiers.php'>Tiers</a></td>", $nav);
 		$nav = str_replace("<td><a href='ladders.php'>Ladders</a></td>", "<td><a href='../../../site/ladders.php'>Ladders</a></td>", $nav);
 		$nav = str_replace("<td><a href='script.php'>Server Script</a></td>", "<td><a href='../../../site/script.php'>Server Script</a></td>", $nav);
