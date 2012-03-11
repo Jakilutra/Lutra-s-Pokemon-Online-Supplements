@@ -57,6 +57,6 @@ If you host a web server with PHP, you can place the `site/` directory in your P
 
 ### File Locations
 
-Make sure the following are placed under 'site/' in your PO server directory: `index.php`, `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php`, `script.php`, `logs.php`, `navigation.php`, `config.txt`, `BlueHiddenInnerBall.png`, `tiers.png`, `ladders.png`, `usage_stats.png`, `script.png`, `logs.png` and `style.css`
+Make sure the following are placed under `site/` in your PO server directory: `index.php`, `tiers.php`, `tiersinfo.php`, `ladders.php`, `ladderinfo.php`, `script.php`, `logs.php`, `navigation.php`, `config.txt`, `BlueHiddenInnerBall.png`, `tiers.png`, `ladders.png`, `usage_stats.png`, `script.png`, `logs.png` and `style.css`
 
 The following must also be placed under `usage_stats/formatted/` in your PO server directory: `poke_img.zip`, `poke_icons.zip`, `index.template`, `pokemon_page.template` and `tier_page.template`.
