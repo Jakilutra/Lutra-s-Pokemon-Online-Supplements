@@ -2,15 +2,15 @@
 
 Created by Lutra(Jakilutra) for use with servers of the Online Pokemon Battle Simulator - [Pokemon Online] (https://github.com/coyotte508/pokemon-online)
 
-# Ownership
+## Ownership
 
 All content except `BlueHiddenInnerBall.png`,  `style.css` and `usage_stats/`'s content was originally created for this repository. 
 
-## Background
+### Background
 
 `BlueHiddenInnerBall.png` is a modification of `HiddenInnerBall.png` from `bin/Themes/Classic/Challenge Window/` in the Pokemon Online repository.
 
-## Usage Statistics
+### Usage Statistics
 
 `style.css`, `index.template`, `pokemon_page.template` and `tier_page.template`  are modified from `bin/usage_stats/formatted/` in the Pokemon Online repository.
 `poke_img.zip` and `poke_icons.zip` are copies of `black_white.zip` and `icons.zip` respectively from `bin/db/pokes/`  in the Pokemon Online repository.
