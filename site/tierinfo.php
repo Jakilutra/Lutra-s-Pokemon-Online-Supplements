@@ -1,7 +1,7 @@
 <?php
 $tiername = $_GET["tier"];
 $xml = new DomDocument();
-$xml->load("tiers.xml");
+$xml->load("../tiers.xml");
 $tiers = $xml->getElementsByTagName("tier");
 $tierscount = $tiers->length;
 foreach ($tiers as $tier){
@@ -29,6 +29,8 @@ foreach ($tiers as $tier){
 		$restrictpokes = explode(",", $tier->getAttribute("restrictedPokemons"));
 		$restrictcount = $restrictpokes == Array(0=> "") ? "0" : count($restrictpokes);
 		$restrictpokes = implode(", ", $restrictpokes);
+		$sitepage = "tiers";
+		include "navigation.php";
 		$display = "<html>"
 		. "<head>"
 		. "<title>Tiers</title>"
@@ -36,9 +38,7 @@ foreach ($tiers as $tier){
 		. "<meta http-equiv='Content-Type' content='text/html'; charset='utf-8' />"
 		. "</head>"
 		. "<body>"
-		. "<table>"
-		. "<tr><th>Tiers</th><td><a href='ladders.php'>Ladders</a></td><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td><td><a href='script.php'>Server Script</a></td><td><a href='logs.php'>Logs</a></td></tr>"
-		. "</table>"
+		. $nav
 		. "<h1><a href='tiers.php'>Tiers ({$tierscount})</a></h1>"
 		. "<center><h2>{$tiername}</h2></center>" 
 		. "<table width='100%'>"

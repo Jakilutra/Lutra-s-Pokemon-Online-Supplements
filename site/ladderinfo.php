@@ -1,7 +1,7 @@
 <?php
 $ladderscount = $_GET["count"];
 $tiername = $_GET["tier"];
-$ladderfile = file("tier_{$tiername}.txt");
+$ladderfile = file("../tier_{$tiername}.txt");
 $ladderinfo = array();
 $ratings = array();
 $rankings = array();
@@ -30,6 +30,8 @@ for ($i=1;$i <$rankingscount+1;$i++){
 	array_push($standings, "<td>{$i}</td>{$rankings[$i]}");
 }
 $standings = implode("<tr align='left'>", $standings);
+$sitepage = "ladders";
+include "navigation.php";
 $display = "<html>"
 . "<head>"
 . "<title>Ladders</title>"
@@ -37,9 +39,7 @@ $display = "<html>"
 . "<meta http-equiv='Content-Type' content='text/html'; charset='utf-8' />"
 . "</head>"
 . "<body>"
-. "<table>"
-. "<tr><td><a href='tiers.php'>Tiers</a></td><th>Ladders</th><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td><td><a href='script.php'>Server Script</a></td><td><a href='logs.php'>Logs</a></td></tr>"
-. "</table>"
+. $nav
 . "<h1><a href='ladders.php'>Ladders ({$ladderscount})</a></h1>"
 . "<center><h2> Ladder for {$tiername}</h2></center>"
 . "<center>"

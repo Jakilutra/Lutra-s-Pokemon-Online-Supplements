@@ -1,0 +1,40 @@
+<?php
+$sitepage = "index";
+include "navigation.php";
+$display = "<html>"
+. "<head>"
+. "<title>Index</title>"
+. "<link rel='stylesheet' type='text/css' href='style.css' />"
+. "<meta http-equiv='Content-Type' content='text/html'; charset='utf-8' />"
+. "</head>"
+. "<body>"
+. $nav
+. "<table width='100%' class='noborder'>"
+. "<tr align='center'>"
+. "<h1><a href='index.php'>Index</a></h1>"
+. "<td class='noborder'>"
+. "<a href='tiers.php'><img src='tiers.png'/></a><br/>"
+. "<a href='tiers.php'><b>Tiers</b></a>"
+. "</td>"
+. "<td class='noborder'>"
+. "<a href='ladders.php'><img src='ladders.png'/></a><br/>"
+. "<a href='ladders.php'><b>Ladders</b></a>"
+. "</td>"
+. "<td class='noborder'>"
+. "<a href='../usage_stats/formatted/index.html'><img src='usage_stats.png'/></a><br/>"
+. "<a href='../usage_stats/formatted/index.html'><b>Usage Statistics</b></a>"
+. "</td>"
+. "<td class='noborder'>"
+. "<a href='script.php'><img src='script.png'/></a><br/>"
+. "<a href='script.php'><b>Server Script</b></a>"
+. "</td>"
+. "<td class='noborder'>"
+. "<a href='logs.php'><img src='logs.png'/></a><br/>"
+. "<a href='logs.php'><b>Logs</b></a>"
+. "</td>"
+. "</tr>"
+. "</table>"
+. "</body>"
+. "</html>";
+echo $display;
+?>

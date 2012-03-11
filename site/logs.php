@@ -19,10 +19,10 @@ function browsedir($dir) {
 		return $dirlist;
 	}
 }
-$battledirs = browsedir("logs/battles/");
-$chatdirs = browsedir("logs/chat/");
+$battledirs = browsedir("../logs/battles/");
+$chatdirs = browsedir("../logs/chat/");
 $path = $_GET["path"];
-if (is_string($path) && substr_compare($path,"logs/", 0, 4) == 0){
+if (is_string($path) && substr_compare($path,"../logs/", 0, 7) == 0){
 	if (is_dir($path)){
 		$subdir = browsedir($path);
 		$patharray = explode("/", $path);
@@ -53,18 +53,24 @@ else {
 	$logname = "No Log Requested";
 	$log = "Click on a Battle Logs or Chat Logs subdirectory for access to a list of logs.";
 }
-$display = "<html>"
+$sitepage = "logs";
+include "navigation.php";
+$siteconfig = file("config.txt");
+foreach ($siteconfig as $line){
+	if (preg_match("/show_logs=/", $line) == 1 && preg_match("/show_logs=true/", $line) == 0){
+		$log = "<i>Hidden</i>";
+	}
+}
+$display = "<html style='height:100%'>"
 . "<head>"
 . "<title>Logs</title>"
 . "<link rel='stylesheet' type='text/css' href='style.css' />"
 . "<meta http-equiv='Content-Type' content='text/html'; charset='utf-8' />"
 . "</head>"
-. "<body>"
-. "<table>"
-. "<tr><td><a href='tiers.php'>Tiers</a></td><td><a href='ladders.php'>Ladders</a></td><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td><td><a href='script.php'>Server Script</a></td><th>Logs</th></tr>"
-. "</table>"
+. "<body style='height:100%'>"
+. $nav
 . "<h1><a href='logs.php'>Logs</a></h1>"
-. "<table class='noborder' width ='100%'>"
+. "<table class='noborder' width ='100%' height='100%'>"
 . "<tr align='left' valign='top'><th>Battle Logs</th><th>Chat Logs</th><th>{$subdirname}</th><th>{$logname}</th></tr>"
 . "<tr align='left' valign='top'><td class='noborder'>{$battledirs}</td><td class='noborder'>{$chatdirs}</td><td class='noborder'>{$subdir}</td><td width='60%' style='background-color:white;color:black;'>{$log}</td></tr>"
 . "</table>"

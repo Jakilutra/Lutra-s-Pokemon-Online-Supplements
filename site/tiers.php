@@ -1,6 +1,6 @@
 <?php
 $xml = new DomDocument();
-$xml->load("tiers.xml");
+$xml->load("../tiers.xml");
 $categories = $xml->firstChild->getElementsByTagName("category");
 $categorieslist = "";
 $tiersslist = "";
@@ -18,6 +18,8 @@ foreach ($categories as $category){
 		$tierslist .= "</td>";
 	}
 }
+$sitepage = "tiers";
+include "navigation.php";
 $display = "<html>"
 . "<head>"
 . "<title>Tiers</title>"
@@ -25,9 +27,7 @@ $display = "<html>"
 . "<meta http-equiv='Content-Type' content='text/html'; charset='utf-8' />"
 . "</head>"
 . "<body>"
-. "<table>"
-. "<tr><th>Tiers</th><td><a href='ladders.php'>Ladders</a></td><td><a href='usage_stats/formatted/index.html'>Usage Statistics</a></td><td><a href='script.php'>Server Script</a></td><td><a href='logs.php'>Logs</a></td></tr>"
-. "</table>"
+. $nav
 . "<h1><a href='tiers.php'>Tiers ({$tierscount})</a></h1>"
 . "<table class='noborder' width='100%'>"
 . "<tr valign='top' align='left'>{$categorieslist}</tr>"
