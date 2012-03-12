@@ -49,21 +49,22 @@ $categories = $xml->firstChild->getElementsByTagName("category");
 $categorieslist = "";
 $ladderslist = "";
 $ladderscount = 0;
+$db = new SQLite3("../pokemon");
 foreach ($categories as $category){
 	if ($category->parentNode->parentNode->nodeName != "category"){
 		$tiers = $category->getElementsByTagName("tier");
 		$categorycount = 0;
 		foreach($tiers as $tier){
 			$tiername = $tier->getAttribute("name");
-			$filename = "../tier_" . $tiername . ".txt";
-			if (file_exists($filename) && file_get_contents($filename) != ""){
+			$tablename = $tier->getAttribute("tableName");
+			$result = $db->querySingle("SELECT COUNT(*) FROM " . $tablename);
+			if ($result){
 				if ($categorycount == 0){
 					$ladderslist .= "<td class='noborder'>";
 				}
 				$ladderscount++;
 				$categorycount++;
-				$tiername = $tier->getAttribute("name");
-				$ladderslist .= "<form action='ladderinfo.php?tier=" . rawurlencode($tiername) . "&count=INSERT_HERE' method='post'><input type='submit' value='{$tiername}'></form>";
+				$ladderslist .= "<form action='ladderinfo.php?tier=" . rawurlencode($tiername) . "&table={$tablename}&count=INSERT_HERE' method='post'><input type='submit' value='{$tiername}'></form>";
 			}
 		}
 		if ($categorycount != 0){

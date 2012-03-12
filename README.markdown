@@ -43,10 +43,6 @@ To create a rules command, type `/writemsgcmd rules*html` into the main chat on 
 
 If you host a web server with PHP, you can place the `site/` directory in your PO server directory, make it accessible via the web, and set index.php as your default page (or link to it directly) to provide easy-to-read tier, ladder, script and logged battle/chat information to your users.
 
-### Ladders
-
-`ladders.php` and `ladderinfo.php` additionally require you to export ladders (`/exportladders` or `/eval sys.exportTierDatabase();` into the main chat of the server).
-
 ### Usage Statistics
 
 `usage_stats` and its contents provide useful Pokemon usage statistics information via html pages. Download it to your PO server directory and over-write any existing files in `usage_stats/formatted/`, extract `poke_img.zip` and `poke_icons.zip` to directories of the same name in the same location, and run `StatsExtracter.exe`to complete the server website.
