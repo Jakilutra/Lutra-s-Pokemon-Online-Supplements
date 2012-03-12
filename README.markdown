@@ -49,7 +49,7 @@ If you host a web server with PHP, you can place the `site/` directory in your P
 
 ### Configuration
 
-`config.txt` contains options for showing each page's content, setting them to true will show the content, setting them to anything else will hide the content.
+`config.txt` contains options for showing hyperlinks to tiers, ladders, usage statistics, script and logs. Setting an option to true will show any hyperlinks to it, setting it to anything else will hide the hyperlinks to it. For script and logs, the content is also shown/hidden.
 
 ### File Locations
 

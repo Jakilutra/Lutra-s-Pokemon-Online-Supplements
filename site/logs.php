@@ -59,18 +59,23 @@ $siteconfig = file("config.txt");
 foreach ($siteconfig as $line){
 	if (preg_match("/show_logs=/", $line) == 1 && preg_match("/show_logs=true/", $line) == 0){
 		$log = "<i>Hidden</i>";
+		$battledirs = "&nbsp;";
+		$chatdirs = "&nbsp;";
+		$subdir = "&nbsp;";
+		$subdirname = "<i>Hidden</i>";
+		$logname = "<i>Hidden</i>";
 	}
 }
-$display = "<html style='height:100%'>"
+$display = "<html>"
 . "<head>"
 . "<title>Logs</title>"
 . "<link rel='stylesheet' type='text/css' href='style.css' />"
 . "<meta http-equiv='Content-Type' content='text/html'; charset='utf-8' />"
 . "</head>"
-. "<body style='height:100%'>"
+. "<body>"
 . $nav
 . "<h1><a href='logs.php'>Logs</a></h1>"
-. "<table class='noborder' width ='100%' height='100%'>"
+. "<table class='noborder' width ='100%'>"
 . "<tr align='left' valign='top'><th>Battle Logs</th><th>Chat Logs</th><th>{$subdirname}</th><th>{$logname}</th></tr>"
 . "<tr align='left' valign='top'><td class='noborder'>{$battledirs}</td><td class='noborder'>{$chatdirs}</td><td class='noborder'>{$subdir}</td><td width='60%' style='background-color:white;color:black;'>{$log}</td></tr>"
 . "</table>"
