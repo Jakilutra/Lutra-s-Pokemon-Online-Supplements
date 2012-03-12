@@ -30,7 +30,7 @@ if (empty($sitepage)){
 	$level = $_GET["level"];
 }
 switch($sitepage){
-	case "index": $nav = str_replace("<td><a href='index.php'>Home/a></td>", "<th>Home</th>", $nav); break;
+	case "index": $nav = str_replace("<td><a href='index.php'>Home</a></td>", "<th>Home</th>", $nav); break;
 	case "tiers": $nav = str_replace("<td><a href='tiers.php'>Tiers</a></td>", "<th>Tiers</th>", $nav); break;
 	case "ladders": $nav = str_replace("<td><a href='ladders.php'>Ladders</a></td>", "<th>Ladders</th>", $nav); break;
 	case "usage_stats": $nav = str_replace("<td><a href='../usage_stats/formatted/index.html'>Usage Statistics</a></td>", "<th>Usage Statistics</th>", $nav); break;
