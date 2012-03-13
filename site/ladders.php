@@ -64,7 +64,7 @@ foreach ($categories as $category){
 				}
 				$ladderscount++;
 				$categorycount++;
-				$ladderslist .= "<form action='ladderinfo.php?tier=" . rawurlencode($tiername) . "&table={$tablename}&count=INSERT_HERE' method='post'><input type='submit' value='{$tiername}'></form>";
+				$ladderslist .= "<form action='ladderinfo.php?tier=" . rawurlencode($tiername) . "&table={$tablename}&sort_field=displayed_rating&sort_type=DESC&count=INSERT_HERE' method='post'><input type='submit' value='{$tiername}'></form>";
 			}
 		}
 		if ($categorycount != 0){
