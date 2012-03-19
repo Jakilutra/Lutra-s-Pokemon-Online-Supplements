@@ -50,7 +50,6 @@ $categorieslist = "";
 $ladderslist = "";
 $ladderscount = 0;
 $db = new SQLite3("../pokemon");
-echo $lastcheck;
 foreach ($categories as $category){
 	if ($category->parentNode->parentNode->nodeName != "category"){
 		$tiers = $category->getElementsByTagName("tier");
