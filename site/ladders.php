@@ -50,6 +50,7 @@ $categorieslist = "";
 $ladderslist = "";
 $ladderscount = 0;
 $db = new SQLite3("../pokemon");
+echo $lastcheck;
 foreach ($categories as $category){
 	if ($category->parentNode->parentNode->nodeName != "category"){
 		$tiers = $category->getElementsByTagName("tier");
@@ -58,6 +59,8 @@ foreach ($categories as $category){
 			$tiername = $tier->getAttribute("name");
 			$tablename = $tier->getAttribute("tableName");
 			$result = $db->querySingle("SELECT COUNT(*) FROM " . $tablename);
+			$lastcheck = $db->querySingle("SELECT last_check_time FROM " . $tablename);
+			$lastcheck = date("F j, Y, g:i a", $lastcheck);
 			if ($result){
 				if ($categorycount == 0){
 					$ladderslist .= "<td class='noborder'>";
@@ -92,6 +95,7 @@ $display = "<html>"
 . "</table>"
 . "<br/>"
 . "<table class='noborder' width='100%'>"
+. "<caption>Last Decay: {$lastcheck}</caption>"
 . "<tr valign='top' align='left'>{$categorieslist}</tr>"
 . "<tr valign='top' align='left'>{$ladderslist}</tr>" 
 . "</table>"
