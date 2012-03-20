@@ -20,7 +20,7 @@ Make sure your chosen `scripts.js` file is not under any directories such as `au
 
 ## Announcements and Server Description
 
-## Setup
+### Setup
 
 Copy and paste the content of `Announcements.txt` and/or `serverdescription.txt` into the Announcement and/or Server Description boxes respectively (Options > Config) and commence editing - if you want to  a starting point for your announcements and/or server description.
 
