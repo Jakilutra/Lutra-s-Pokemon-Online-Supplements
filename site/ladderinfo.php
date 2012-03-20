@@ -33,6 +33,17 @@ $currentfile = explode("/", $currentfile);
 $currentfile = $currentfile[count($currentfile) - 1];
 $path = $currentfile . "?" . urldecode($_SERVER["QUERY_STRING"]);
 $caption = str_replace("<option value='{$path}'>", "<option selected='selected' value='{$path}'>", $caption);
+$tstandings = "<tr align='left'><th>Ranking</th><th>Name</th><th>Number of Battles</th><th>Displayed Rating</th><th>Actual Rating</th><th>Days without Play</th></tr>";
+$siteconfig = file("config.txt");
+foreach ($siteconfig as $line){
+	if (preg_match("/show_ladders=/", $line) == 1 && preg_match("/show_ladders=true/", $line) == 0){
+		$caption = "<i>Hidden</i>";
+		$ladderscount = "N/A";
+		$tiername = "<i>Hidden</i>";
+		$tstandings = "<tr><th><i>Hidden</i></th></tr>";
+		$standings = "<tr><td><i>Hidden</i></td></tr>";
+	}
+}
 $sitepage = "ladders";
 include "navigation.php";
 $display = "<html>"
@@ -48,7 +59,7 @@ $display = "<html>"
 . "<center>"
 . "<table width='70%'>"
 . $caption
-. "<tr align='left'><th>Ranking</th><th>Name</th><th>Number of Battles</th><th>Displayed Rating</th><th>Actual Rating</th><th>Days without Play</th></tr>"
+. $tstandings
 . $standings
 . "</table>"
 . "</center>"

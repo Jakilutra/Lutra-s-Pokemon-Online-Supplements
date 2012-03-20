@@ -18,6 +18,14 @@ foreach ($categories as $category){
 		$tierslist .= "</td>";
 	}
 }
+$siteconfig = file("config.txt");
+foreach ($siteconfig as $line){
+	if (preg_match("/show_tiers=/", $line) == 1 && preg_match("/show_tiers=true/", $line) == 0){
+		$tierscount = "N/A";
+		$categorieslist = "<td><i>Hidden</i></td>";
+		$tierslist = "<td><i>Hidden</i></td>";
+	}
+}
 $sitepage = "tiers";
 include "navigation.php";
 $display = "<html>"

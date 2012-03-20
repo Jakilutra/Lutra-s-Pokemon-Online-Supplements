@@ -29,6 +29,17 @@ foreach ($tiers as $tier){
 		$restrictpokes = explode(",", $tier->getAttribute("restrictedPokemons"));
 		$restrictcount = $restrictpokes == Array(0=> "") ? "0" : count($restrictpokes);
 		$restrictpokes = implode(", ", $restrictpokes);
+		$tiertinfo = "<tr align='center' valign='top'><th>Generation</th><th>Mode</th><th>Maximum Team Size</th><th>Maximum Level</th><th>Clauses ({$clausescount})</th><th>Ban Parent</th><th>{$banmode} Pokemon ({$pokemonscount})</th><th>{$banmode} Items ({$itemscount})</th><th>{$banmode} Moves ({$movescount})</th><th>Maximum Restricted</th><th>Restricted ({$restrictcount})</th></tr>";
+		$tierinfo = "<tr align='center' valign='top'><td>&nbsp;{$gen}</td><td>&nbsp;{$mode}</td><td>&nbsp;{$teamsize}</td><td>&nbsp;{$tier->getAttribute("maxLevel")}</td><td>&nbsp;{$clauses}</td><td>&nbsp;{$banparent}</td><td>&nbsp;{$pokemons}</td><td>&nbsp;{$items}</td><td>&nbsp;{$moves}</td><td>&nbsp;{$restrictno}</td><td>&nbsp;{$restrictpokes}</td></tr>";
+		$siteconfig = file("config.txt");
+		foreach ($siteconfig as $line){
+			if (preg_match("/show_tiers=/", $line) == 1 && preg_match("/show_tiers=true/", $line) == 0){
+				$tierscount = "N/A";
+				$tiername = "<i>Hidden</i>";
+				$tiertinfo = "<tr><td><i>Hidden</i></td></tr>";
+				$tierinfo = "<tr><td><i>Hidden</i></td></tr>";
+			}
+		}
 		$sitepage = "tiers";
 		include "navigation.php";
 		$display = "<html>"
@@ -42,8 +53,8 @@ foreach ($tiers as $tier){
 		. "<h1><a href='tiers.php'>Tiers ({$tierscount})</a></h1>"
 		. "<center><h2>{$tiername}</h2></center>" 
 		. "<table width='100%'>"
-		. "<tr align='center' valign='top'><th>Generation</th><th>Mode</th><th>Maximum Team Size</th><th>Maximum Level</th><th>Clauses ({$clausescount})</th><th>Ban Parent</th><th>{$banmode} Pokemon ({$pokemonscount})</th><th>{$banmode} Items ({$itemscount})</th><th>{$banmode} Moves ({$movescount})</th><th>Maximum Restricted</th><th>Restricted ({$restrictcount})</th></tr>"
-		. "<tr align='center' valign='top'><td>&nbsp;{$gen}</td><td>&nbsp;{$mode}</td><td>&nbsp;{$teamsize}</td><td>&nbsp;{$tier->getAttribute("maxLevel")}</td><td>&nbsp;{$clauses}</td><td>&nbsp;{$banparent}</td><td>&nbsp;{$pokemons}</td><td>&nbsp;{$items}</td><td>&nbsp;{$moves}</td><td>&nbsp;{$restrictno}</td><td>&nbsp;{$restrictpokes}</td></tr>" 
+		. $tiertinfo
+		. $tierinfo
 		. "</table>"
 		. "<br/>"
 		. "<center><form action='tiers.php' method='link'><input type='submit' value='Back to Index'></form></center>"

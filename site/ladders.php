@@ -76,6 +76,17 @@ foreach ($categories as $category){
 	}
 }
 $ladderslist = str_replace("INSERT_HERE", $ladderscount, $ladderslist);
+$siteconfig = file("config.txt");
+foreach ($siteconfig as $line){
+	if (preg_match("/show_ladders=/", $line) == 1 && preg_match("/show_ladders=true/", $line) == 0){
+		$ladderscount = "N/A";
+		$laddertinfo = "<td><i>Hidden</i></td>";
+		$ladderinfo = "<td><i>Hidden</i></td>";
+		$categorieslist = "<td><i>Hidden</i></td>";
+		$ladderslist = "<td><i>Hidden</i></td>";
+		$lastcheck = "<i>Hidden</i>";
+	}
+}
 $sitepage = "ladders";
 include "navigation.php";
 $display = "<html>"
