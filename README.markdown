@@ -1,8 +1,13 @@
 #Lutra's Pokemon Online Server Script
 
-Created by Lutra(Jakilutra) for use with servers of the Online Pokemon Battle Simulator - [Pokemon Online] (https://github.com/coyotte508/pokemon-online) to benefit users and hosts of servers with useful functionality via commands and files.
+Created by Lutra(Jakilutra) for use with servers of the Online Pokemon Battle Simulator - [Pokemon Online] (https://github.com/coyotte508/pokemon-online)
+The files were made public in order to benefit users and hosts of servers with useful functionality via commands and files.
 
-## Server Scripts
+## Server Script
+
+The Server Script is entirely coded in JavaScript and began as a tournament script.
+
+### Setup
 
 Download either `autoupdatescript/scripts.js` (updates the full script every time the script is loaded) or `fullscript/scripts.js` (full script editable in scripts window) to your PO server directory if you want the chosen script to be loaded when you next start the PO server (`Server.exe`).
 
