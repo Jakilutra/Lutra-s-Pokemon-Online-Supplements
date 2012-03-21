@@ -4,6 +4,8 @@ Created by Lutra(Jakilutra) for use with servers of the Online Pokemon Battle Si
 
 The files were made public in order to benefit users and hosts of servers with useful functionality, primarily via commands.
 
+The repository can be downloaded [here] (https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Script/downloads)
+
 ## Server Script
 
 The Server Script is entirely coded in JavaScript and began as a tournament script.
