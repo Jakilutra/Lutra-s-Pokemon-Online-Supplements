@@ -2,7 +2,7 @@
 
 Created by Lutra(Jakilutra) for use with servers of the Online Pokemon Battle Simulator - [Pokemon Online] (https://github.com/coyotte508/pokemon-online)
 
-The files were made public in order to benefit users and hosts of servers with useful functionality via commands and files.
+The files were made public in order to benefit users and hosts of servers with useful functionality, primarily via commands.
 
 ## Server Script
 
