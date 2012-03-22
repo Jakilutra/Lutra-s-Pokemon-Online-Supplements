@@ -4,7 +4,7 @@ Created by Lutra(Jakilutra) for use with servers of the Online Pokemon Battle Si
 
 The files were made public in order to benefit users and hosts of servers with extra useful functionality.
 
-The repository can be downloaded [here] (https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Script/downloads)
+The repository can be downloaded [here] (https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Supplements/downloads)
 
 ## Server Script
 
@@ -30,4 +30,4 @@ To create a rules command, type `/writemsgcmd rules*html` into the main chat on 
 
 ## Website
 
-For information on the PO Server Website, visit [here] (https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Script/wiki/PO-Server-Website)
+For information on the PO Server Website, visit [here] (https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Supplements/wiki/PO-Server-Website)
