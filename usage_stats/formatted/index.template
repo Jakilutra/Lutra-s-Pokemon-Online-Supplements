@@ -3,20 +3,27 @@ page{{
 	<head>
 		<title>Usage Statistics</title>
 		<link rel="stylesheet" type="text/css" href="../../site/style.css" />
-		<meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
+		<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
 	</head>
 	<body>
 		<script type="text/javascript" src="../../site/navigation.php?sitepage=usage_stats&level=1"></script>
-		<h1><a href="index.html">Usage Statistics</a></h1>
-		<div style="text-align:center;">
-		{tier*}
-		</div>
+		<script type="text/javascript">
+		if (window.XMLHttpRequest)
+			xmlhttp=new XMLHttpRequest();
+		else
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		xmlhttp.open("GET","../../site/config.txt",false);
+		xmlhttp.send();
+		config = xmlhttp.responseText;
+		if (/show_stats=true/.test(config))
+			usage_stats = "<h1><a href='index.html'>Usage Statistics</a></h1>"
+			+ "<div style='text-align:center;'>{tier*}</div>";
+		else
+			usage_stats = "<h1>Hidden</h1>";
+		document.write(usage_stats);
+		</script>
 	</body>
 </html>
 }}
 
-tier{{
-			<div class="tier" style="background-image:url('poke_img/{imagelink}')">
-				<a href='{tier}/index.html'>{tier}</a>
-			</div>
-}}
+tier{{<div class='tier' style='background-image:url(poke_img/{imagelink})'><a href='{tier}/index.html'>{tier}</a></div>}}

@@ -16,100 +16,103 @@ page{{
 	<head>
 		<title>Pok&eacute;mon {pokemon}</title>
 		<link rel="stylesheet" type="text/css" href="../../../site/style.css" />
-		<meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
+		<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
 		<script type="text/javascript" src="../script.js"></script>
 	</head>
 	<body>
 		<script type="text/javascript" src="../../../site/navigation.php?sitepage=usage_stats&level=2"></script>
-		<h1><a href="../index.html">Usage Statistics</a></h1>
-		<h2><a href="index.html"> {tier} </a></h2>
-		<p><input type='button' onclick="spoiler(document.getElementById('globals'))" value='Show globals'/></p>
-		<div id="globals" style="display: none;">
-		<img src="../poke_img/{imagelink}" />
-		<table class="globaltable">
-			<tr><th>Moves</th>
-			<th>Items</th></tr>
-			<tr>
-				<td valign="top" class="globaltd">
-					<table>
-						<tr><th>Rank</th><th>Name</th><th>Usage</th></tr>
-						{globalmove*}
-					</table>
-				</td>
-				<td valign="top" class="globaltd">
-					<table>
-						<tr><th>Rank</th><th>Name</th><th>Usage</th></tr>
-						{globalitem*}
-					</table>
-				</td>
-			</tr>
-		</table>
-		</div>
-		<img src="../poke_img/{imagelink}" />
-		<ul>
-			{globalability*}
-		</ul>
-		<table style="width: 100%">
-			<caption>Global Usage: {percentage} % ({battles} battles)</caption>
-			<tr><th>Regular Usage</th><th>Lead Usage</th></tr>
-			<tr><td>{nonleadpercentage} %</td><td>{leadpercentage} %</td></tr>
-			<tr><td valign="top">{moveset*}</td><td valign="top">{leadmoveset*}</td>
-		</table>
+		<script type="text/javascript">
+		if (window.XMLHttpRequest)
+			xmlhttp=new XMLHttpRequest();
+		else
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		xmlhttp.open("GET","../../../site/config.txt",false);
+		xmlhttp.send();
+		config = xmlhttp.responseText;
+		globals = "globals";
+		if (/show_stats=true/.test(config))
+			usage_stats = "<h1><a href='../index.html'>Usage Statistics</a></h1>"
+			+ "<h2><a href='index.html'> {tier} </a></h2>"
+			+ "<p><input type='button' onclick='spoiler(document.getElementById(globals))' value='Show globals'/></p>"
+			+ "<div id='globals' style='display: none;'>"
+			+ "<img src='../poke_img/{imagelink}' />"
+			+ "<table class='globaltable'>"
+			+ "<tr><th>Moves</th>"
+			+ "<th>Items</th></tr>"
+			+ "<tr>"
+			+ "<td valign='top' class='globaltd'>"
+			+ "<table>"
+			+ "<tr><th>Rank</th><th>Name</th><th>Usage</th></tr>"{globalmove*}
+			+ "</table>"
+			+ "</td>"
+			+ "<td valign='top' class='globaltd'>"
+			+ "<table>"
+			+ "<tr><th>Rank</th><th>Name</th><th>Usage</th></tr>"{globalitem*}
+			+ "</table>"
+			+ "</td>"
+			+ "</tr>"
+			+ "</table>"
+			+ "</div>"
+			+ "<img src='../poke_img/{imagelink}' />"
+			+ "<ul>"{globalability*}
+			+ "</ul>"
+			+ "<table style='width: 100%'>"
+			+ "<caption>Global Usage: {percentage} % ({battles} battles)</caption>"
+			+ "<tr><th>Regular Usage</th><th>Lead Usage</th></tr>"
+			+ "<tr><td>{nonleadpercentage} %</td><td>{leadpercentage} %</td></tr>"
+			+ "<tr><td valign='top'>"{moveset*}
+			+ "</td>"
+			+ "<td valign='top'>"{leadmoveset*} 
+			+ "</td></tr>"
+			+ "</table>";
+		else
+			usage_stats = "<h1>Hidden</h1>";
+		document.write(usage_stats);
+		</script>
 	</body>
 </html>
 }}
 
 globalmove{{
-	<tr><td><code>{rank}</code></td><td><code>| {move}</code></td><td><code>&nbsp;| {percentage} % <!-- {battles} battles --></code></td></tr>
-}}
+			+ "<tr><td><code>{rank}</code></td><td><code>| {move}</code></td><td><code>&nbsp;| {percentage} % ({battles} battles) </code></td></tr>"}}
 
 globalitem{{
-	<tr><td><code>{rank}</code></td><td><code>| {item}</code></td><td><code>&nbsp;| {percentage} % <!-- {battles} battles --></code></td></tr>
-}}
+			+ "<tr><td><code>{rank}</code></td><td><code>| {item}</code></td><td><code>&nbsp;| {percentage} % ({battles} battles) </code></td></tr>"}}
 
 globalability{{
-	<li>{ability} - {percentage} % ({battles} battles)</li>
-}}
+			+ "<li>{ability} - {percentage} % ({battles} battles)</li>"}}
 
 moveset{{
-	<p class='pokemonRank'># {rank} - {percentage} % ({battles} battles)</p>
-	<hr />
-	<p class='pokemonTitle'>{pokemon} @ {item} Lv. {level} -- {abilities}</p>
-	<!-- This is the first stat set, the other are in the braces -->
-	{firststatset}
-	<div style='display: none;'>
-		{statset*}
-	</div>
-	<ul class='moveList'>
-		<li class='move'>{move1}</li>
-		<li class='move'>{move2}</li>
-		<li class='move'>{move3}</li>
-		<li class='move'>{move4}</li>
-	</ul>
-}}
+			+ "<p class='pokemonRank'># {rank} - {percentage} % ({battles} battles)</p>"
+			+ "<hr />"
+			+ "<p class='pokemonTitle'>{pokemon} @ {item} Lv. {level} -- {abilities}</p>"
+			+ "<!-- This is the first stat set, the other are in the braces -->"{firststatset}
+			+ "<div style='display: none;'>"{statset*}
+			+ "</div>"
+			+ "<ul class='moveList'>"
+			+ "<li class='move'>{move1}</li>"
+			+ "<li class='move'>{move2}</li>"
+			+ "<li class='move'>{move3}</li>"
+			+ "<li class='move'>{move4}</li>"
+			+ "</ul>"}}
 
 leadmoveset{{
-	<p class='pokemonRank'># {rank} - {percentage} % ({battles} battles)</p>
-	<hr />
-	<p class='pokemonTitle'>{pokemon} @ {item} Lv. {level} -- {abilities}</p>
-	<!-- This is the first stat set, the other are in the braces -->
-	{firststatset}
-	<div style='display: none;'>
-		{statset*}
-	</div>
-	<ul class='moveList'>
-		<li class='move'>{move1}</li>
-		<li class='move'>{move2}</li>
-		<li class='move'>{move3}</li>
-		<li class='move'>{move4}</li>
-	</ul>
-}}
+			+ "<p class='pokemonRank'># {rank} - {percentage} % ({battles} battles)</p>"
+			+ "<hr />"
+			+ "<p class='pokemonTitle'>{pokemon} @ {item} Lv. {level} -- {abilities}</p>"
+			+ "<!-- This is the first stat set, the other are in the braces -->"{firststatset}
+			+ "<div style='display: none;'>"{statset*}
+			+ "</div>"
+			+ "<ul class='moveList'>"
+			+ "<li class='move'>{move1}</li>"
+			+ "<li class='move'>{move2}</li>"
+			+ "<li class='move'>{move3}</li>"
+			+ "<li class='move'>{move4}</li>"
+			+ "</ul>"}}
 
 firststatset{{
-	<p class="advanced">Nature: {nature} - EVs: {evs} <!-- - IVs: {ivs}--><span class='smallPercent'>({percentage} %)</span><span class='hiddenPower'>{hiddenpower}</span>
-		<input type='button' onclick='hideShow(this)' value='+'/></p>
-}}
+			+ "<p class='advanced'>Nature: {nature} - EVs: {evs}  - IVs: {ivs}<span class='smallPercent'>({percentage} %)</span><span class='hiddenPower'>{hiddenpower}</span>"
+			+ "<input type='button' onclick='hideShow(this)' value='+'/></p>"}}
 
 statset{{
-	<p class='advanced'>Nature: {nature} - EVs: {evs} <!-- - IVs: {ivs}--><span class='smallPercent'>({percentage} %)</span><span class='hiddenPower'>{hiddenpower}</span></p>
-}}
+			+ "<p class='advanced'>Nature: {nature} - EVs: {evs}  - IVs: {ivs}<span class='smallPercent'>({percentage} %)</span><span class='hiddenPower'>{hiddenpower}</span></p>"}}
