@@ -1,8 +1,8 @@
-#Lutra's Pokemon Online Server Script
+#Lutra's Pokemon Online Server Supplements
 
 Created by Lutra(Jakilutra) for use with servers of the Online Pokemon Battle Simulator - [Pokemon Online] (https://github.com/coyotte508/pokemon-online)
 
-The files were made public in order to benefit users and hosts of servers with useful functionality, primarily via commands.
+The files were made public in order to benefit users and hosts of servers with extra useful functionality.
 
 The repository can be downloaded [here] (https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Script/downloads)
 
