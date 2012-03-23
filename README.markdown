@@ -7,11 +7,11 @@ Created by Lutra (Jakilutra) for use with servers of the Online Pokemon Battle S
 2. Extract `Lutra-s-Pokemon-Online-Server-Supplements.7z`
 3. Refer to the specific instructions on how to setup your chosen supplement.
 
-## Server Script
+## Script
 
 For information on the PO Server Script, visit [here](https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Supplements/wiki/PO-Server-Script)
 
-## Server Assists
+## Assists
 
 For information on the PO Server Assists, visit [here](https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Supplements/wiki/PO-Server-Assists)
 
