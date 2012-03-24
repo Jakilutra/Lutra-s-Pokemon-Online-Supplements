@@ -9,6 +9,6 @@ Created by Lutra (Jakilutra) for use with servers of the Online Pokemon Battle S
 
 ## Subpages
 
-* PO Server Script: <https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Supplements/wiki/PO-Server-Script>
-* PO Server Assists: <https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Supplements/wiki/PO-Server-Assists>
-* PO Server Website: <https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Supplements/wiki/PO-Server-Website>
+* [PO Server Script] (https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Supplements/wiki/PO-Server-Script)
+* [PO Server Assists] (https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Supplements/wiki/PO-Server-Assists)
+* [PO Server Website] (https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Server-Supplements/wiki/PO-Server-Website)
