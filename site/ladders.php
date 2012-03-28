@@ -76,6 +76,7 @@ foreach ($categories as $category){
 	}
 }
 $ladderslist = str_replace("INSERT_HERE", $ladderscount, $ladderslist);
+$championladder = "<center><form action='ladderchamps.php?sort_field=displayed_rating&sort_type=DESC&count={$ladderscount}' method='post'><input type='submit' value='Champion Ladder'></form></center>";
 $siteconfig = file("config.txt");
 foreach ($siteconfig as $line){
 	if (preg_match("/show_ladders=/", $line) == 1 && preg_match("/show_ladders=true/", $line) == 0){
@@ -85,6 +86,7 @@ foreach ($siteconfig as $line){
 		$categorieslist = "<td><i>Hidden</i></td>";
 		$ladderslist = "<td><i>Hidden</i></td>";
 		$lastcheck = "<i>Hidden</i>";
+		$championladder = "";
 	}
 }
 $sitepage = "ladders";
@@ -93,7 +95,7 @@ $display = "<html>"
 . "<head>"
 . "<title>Ladders</title>"
 . "<link rel='stylesheet' type='text/css' href='style.css' />"
-. "<meta http-equiv='Content-Type' content='text/html'; charset='utf-8' />"
+. "<meta http-equiv='Content-Type' content='text/html' charset='utf-8' />"
 . "</head>"
 . "<body>"
 . $nav
@@ -103,6 +105,8 @@ $display = "<html>"
 . "<tr align='center'>{$laddertinfo}</tr>"
 . "<tr align='center'>{$ladderinfo}</tr>"
 . "</table>"
+. "<br/>"
+. $championladder
 . "<br/>"
 . "<table class='noborder' width='100%'>"
 . "<caption>Last Decay: {$lastcheck}</caption>"

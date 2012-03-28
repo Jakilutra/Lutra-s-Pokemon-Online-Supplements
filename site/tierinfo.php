@@ -46,7 +46,7 @@ foreach ($tiers as $tier){
 		. "<head>"
 		. "<title>Tiers</title>"
 		. "<link rel='stylesheet' type='text/css' href='style.css' />"
-		. "<meta http-equiv='Content-Type' content='text/html'; charset='utf-8' />"
+		. "<meta http-equiv='Content-Type' content='text/html' charset='utf-8' />"
 		. "</head>"
 		. "<body>"
 		. $nav
