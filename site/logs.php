@@ -27,7 +27,7 @@ function browsedir($dir) {
 }
 $battledirs = browsedir("../logs/battles/");
 $chatdirs = browsedir("../logs/chat/");
-if (isset($GET["path"])){
+if (isset($_GET["path"])){
 	$path = $_GET["path"];
 }
 if (is_string($path) && substr_compare($path,"../logs/", 0, 7) == 0){
