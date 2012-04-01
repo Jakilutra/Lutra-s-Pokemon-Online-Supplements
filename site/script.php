@@ -1,4 +1,5 @@
 <?php
+/* Showing/Hiding Script */
 $siteconfig = file("config.txt");
 foreach ($siteconfig as $line){
 	if (preg_match("/show_scripts=true/", $line) == 1){
@@ -20,23 +21,46 @@ if (isset($script) == false){
 	$lines = "N/A";
 	$script = "<i>Hidden</i>";
 }
+/* Including Navigation */
 $sitepage = "script";
 include "navigation.php";
-$display = "<html>"
-. "<head>"
-. "<title>Server Script</title>"
-. "<link rel='stylesheet' type='text/css' href='style.css' />"
-. "<meta http-equiv='Content-Type' content='text/html' charset='utf-8' />"
-. "</head>"
-. "<body>"
+/* Constructing Page */
+$display = "<!DOCTYPE html>" . "\n"
+. "\t" . "<head>" . "\n"
+. "\t\t" . "<title>Server Script</title>" . "\n"
+. "\t\t" . "<link rel='stylesheet' type='text/css' href='style.css' />" . "\n"
+. "\t\t" . "<meta http-equiv='Content-Type' content='text/html;charset=utf-8' />" . "\n"
+. "\t" . "</head>" . "\n"
+. "\t" . "<body>" . "\n"
+. "\t\t" . "<!--Navigation-->" . "\n"
 . $nav
-. "<h1><a href='script.php'>Server Script</a></h1>"
-. "<table width ='100%'>"
-. "<tr align='left' valign='top'><th>Line</th><th>Script&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href={$scriptlink}><input type='submit' value='Raw'></a></input></th></tr>"
-. "<tr align='left' valign='top'><td><b><small>{$lines}</small></b></td><td nowrap><b><small>{$script}</small></b></tr>"
-. "</table>"
-. "</body>"
-. "</html>";
+. "\t\t" . "<h1><a href='script.php'>Server Script</a></h1>" . "\n"
+. "\t\t" . "<!--Script Table-->" . "\n"
+. "\t\t" . "<table>" . "\n"
+. "\t\t\t" . "<tr>" . "\n"
+. "\t\t\t\t" . "<th>" . "\n"
+. "\t\t\t\t\t" . "Line" . "\n"
+. "\t\t\t\t" . "</th>" . "\n"
+. "\t\t\t\t" . "<th class='left'>" . "\n"
+. "\t\t\t\t" . "<!--Raw Script Link-->" . "\n"
+. "\t\t\t\t\t" . "<form action='../scripts.js' method='get'>" . "\n"
+. "\t\t\t\t\t\t" . "<input type='submit' value='Raw Script' />" . "\n"
+. "\t\t\t\t\t" . "</form>" . "\n"
+. "\t\t\t\t" . "</th>" . "\n"
+. "\t\t\t" . "</tr>" . "\n"
+. "\t\t\t" . "<tr>" . "\n"
+. "\t\t\t\t" . "<td>" . "\n"
+. "\t\t\t\t" . "<!--Script Line Numbers-->" . "\n"
+. "\t\t\t\t\t" . "<b><small>{$lines}</small></b>" . "\n"
+. "\t\t\t\t" . "</td>" . "\n"
+. "\t\t\t\t" . "<td class='left'>" . "\n"
+. "\t\t\t\t" . "<!--Script Lines-->" . "\n"
+. "\t\t\t\t\t" . "<b><small>{$script}</small></b>" . "\n"
+. "\t\t\t\t" . "</td>" . "\n"
+. "\t\t\t" . "</tr>" . "\n"
+. "\t\t" . "</table>" . "\n"
+. "\t" . "</body>" . "\n"
+. "</html>" . "\n";
+/* Displaying Page */
 echo $display;
-fopen("scripts.js", "r");
 ?>

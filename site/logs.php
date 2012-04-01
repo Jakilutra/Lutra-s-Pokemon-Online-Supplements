@@ -1,17 +1,23 @@
 <?php
+/* Constructing Logs Index and Display */
 function browsedir($dir) {
 	$dirlist = "";
 	if ($handle = opendir($dir)) { 		
 		while (false !== ($entry = readdir($handle))) {
+			$entry = utf8_encode($entry);	
 			$entryvalue = str_replace("'", "&#39;", $entry);
 			if (is_dir($dir.$entry)){
 				if ($entry != "." && $entry != ".." ){
-					$dirlist .= "<form action='logs.php?path=" . rawurlencode($dir) . rawurlencode($entry) . "/' method='post'><input type='submit' value='{$entryvalue}'></form>";
+					$dirlist .= "\t\t\t\t\t" .  "<form action='logs.php?path=" . rawurlencode($dir) . rawurlencode($entry) . "/' method='post'>" . "\n"
+					. "\t\t\t\t\t\t" .  "<input type='submit' value='{$entryvalue}'>" . "\n"
+					. "\t\t\t\t\t" .  "</form>" . "\n";
 				}
 			}
 			else {
 				if (substr_compare($entry, ".raw", strlen($entry)-4, 4) != 0){
-					$dirlist .= "<form action='logs.php?path=" . rawurlencode($dir) . rawurlencode($entry) . "' method='post'><input type='submit' value='{$entryvalue}'></form>";
+					$dirlist .= "\t\t\t\t\t" .  "<form action='logs.php?path=" . rawurlencode($dir) . rawurlencode($entry) . "' method='post'>" . "\n"
+					. "\t\t\t\t\t\t" .  "<input type='submit' value='{$entryvalue}'>" . "\n"
+					. "\t\t\t\t\t" .  "</form>" . "\n";
 				}
 			}
 		}
@@ -21,7 +27,9 @@ function browsedir($dir) {
 }
 $battledirs = browsedir("../logs/battles/");
 $chatdirs = browsedir("../logs/chat/");
-$path = $_GET["path"];
+if (isset($GET["path"])){
+	$path = $_GET["path"];
+}
 if (is_string($path) && substr_compare($path,"../logs/", 0, 7) == 0){
 	if (is_dir($path)){
 		$subdir = browsedir($path);
@@ -48,37 +56,73 @@ if (is_string($path) && substr_compare($path,"../logs/", 0, 7) == 0){
 	}
 }
 else {
-	$subdir = "&nbsp;";
+	$subdir = "\t\t\t\t\t" .  "&nbsp;" . "\n";
 	$subdirname = "No Subdirectory Requested";
 	$logname = "No Log Requested";
 	$log = "Click on a Battle Logs or Chat Logs subdirectory for access to a list of logs.";
 }
-$sitepage = "logs";
-include "navigation.php";
+/* Hiding Logs Index and Display */
 $siteconfig = file("config.txt");
 foreach ($siteconfig as $line){
 	if (preg_match("/show_logs=/", $line) == 1 && preg_match("/show_logs=true/", $line) == 0){
 		$log = "<i>Hidden</i>";
-		$battledirs = "&nbsp;";
-		$chatdirs = "&nbsp;";
-		$subdir = "&nbsp;";
+		$battledirs = "\t\t\t\t\t" .  "&nbsp;" . "\n";
+		$chatdirs = "\t\t\t\t\t" .  "&nbsp;" . "\n";
+		$subdir = "\t\t\t\t\t" .  "&nbsp;" . "\n";
 		$subdirname = "<i>Hidden</i>";
 		$logname = "<i>Hidden</i>";
 	}
 }
-$display = "<html>"
-. "<head>"
-. "<title>Logs</title>"
-. "<link rel='stylesheet' type='text/css' href='style.css' />"
-. "<meta http-equiv='Content-Type' content='text/html' charset='utf-8' />"
-. "</head>"
-. "<body>"
+/* Including Navigation */
+$sitepage = "logs";
+include "navigation.php";
+/* Constructing Page */
+$display = "<!DOCTYPE html>" . "\n"
+. "\t" . "<head>" . "\n"
+. "\t\t" .  "<title>Logs</title>" . "\n"
+. "\t\t" .  "<link rel='stylesheet' type='text/css' href='style.css' />" . "\n"
+. "\t\t" .  "<meta http-equiv='Content-Type' content='text/html;charset=utf-8' />" . "\n"
+. "\t" . "</head>" . "\n"
+. "\t" . "<body>" . "\n"
+. "\t\t" . "<!--Navigation-->" . "\n"
 . $nav
-. "<h1><a href='logs.php'>Logs</a></h1>"
-. "<table class='noborder' width ='100%'>"
-. "<tr align='left' valign='top'><th>Battle Logs</th><th>Chat Logs</th><th>{$subdirname}</th><th>{$logname}</th></tr>"
-. "<tr align='left' valign='top'><td class='noborder'>{$battledirs}</td><td class='noborder'>{$chatdirs}</td><td class='noborder'>{$subdir}</td><td width='60%' style='background-color:white;color:black;'>{$log}</td></tr>"
-. "</table>"
-. "</body>";
+. "\t\t" .  "<h1><a href='logs.php'>Logs</a></h1>" . "\n"
+. "\t\t" . "<!--Logs Table-->" . "\n"
+. "\t\t" .  "<table class='noborder'>" . "\n"
+. "\t\t\t" .  "<tr>" . "\n"
+. "\t\t\t\t" .  "<th>" . "\n"
+. "\t\t\t\t\t" .  "Battle Logs" . "\n"
+. "\t\t\t\t" .  "</th>" . "\n"
+. "\t\t\t\t" .  "<th>" . "\n"
+. "\t\t\t\t\t" .  "Chat Logs" . "\n"
+. "\t\t\t\t" .  "</th>" . "\n"
+. "\t\t\t\t" .  "<th>" . "\n"
+. "\t\t\t\t\t" .  "{$subdirname}" . "\n"
+. "\t\t\t\t" .  "</th>" . "\n"
+. "\t\t\t\t" .  "<th>" . "\n"
+. "\t\t\t\t\t" .  "{$logname}" . "\n"
+. "\t\t\t\t" .  "</th>" . "\n"
+. "\t\t\t" .  "</tr>" . "\n"
+. "\t\t\t" .  "<tr>" . "\n"
+. "\t\t\t\t" . "<!--Battle Subdirectory Index-->" . "\n"
+. "\t\t\t\t" .  "<td class='noborder'>" . "\n"
+. $battledirs
+. "\t\t\t\t" .  "</td>" . "\n"
+. "\t\t\t\t" . "<!--Chat Subdirectory Index-->" . "\n"
+. "\t\t\t\t" .  "<td class='noborder'>" . "\n"
+. $chatdirs
+. "\t\t\t\t" .  "</td>" . "\n"
+. "\t\t\t\t" . "<!--Log File Index-->" . "\n"
+. "\t\t\t\t" .  "<td class='noborder'>" . "\n"
+. $subdir
+. "\t\t\t\t" .  "</td>" . "\n"
+. "\t\t\t\t" . "<!--Log Display-->" . "\n"
+. "\t\t\t\t" .  "<td class='logs'>" . "\n"
+. "\t\t\t\t\t" .  "{$log}" . "\n"
+. "\t\t\t\t" .  "</td>" . "\n"
+. "\t\t\t" .  "</tr>" . "\n"
+. "\t\t" .  "</table>" . "\n"
+. "\t" . "</body>" . "\n";
+/* Displaying Page */
 echo $display;
 ?>

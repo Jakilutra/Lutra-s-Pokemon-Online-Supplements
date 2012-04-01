@@ -165,16 +165,16 @@ h2 {
 	color:white;
 	font-family:Arial;
 	font-size: 35px;
+	text-align: center;
 }
 
 body {
-	background: url("BlueHiddenInnerBall.png");	
+	background: url("BlueHiddenInnerBall.png");
 }
 
 div {
 	margin: 0px;
 }
-
 
 table {
 	border:3px solid black;
@@ -182,17 +182,41 @@ table {
 	margin-top: 10px;
 	margin-left: 0px;
 	position: relative;
+	width: 100%;
+	text-align:center;
 }
 
 table.noborder {
 	background-color: transparent;
 	border:0px solid;
+	text-align: left;
+}
+
+table.back {
+	background-color: transparent;
+	border:0px solid;
+}
+
+
+table.nav {
+	width:50%;
+}
+
+table.ladder{
+	width:70%;
+	margin-left:auto;
+	margin-right:auto;
 }
 
 caption {
 	color:white;
 	font-family:Arial;
 }
+
+tr {
+	width: 100%;
+}
+
 
 th {
 	background-color: MidnightBlue;
@@ -210,11 +234,24 @@ td {
 	font-family:Arial;
 	font-size: 20px;
 	padding:10px 10px 10px 10px;
+	vertical-align:top;
 }
 
 td.noborder {
 	background-color: transparent;
 	border:0px solid;
+}
+
+td.logs{
+	width: 60%;
+	background-color:white;
+	color: black;
+	text-align: left;
+}
+
+th.left, td.left {
+	white-space: nowrap;
+	text-align: left;
 }
 
 p {
@@ -244,6 +281,7 @@ input {
 	padding: 4px;
 	text-decoration:none;
 	text-shadow: 50px #810e05;
+	margin: 3px 3px 3px 3px;
 }
 
 input:hover {

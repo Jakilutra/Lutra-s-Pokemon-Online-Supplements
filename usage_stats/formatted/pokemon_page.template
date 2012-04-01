@@ -12,15 +12,15 @@
 -->
 
 page{{
-<html>
+<!DOCTYPE html>
 	<head>
 		<title>Pok&eacute;mon {pokemon}</title>
 		<link rel="stylesheet" type="text/css" href="../../../site/style.css" />
-		<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 		<script type="text/javascript" src="../script.js"></script>
 	</head>
 	<body>
-		<script type="text/javascript" src="../../../site/navigation.php?sitepage=usage_stats&level=2"></script>
+		<script type="text/javascript" src="../../../site/navigation.php?sitepage=usage_stats&amp;level=2"></script>
 		<script type="text/javascript">
 		if (window.XMLHttpRequest)
 			xmlhttp=new XMLHttpRequest();
@@ -60,9 +60,9 @@ page{{
 			+ "<caption>Global Usage: {percentage} % ({battles} battles)</caption>"
 			+ "<tr><th>Regular Usage</th><th>Lead Usage</th></tr>"
 			+ "<tr><td>{nonleadpercentage} %</td><td>{leadpercentage} %</td></tr>"
-			+ "<tr><td valign='top'>"{moveset*}
+			+ "<tr><td class='left'>"{moveset*}
 			+ "</td>"
-			+ "<td valign='top'>"{leadmoveset*} 
+			+ "<td class='left'>"{leadmoveset*} 
 			+ "</td></tr>"
 			+ "</table>";
 		else
