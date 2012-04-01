@@ -25,6 +25,12 @@ function browsedir($dir) {
 		return $dirlist;
 	}
 }
+function no_subdirs (){
+	$GLOBALS["subdir"] = "\t\t\t\t\t" .  "&nbsp;" . "\n";
+	$GLOBALS["subdirname"] = "No Subdirectory Requested";
+	$GLOBALS["logname"] = "No Log Requested";
+	$GLOBALS["log"] = "Click on a Battle Logs or Chat Logs subdirectory for access to a list of logs.";
+}
 $battledirs = browsedir("../logs/battles/");
 $chatdirs = browsedir("../logs/chat/");
 if (isset($_GET["path"])){
@@ -54,12 +60,12 @@ if (isset($_GET["path"])){
 			$subdir = browsedir($subdir);
 		}
 	}
+	else {
+		no_subdirs();
+	}
 }
 else {
-	$subdir = "\t\t\t\t\t" .  "&nbsp;" . "\n";
-	$subdirname = "No Subdirectory Requested";
-	$logname = "No Log Requested";
-	$log = "Click on a Battle Logs or Chat Logs subdirectory for access to a list of logs.";
+	no_subdirs();
 }
 /* Hiding Logs Index and Display */
 $siteconfig = file("config.txt");
