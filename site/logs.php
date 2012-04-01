@@ -8,7 +8,7 @@ function browsedir($dir) {
 			$entryvalue = str_replace("'", "&#39;", $entry);
 			if (is_dir($dir.$entry)){
 				if ($entry != "." && $entry != ".." ){
-					$dirlist .= "\t\t\t\t\t" .  "<form action='logs.php?path=" . rawurlencode($dir) . rawurlencode($entry) . "/' method='post'>" . "\n"
+					$dirlist .= "\t\t\t\t\t" .  "<form action='logs.php?path=" . rawurlencode($dir) . rawurlencode($entry) . "%2F' method='post'>" . "\n"
 					. "\t\t\t\t\t\t" .  "<input type='submit' value='{$entryvalue}'>" . "\n"
 					. "\t\t\t\t\t" .  "</form>" . "\n";
 				}
@@ -29,30 +29,30 @@ $battledirs = browsedir("../logs/battles/");
 $chatdirs = browsedir("../logs/chat/");
 if (isset($_GET["path"])){
 	$path = $_GET["path"];
-}
-if (is_string($path) && substr_compare($path,"../logs/", 0, 7) == 0){
-	if (is_dir($path)){
-		$subdir = browsedir($path);
-		$patharray = explode("/", $path);
-		$pathindex = count($patharray)-2;
-		$subdirname = $patharray[$pathindex];
-		$logname = "No Log Requested";
-		$log = "Click on a file to view the log.";
-	}
-	else {
-		$patharray = explode("/", $path);
-		$pathindex = count($patharray)-2;
-		$subdir = "";
-		for( $i = 0; $i < (count($patharray)-1); ++$i ) {
-			$subdir .= $patharray[$i] . "/";
+	if ((substr($path, 0,  13) == "../logs/chat/"  || substr($path, 0, 16) == "../logs/battles/") && substr_count($path, "/") == 4){
+		if (is_dir($path)){
+			$subdir = browsedir($path);
+			$patharray = explode("/", $path);
+			$pathindex = count($patharray)-2;
+			$subdirname = $patharray[$pathindex];
+			$logname = "No Log Requested";
+			$log = "Click on a file to view the log.";
 		}
-		$subdirname = $patharray[$pathindex];
-		$logname = substr($path, strlen($subdir));
-		$log = file_get_contents($path);
-		if (substr_compare($path, ".html", strlen($path)-5, 5) != 0){
-			$log = nl2br($log);
+		else {
+			$patharray = explode("/", $path);
+			$pathindex = count($patharray)-2;
+			$subdir = "";
+			for( $i = 0; $i < (count($patharray)-1); ++$i ) {
+				$subdir .= $patharray[$i] . "/";
+			}
+			$subdirname = $patharray[$pathindex];
+			$logname = substr($path, strlen($subdir));
+			$log = file_get_contents($path);
+			if (substr_compare($path, ".html", strlen($path)-5, 5) != 0){
+				$log = nl2br($log);
+			}
+			$subdir = browsedir($subdir);
 		}
-		$subdir = browsedir($subdir);
 	}
 }
 else {
