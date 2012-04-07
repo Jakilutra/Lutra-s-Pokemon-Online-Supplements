@@ -1,25 +1,31 @@
 <table border="4" style="background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #000, stop:0.25 #1E90FF, stop:0.4 #008000, stop:0.6 #008000, stop:0.75 #DA70D6, stop:1 #000);">
-<tr>
-<td  width ='25%'>
-<div style="background:url(Themes/Classic/Challenge Window/HiddenInnerBall.png);">
-<font size='5' color='beige'><b>Home Info:</b></font><br/>
-<br/>
-<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/site/index.php" style='color:white'><b>Server Site</b></a></font><br/>
-<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/forums/" style='color:white'><b>Forums</b></a></font><br/>
-</div>
-</td>
-<td width='50%'>
-<center><h1><u><div style="background:url(Themes/Classic/Challenge Window/HiddenInnerBall.png);"><img src="themes/classic/client/oAvailable.png"><font color='white'> Pokemon Perfect</font><img src="themes/classic/client/oAvailable.png"></div></u></h1>
-<b><i><font color='white'>Pokemon Practice Makes Pokemon Perfect</font></i></b><br/>
-<b><font size='6' color='white'>Advanced Connect: pokemonperfect.co.uk</font></b><br/>
-</td>
-<td  width ='25%'>
-<div style="background:url(Themes/Classic/Challenge Window/HiddenInnerBall.png);">
-<font size='5' color='beige'><b>Internet Info:</b> </font><br/>
-<br/>
-<font size='5'><b><font color='white'>•</font></b> <a href="http://www.livestream.com/pokemonperfect" style='color:white'><b>Livestream</b></a></font><br/>
-<font size='5'><b><font color='white'>•</font></b> <a href="http://www.youtube.com/user/PokePerfectMon" style='color:white'><b>Youtube</b></a></font><br/>
-</div>
-</td>
-</tr>
+	<tr>
+		<td  width ='25%'>
+			<div style="background:url(Themes/Classic/Challenge Window/HiddenInnerBall.png);">
+				<font size='5' color='beige'><b>Home Info:</b></font><br/>
+				<br/>
+				<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/poserver/site/index.php" style='color:white'><b>Server Site</b></a></font><br/>
+				<font size='5'><b><font color='white'>•</font></b> <a href="http://pokemonperfect.co.uk/forums/" style='color:white'><b>Forums</b></a></font><br/>
+			</div>
+		</td>
+		<td width='50%'>
+			<div style="background:url(Themes/Classic/Challenge Window/HiddenInnerBall.png);">
+				<center><u>
+					<img src="data:;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4BAMAAABaqCYtAAAAAXNSR0IArs4c6QAAADBQTFRF////GBAQ53ut97XG/+//////////////////////////////////////////////zRZQdwAAAAF0Uk5TAEDm2GYAAAABYktHRACIBR1IAAAACXBIWXMAAArwAAAK8AFCrDSYAAAAB3RJTUUH2AsPCRYTiv3aIwAAAkFJREFUOMuNlItxwyAMhv1YIAIGMJgBAmIBQPvPVAmwYydNr1x74fyhBz+Spum/a/kL2sd3NoM6dp9QAYyd/3AxOwvto51M/jBk2Pyah6lvpsE51/2arCncWLQga1sfkyGI7moaARQiB53zpp0nytvr+gCaeEWYU4Yk29Pxyg6ZGKoInnZhVA/TwE6pGP5iweRmSDSirla8GvHFmyLuXWp+V3SSqM78rYC4YAd8LUlpbjdwVlPlK8jiVCM6l8pjmsVMJYqUc26Q03YMPau0qJYpB8xO5wO6DifFihIHrJxSi6AlH3Yr0Do+67MKqdrEEQBQEtpJ4CzJmJzlRDaFJdyRTfmf4aKsL1RU4rtrozGAxrbCU97RJg7pK98vBRFfdWjbw9vEoiQvkmGKAJ3GJt9sRczS1RYBee0YYevPhfzZd7UHFHPddAd+o3rAfDDb6zTsaXg9oRRbr9OokcIBC5yrdwFnp77ABQJGfcD6BinvX+EERtn9hPYNVrjAcIcmaDghxlOFbsmPeIE0HA+FZDeKtWI4hOh1O0qsG2JI5OILhgvkz74k+RlwkXM4cq1W+35oO/sPMLWINlXXXajndDbLzrQigqEeAN1lPvWq4gKq0ip8ML7gyqb9/rEVPEe/Ti8l86J1Q92lA3G7DJNGuGV2Kgw94WVkLF2zVJCKtNENTl1RVTDV1kY3OEyBq60ldIPTeCuN/SrXhF4UkeQvPO/jb21xRx+Fj5HbJmAXS/8yrnlUWKHq+fs4F+/fmMwtbOwH9L6pX+tiBoIAAAAASUVORK5CYII=" style="vertical-align:middle"/>
+					<font color='white' size='7'><b> Pokemon Perfect</b></font>
+					<img src="data:;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4BAMAAABaqCYtAAAAAXNSR0IArs4c6QAAAC1QTFRF////GBAQhHOc97WM/+//////////////////////////////////////////tg1VugAAAAF0Uk5TAEDm2GYAAAABYktHRACIBR1IAAAACXBIWXMAAArwAAAK8AFCrDSYAAAAB3RJTUUH2QETCikmHfWpRgAAAntJREFUOMttlOGBrCAMhGWvASMUIGABL8QGNOm/pjfBXXXv9M+ufJLAZJJhGAYa+pPH4e/zsvH42R5gOFaD6fgEbXzRnEweoUzJCHB+hKuZLdqeDqQO2ZQf4KJips0edybDRl1MHw70Y+9HHw70umA+aaNP1BNWfgduZvSW4IRN+ArmdPHl9QO3vtXXul4eFaysJtLW/r1v3KJHAVSzXAUPp14DzzQGh2S227YeEMtzj7oPQ0TcrFCVkBZwRJwjEwIEvIbdVs4IrR0q3+GrmuZsi/nOQMjUz4PUtX8nKeHWOCxHJjpujujxgFH9lrimCLzS4fyB6gowVako7EYd8gFdjm3hRNRV2Cy5Lu3Iifx72sawxCRF1mSL64Lokt3TYHFYUlqsOtx8p8yvDgcilyWlHWt2QNU5HtCf+ad/70bjDaWQLJcxRoGEVFco6VCVpY2nPXmMqHXllMDXVW4woE8C5OBIgKpe+DNleNcdZSOL5CWaTugXdjkgYk0sEZBOF0/8thXCJY3ci/s5j/8NbiRtyhrXeIM9ZcApvC24RnfNePXSP8wErCyouu/cvqDXDu1WvE3huP0Gk7k70gGhrllsv2CUVpaK0PwbwgC7tFabt7jpF8TEsE1qLa04lFiuzkc+uGNqrVR4qt7F88PAn8alEMHBnjzfpg0TB9UpI6RDLtd8CAXlGJI0Eh8cUcodpioFfpN1cgt/pfSJ2dAfQRI6UliFxzvkyeGUJ0Sdkqz3kYQOEhqoZF3Ex6Tt962UiUhbxjm5uEvvFLsK0uGeuE8qR/9eN/WGEimZwji59Ha7jHXv5W4raCJfQ52gGdHHNUzyNX3D5cUBf/3tP/lxtIo55BRYAAAAAElFTkSuQmCC" style="vertical-align:middle"/>
+				</u></center>
+			</div>
+			<center><b><i><font size='4' color='white'>Pokemon Practice Makes Pokemon Perfect!</font></i></b></center><br/>
+			<center><b><font size='5' color='white'>Advanced Connect: pokemonperfect.co.uk</font></b></center>
+		</td>
+		<td  width ='25%'>
+			<div style="background:url(Themes/Classic/Challenge Window/HiddenInnerBall.png);">
+				<font size='5' color='beige'><b>Internet Info:</b> </font><br/>
+				<br/>
+				<font size='5'><b><font color='white'>•</font></b> <a href="http://www.livestream.com/pokemonperfect" style='color:white'><b>Livestream</b></a></font><br/>
+				<font size='5'><b><font color='white'>•</font></b> <a href="http://www.youtube.com/user/PokePerfectMon" style='color:white'><b>Youtube</b></a></font><br/>
+			</div>
+		</td>
+	</tr>
 </table>
