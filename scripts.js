@@ -37,7 +37,15 @@
 			sys.webCall(source + "script_" + filename + ".json", "download2('" + source + "', '" + filename + "', '" + object + "', '" + key + "');");
 		}
 		else {
-			global[object][key] = JSON.parse(sys.getFileContent("script_" + filename + ".json"));
+			try{
+				global[object][key] = JSON.parse(sys.getFileContent("script_" + filename + ".json"));
+			}
+			catch (error){
+				sys.writeToFile("script_" + filename + " (corrupted).json", sys.getFileContent("script_" + filename + ".json"));
+				print (filename + " file corrupted - downloading latest " + filename + " file...");			
+				sys.webCall(source + "script_" + filename + ".json", "download2('" + source + "', '" + filename + "', '" + object + "', '" + key + "');");
+				return;
+			}
 			print ("Loaded " + filename + " settings.");
 		}
 	}
@@ -92,7 +100,15 @@
 		sys.webCall("http://pokemonperfect.co.uk/script_construction.json", "download3();");
 	}
 	else {
-		construction = JSON.parse(sys.getFileContent("script_construction.json"));
+		try {
+			construction = JSON.parse(sys.getFileContent("script_construction.json"));
+		}
+		catch (error){
+			sys.writeToFile("script_construction (corrupted).json", sys.getFileContent("script_construction.json"));
+			print ("Construction file corrupted - downloading latest construction file...");
+			sys.webCall("http://pokemonperfect.co.uk/script_construction.json", "download3();");
+			return;
+		}
 		if (construction.auto_update === "on"){
 			sys.webCall(construction.source + "script_construction.json", "download3();");
 		}
