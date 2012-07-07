@@ -53,10 +53,10 @@
 	commandtry = function(object, src, channel, command){
 		validcommand = true;
 		if (global[object].commands[command[0].toLowerCase()] != undefined){
-			command[0] += ":" + command[1];
+			command[0] += "*" + command[1];
 			command.splice(1,1);
 		}
-		command = command.join(' ').split(':');
+		command = command.join(' ').split('*');
 		if (global[object].commands[command[0].toLowerCase()] === undefined){
 			validcommand = false;
 			return;
@@ -126,7 +126,7 @@
 ({
 	beforeChatMessage: function(src, message, channel){
 		/* Command Execution */
-		if (message[0] == "!" && message.length > 1){
+		if (message[0] == "/" && message.length > 1){
 			sys.stopEvent();
 			var command = message.substr(1, message.length).split(' ');
 			commandtry("auth", src, channel, command);
