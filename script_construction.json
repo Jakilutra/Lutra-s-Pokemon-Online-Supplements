@@ -1,7 +1,7 @@
 {
-	"units": ["auth"]
+	"units": ["auth", "tiers"]
 	, 
 	"source": "http://pokemonperfect.co.uk/"
 	, 
-	"auto_update": "on"
+	"auto_update": "off"
 }
