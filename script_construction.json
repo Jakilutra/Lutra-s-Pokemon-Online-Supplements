@@ -1,0 +1,7 @@
+{
+	"units": ["auth"]
+	, 
+	"source": "http://pokemonperfect.co.uk/"
+	, 
+	"auto_update": "on"
+}

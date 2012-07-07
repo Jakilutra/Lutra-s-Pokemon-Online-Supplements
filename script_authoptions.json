@@ -1,0 +1,23 @@
+{
+	"server": {"minorcolor": "red", "majorcolor": "black", "textcolor": "white", "name": "Server"},
+	"owner": {"minorcolor": "deeppink", "majorcolor": "indigo", "textcolor": "white", "name": "Owner", "registered": "on", "auto": "on"},
+	"admin": {"minorcolor": "gold", "majorcolor": "black", "textcolor": "white", "name": "Administrator", "registered": "on"},
+	"mod": {"minorcolor": "red", "majorcolor": "navy", "textcolor": "white", "name": "Moderator", "registered": "on"},
+	"user": {"minorcolor": "black", "majorcolor": "red", "textcolor": "white", "name": "User"},
+	"battleadmin": {"minorcolor": "blue", "majorcolor": "black", "textcolor": "white", "name": "Battle Admin", "authlevel": "1", "registered": "on"},
+	"battleplayer": {"minorcolor": "black", "majorcolor": "blue", "textcolor": "white", "name": "Battle Player"},
+	"battlespectator": {"minorcolor": "black", "majorcolor": "dodgerblue", "textcolor": "white", "name": "Battle Spectator"},
+	"touradmin": {"minorcolor": "green", "majorcolor": "black", "textcolor": "white", "name": "Tour Admin", "authlevel": "1", "registered": "on"},
+	"touruser": {"minorcolor": "black", "majorcolor": "green", "textcolor": "white", "name": "Tour User"},
+	"gameadmin": {"minorcolor": "indigo", "majorcolor": "black", "textcolor": "white", "name": "Game Admin", "authlevel": "1", "registered": "on"},
+	"gameuser": {"minorcolor": "black", "majorcolor": "indigo", "textcolor": "white", "name": "Game User"},
+	"channel": {"minorcolor": "red", "majorcolor": "darkslategray", "textcolor": "white", "name": "Channel"},
+	"chanowner": {"minorcolor": "deeppink", "majorcolor": "darkorchid", "textcolor": "white", "name": "Chan Owner", "globalauth": "off", "registered": "on"},
+	"chanadmin": {"minorcolor": "gold", "majorcolor": "darkslategray", "textcolor": "white", "name": "Chan Admin", "globalauth": "off", "registered": "on"},
+	"chanmod": {"minorcolor": "red", "majorcolor": "dodgerblue", "textcolor": "white", "name": "Chan Mod", "globalauth": "off", "registered": "on"},
+	"chanuser": {"minorcolor": "black", "majorcolor": "tomato", "textcolor": "white", "name": "Chan User"},
+	"chantouradmin":{"minorcolor": "green", "majorcolor": "darkslategray", "textcolor": "white", "name": "Chan Tour Admin", "authlevel": "1", "globalauth": "off", "registered": "on"},
+	"chantouruser": {"minorcolor": "black", "majorcolor": "mediumseagreen", "textcolor": "white", "name": "Chan Tour User"},
+	"changameadmin": {"minorcolor": "indigo", "majorcolor": "darkslategray", "textcolor": "white", "name": "Chan Game Admin", "authlevel": "1", "globalauth": "off", "registered": "on"},
+	"changameuser": {"minorcolor": "black", "majorcolor": "darkorchid", "textcolor": "white", "name": "Chan Game User"}
+}
