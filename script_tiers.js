@@ -1,7 +1,7 @@
 tiers = {};
 set(construction.source, "tiersoptions", "tiers", "options");
 set(construction.source, "tierslinks", "tiers", "links");
-tiers.download = function(user, key){
+tiers.install = function(user, key){
 	var current_tiers = sys.getFileContent("tiers.xml");
 	if (/category/gi.test(resp)){
 		if (current_tiers !== resp){
@@ -22,9 +22,9 @@ tiers.download = function(user, key){
 		print("The server's tiers are up to date with " + tiers.options["autoupdate"] + "'s.");
 	}
 }
-tiers.install = function(user, key){
-	sys.webCall(tiers.links[key], "tiers.download('" + user + "','" + key + "')");
+tiers.download = function(user, key){
+	sys.webCall(tiers.links[key], "tiers.install('" + user + "','" + key + "')");
 }
 if (tiers.links[tiers.options["autoupdate"]] != undefined){
-	tiers.install("~~Server~~", tiers.options["autoupdate"]);
+	tiers.download("~~Server~~", tiers.options["autoupdate"]);
 }
