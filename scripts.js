@@ -117,6 +117,26 @@
 			print ("Loaded construction settings.");
 		}
 	}
+	/* Script Update Check Function */
+	download4 = function(event){
+		var current_script = sys.getFileContent("scripts.js");
+		if (construction.auto_update === "on" && /download/gi.test(resp)){
+			if (current_script !== resp){
+				sys.writeToFile("scripts (last).js", current_script);
+				if (event === "start"){
+					sys.writeToFile("scripts.js", resp);
+					sys.changeScript(resp, true);
+				}
+				else {
+					sys.writeToFile("scripts.js", resp);
+					sys.changeScript(resp);
+				}
+				print("Script Updated!");
+				return;
+			}
+			print("Script is up-to-date.");
+		}
+	}
 	/* Script Reload Message */
 	if (global.auth !== undefined){
 		auth.echo("server", "The Script has been reloaded!", -1);
@@ -124,6 +144,18 @@
 }).call(null);
 
 ({
+	serverStartUp: function(){
+		/* Script Update Startup Check */
+		sys.webCall(construction.source + "scripts.js", "download4('start');");
+	}
+	,
+	afterNewMessage: function(message){
+		/* Script Update Script Load Check */
+		if (message === "Script Check: OK"){
+			sys.webCall(construction.source + "scripts.js", "download4('scriptload');");
+		}
+	}
+	,
 	beforeChatMessage: function(src, message, channel){
 		/* Command Execution */
 		if (message[0] == "/" && message.length > 1){
