@@ -5,6 +5,7 @@ tiers.download = function(user, key){
 	var current_tiers = sys.getFileContent("tiers.xml");
 	if (/category/gi.test(resp)){
 		if (current_tiers !== resp){
+			sys.writeToFile("tiers (last).xml", sys.getFileContent("tiers.xml"));
 			sys.writeToFile("tiers.xml", resp); 
 			sys.reloadTiers();
 			print(tiers.options["autoupdate"] + " tiers have been installed.");
@@ -22,7 +23,6 @@ tiers.download = function(user, key){
 	}
 }
 tiers.install = function(user, key){
-	sys.writeToFile("tiers (last).xml", sys.getFileContent("tiers.xml"));
 	sys.webCall(tiers.links[key], "tiers.download('" + user + "','" + key + "')");
 }
 if (tiers.links[tiers.options["autoupdate"]] != undefined){
