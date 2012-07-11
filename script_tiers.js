@@ -1,6 +1,8 @@
+/* Loading Tiers Object and Settings */
 tiers = {};
 set(construction.source, "tiersoptions", "tiers", "options");
 set(construction.source, "tierslinks", "tiers", "links");
+/* Installing Tiers Functions */
 tiers.install = function(user, key){
 	var current_tiers = sys.getFileContent("tiers.xml");
 	if (/category/gi.test(resp)){
@@ -25,6 +27,9 @@ tiers.install = function(user, key){
 tiers.download = function(user, key){
 	sys.webCall(tiers.links[key], "tiers.install('" + user + "','" + key + "')");
 }
+/* Auto-Update Tiers */
 if (tiers.links[tiers.options["autoupdate"]] != undefined){
 	tiers.download("~~Server~~", tiers.options["autoupdate"]);
 }
+/* Tiers Commands */
+tiers.commands = {};

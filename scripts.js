@@ -61,7 +61,8 @@
 			validcommand = false;
 			return;
 		}
-		global[object].commands[command[0].toLowerCase()](src,channel, command);
+		global[object].commands[command[0].toLowerCase()](src, channel, command);
+		commandused = true;
 	}
 	/* Command Error Message Function */
 	commanderror = function (id, text, channel){
@@ -137,6 +138,20 @@
 			print("Script is up-to-date.");
 		}
 	}
+	/* Base Commands */
+	typecommands = "<center><b><font color='orangered'>The following commands need to be entered into a channel's main chat:</font></b></center>";
+	commands = {
+		commands: function(src, channel, command){
+			var index, display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:0.3, stop:0.1 mediumorchid stop:0.5 papayawhip); color: black;'>"
+			+ "<tr><td><center><h2><font color='green'>Commands</font></h2></center></td></tr>"
+			+ typecommands;
+			for (index in construction.units){
+				display += "<tr><td><center><font color='darkgreen'><b>/" + construction.units[index] + "commands</b></font>: displays the " + construction.units[index] + "commands.</center></td></tr>";
+			}
+			display += "</table>";
+			sys.sendHtmlMessage(src, display, channel);
+		}
+	}
 	/* Script Reload Message */
 	if (global.auth !== undefined){
 		auth.echo("server", "The Script has been reloaded!", -1);
@@ -160,11 +175,21 @@
 		/* Command Execution */
 		if (message[0] == "/" && message.length > 1){
 			sys.stopEvent();
-			var command = message.substr(1, message.length).split(' ');
-			commandtry("auth", src, channel, command);
-			if (!validcommand){
+			var command = message.substr(1, message.length).split(' '), index;
+			commandtry("global", src, channel, command);
+			for (index in construction.units){
+				commandtry(construction.units[index], src, channel, command);
+			}
+			if (!validcommand && !commandused){
 				commanderror(src, "The server does not recognise <b>\"" + escapehtml(message) + "\"</b> as a valid command.", channel);
 			}
+			commandused = false;
 		}
+	}
+	,
+	afterLogIn: function (src){
+		/* LogIn Notifications*/
+		var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 mediumorchid stop:0.5 papayawhip); color: black;'><tr><td><center><b><big>Type: <font color='darkgreen'>/Commands</font> into a channel's main chat to view a list of commands.</big></b></center></td></tr></table>";
+		sys.sendHtmlMessage (src, display);
 	}
 })

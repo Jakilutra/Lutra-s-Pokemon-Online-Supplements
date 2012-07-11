@@ -1,6 +1,8 @@
+/* Loading Auth Object and Settings */
 auth = {};
 set(construction.source, "authoptions", "auth", "options");
 set(construction.source, "authmembers", "auth", "members");
+/* Auth-based Announcement Function */
 auth.echo = function(group, text, channel){
 	var display = auth.options === undefined ? "<timestamp/><b>" + text + "</b>" : "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 " + auth.options[group].minorcolor + ", stop:0.5 " + auth.options[group].majorcolor + "); color:" + auth.options[group].textcolor + ";'><tr><td><center><b><big>" + text + "</big></b></center></td></tr></table>";
 	if (channel > -1){
@@ -10,6 +12,7 @@ auth.echo = function(group, text, channel){
 		sys.sendHtmlAll(display);
 	}
 }
+/* Main Chat PM Function */
 auth.pm = function(group, text, from, to, recipients, channel){
 	var display = auth.options === undefined ? "<timestamp/> from " + from + " to" + to + " Sent to: " + String(recipients).replace(/,/gi, ", ") + "<br/><b>" + text + "</b>" : "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 " + auth.options[group].minorcolor + ", stop:0.5 " + auth.options[group].majorcolor + "); color:" + auth.options[group].textcolor + ";'><tr><th>Personal Message from <i>" + from + "</i> to <i>" + to + "</i>&nbsp;&nbsp;&nbsp;Sent to: <i>" + String(recipients).replace(/,/gi, ", ") + "</i></th></tr><tr><td><center><b><big>" + text + "</big></b></center></td></tr></table>";
 	var index;
@@ -24,6 +27,7 @@ auth.pm = function(group, text, from, to, recipients, channel){
 		}
 	}
 }
+/* Auth Commands */
 auth.commands = {
 	echo: function(src, channel, command){
 		if (sys.auth(src) < 3){
