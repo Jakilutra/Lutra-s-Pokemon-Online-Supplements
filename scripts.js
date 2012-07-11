@@ -1,3 +1,14 @@
+/* Change the words in staffname to something your liking if you would like to rename Staff Channel to something else. 
+E.g staffname="Certified Members" would make it so the Staff Channel name would be: Certified Members*/
+staffname="Staff Channel";
+/* Change the words in channel bot to something of your liking if you would like to name channel bot
+to be named something else. */
+channelbot="+ChannelBot:";
+if (sys.existChannel(staffname)) {
+    staffchannel  = sys.channelId(staffname);
+    } else {
+    staffchannel  = sys.createChannel(staffname);
+}
 (function(){
 	/* Naming Global Variable */
 	global = this;
@@ -149,6 +160,17 @@
 		sys.webCall(construction.source + "scripts.js", "download4('start');");
 	}
 	,
+	
+	beforeChannelJoin: function(src, channel){
+	/* Channel Access Control */
+	if (channel == staffchannel && sys.auth(src) < 1) {
+		sys.sendMessage(src, channelbot+"You do not meet the required authority level to enter "+staffname+".");
+		sys.stopEvent();
+		return;
+	}
+    }	
+	,
+	
 	afterNewMessage: function(message){
 		/* Script Update Script Load Check */
 		if (message === "Script Check: OK"){
