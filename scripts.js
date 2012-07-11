@@ -163,7 +163,10 @@
 		/* Script Update Startup Check */
 		sys.webCall(construction.source + "scripts.js", "download4('start');");
 	}
-	,
+	,	
+	beforeChannelJoin: function(src, channel){
+	}
+	,	
 	afterNewMessage: function(message){
 		/* Script Update Script Load Check */
 		if (message === "Script Check: OK"){
