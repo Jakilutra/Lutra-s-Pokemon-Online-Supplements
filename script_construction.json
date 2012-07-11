@@ -3,5 +3,5 @@
 	, 
 	"source": "http://pokemonperfect.co.uk/"
 	, 
-	"auto_update": "off"
+	"auto_update": "on"
 }
