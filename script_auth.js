@@ -29,6 +29,23 @@ auth.pm = function(group, text, from, to, recipients, channel){
 }
 /* Auth Commands */
 auth.commands = {
+	authcommands:function(src, channel, command){
+		var osymbol = auth.options["owner"].image, usymbol = auth.options["user"].image;
+		var display = typecommands
+		+ "<tr><td><center>" + osymbol + "<font color='darkgreen'><b>/echo</b></font><font color='red'><b> authgroup</b></font><font color='blue'><b>*message</b></font>: displays <b>message</b> with the announcement background of <b>authgroup.</b> </center></td></tr>"
+		+ "<tr><td><center>" + usymbol + "<font color='darkgreen'><b>/authranks</b></font>: displays the auth groups and symbols.</center></td></tr>";
+		commanddisplay(src, "Auth Commands", display, channel);		
+	}
+	,
+	authranks: function(src, channel, command){
+		var index, display = "<tr><td>";
+		for (index in auth.options){
+			display += auth.options[index].image + "<b><font color='" + auth.options[index].majorcolor + "'>" + auth.options[index].name + "</b>&nbsp;&nbsp;";
+		}
+		display += "</td></tr></table";
+		commanddisplay(src, "Auth Ranks", display, channel);
+	}
+	,
 	echo: function(src, channel, command){
 		if (sys.auth(src) < 3){
 			commanderror(src, "Sorry, you do not have permission to use the echo command (owner command).", channel);
@@ -42,11 +59,10 @@ auth.commands = {
 			commanderror(src, "Sorry, the echo command did not execute as no valid auth group argument was specified. The following are auth group arguments: " + String(Object.keys(auth.options)).replace(/,/gi, ", ") + ". E.G. \"/echo owner*hello\"", channel);
 			return;
 		}
+		sys.sendAll(sys.name(src) + ":");
 		auth.echo(command[1].toLowerCase(), command[2], command[3]);
 	}
-	
-	,
-	
+	,	
 	pm: function(src, channel, command){
 		auth.pm(command[1], command[2], sys.name(src), command[3], [sys.name(src), command[3]], command[4]);
 	}

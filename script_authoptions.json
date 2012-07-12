@@ -1,23 +1,171 @@
 {
-	"server": {"minorcolor": "red", "majorcolor": "black", "textcolor": "white", "name": "Server"},
-	"owner": {"minorcolor": "deeppink", "majorcolor": "indigo", "textcolor": "white", "name": "Owner", "registered": "on", "auto": "on"},
-	"admin": {"minorcolor": "gold", "majorcolor": "black", "textcolor": "white", "name": "Administrator", "registered": "on"},
-	"mod": {"minorcolor": "red", "majorcolor": "navy", "textcolor": "white", "name": "Moderator", "registered": "on"},
-	"user": {"minorcolor": "black", "majorcolor": "red", "textcolor": "white", "name": "User"},
-	"battleadmin": {"minorcolor": "blue", "majorcolor": "black", "textcolor": "white", "name": "Battle Admin", "authlevel": "1", "registered": "on"},
-	"battleplayer": {"minorcolor": "black", "majorcolor": "blue", "textcolor": "white", "name": "Battle Player"},
-	"battlespectator": {"minorcolor": "black", "majorcolor": "dodgerblue", "textcolor": "white", "name": "Battle Spectator"},
-	"touradmin": {"minorcolor": "green", "majorcolor": "black", "textcolor": "white", "name": "Tour Admin", "authlevel": "1", "registered": "on"},
-	"touruser": {"minorcolor": "black", "majorcolor": "green", "textcolor": "white", "name": "Tour User"},
-	"gameadmin": {"minorcolor": "indigo", "majorcolor": "black", "textcolor": "white", "name": "Game Admin", "authlevel": "1", "registered": "on"},
-	"gameuser": {"minorcolor": "black", "majorcolor": "indigo", "textcolor": "white", "name": "Game User"},
-	"channel": {"minorcolor": "red", "majorcolor": "darkslategray", "textcolor": "white", "name": "Channel"},
-	"chanowner": {"minorcolor": "deeppink", "majorcolor": "darkorchid", "textcolor": "white", "name": "Chan Owner", "globalauth": "off", "registered": "on"},
-	"chanadmin": {"minorcolor": "gold", "majorcolor": "darkslategray", "textcolor": "white", "name": "Chan Admin", "globalauth": "off", "registered": "on"},
-	"chanmod": {"minorcolor": "red", "majorcolor": "dodgerblue", "textcolor": "white", "name": "Chan Mod", "globalauth": "off", "registered": "on"},
-	"chanuser": {"minorcolor": "black", "majorcolor": "tomato", "textcolor": "white", "name": "Chan User"},
-	"chantouradmin":{"minorcolor": "green", "majorcolor": "darkslategray", "textcolor": "white", "name": "Chan Tour Admin", "authlevel": "1", "globalauth": "off", "registered": "on"},
-	"chantouruser": {"minorcolor": "black", "majorcolor": "mediumseagreen", "textcolor": "white", "name": "Chan Tour User"},
-	"changameadmin": {"minorcolor": "indigo", "majorcolor": "darkslategray", "textcolor": "white", "name": "Chan Game Admin", "authlevel": "1", "globalauth": "off", "registered": "on"},
-	"changameuser": {"minorcolor": "black", "majorcolor": "darkorchid", "textcolor": "white", "name": "Chan Game User"}
+    "server": {
+        "minorcolor": "red",
+        "majorcolor": "black",
+        "textcolor": "white",
+        "name": "Server",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAAA3ElEQVRIx+2VsRHCMAxFPQolpcuUKSkzBiXjpGQEj8EIHsUdRJf8nPBJsghHGlL8ytZ7lpOTQ0op/DLhPwQxxqeUrwUAldtVjEdkwldYH+VMa4/uZEps+DjO0QRLcq93YsNLmdOQUBeaZF/BCkex84pIoElsgSOAuwW0cavg3p3bgsswvEmoCGnBqdbVASQoQiCRwKhxdUAQXgQoJFyKPVg3BfU1QYZIUOyT4KogM6CnA3wjl4BLpG9A4afX/h7XsMvVX1TDsf7xsKvHNcB5GWz81JvH9S4PzvHoU17Zl72tAmlKDgAAAABJRU5ErkJggg=='/>"
+    },
+    "owner": {
+        "minorcolor": "deeppink",
+        "majorcolor": "indigo",
+        "textcolor": "white",
+        "name": "Owner",
+        "registered": "on",
+        "auto": "on",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAABAUlEQVRIx+2VvQ3CMBBGPQojuKSkpMwYlJQpGYERMoJHSJkRKBkhpTvIZ+mss3MXnwSIAopPUeK79+z82YUQ3CfjfkPgvX9IeUlQgPazGItMhd93Y44EL8bdVZWI8DjGAjAdYgqHo4bXaZL1CpbCevZvE6xuzdLUuj1FLWIVEPw2zcVRk5CgXsVKkGciwDVJ7rEIzn7KgJYg1TL4yY9tAYq0974OBDwmwbHrCgnOKRqY4KgxCXiGYXklY0xHnEtQnk0BSfr+khsAp9QwHvSYPjQU4WECiKZ6BRIY9Ri3fcmChIJrUjR482+KRg1K4C14cz+gXzGB6lj2he9tOP9Nn/IEfN0fBbbre5sAAAAASUVORK5CYII='/>"
+    },
+    "admin": {
+        "minorcolor": "gold",
+        "majorcolor": "black",
+        "textcolor": "white",
+        "name": "Administrator",
+        "registered": "on",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAABAElEQVRIx+2VMRKCMBBFOYJHoeQIlpSUlpaWlBzBI1Ba5giUlpQegzId+tHNrDubZB3URos/TCD7XgghKZxzxSdT/IagLMtZy2oBgfxYqbGIknACjafNfOiOIWjzZylJGj41c++GJ/irEhUOAODe+yWaRApiElWwFGcE/Fugf73b5wVh9I9CgGNTxAWAU6QkKdDA2vS8XRAbvUlQbRuzQI4etVnBtq7DFACGNoULaOVwOPqYBDx9P9xX0u2KNmAER2T/pIAkbduFAlqqiITxoMb8H1zO0wJEkXwDDYz+eG4SaBIK7mmJwbObHQpjUAKn4ObtmkAyq7brrxw4/0MfuQJ9AQz8zKT6+QAAAABJRU5ErkJggg=='/>"
+    },
+    "mod": {
+        "minorcolor": "red",
+        "majorcolor": "navy",
+        "textcolor": "white",
+        "name": "Moderator",
+        "registered": "on",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAABCklEQVRIx+2VLRKDMBBGOVJkZSWS4yB7BI6ARCIjKyuRPQYyjma32cwSNtkMM61pxTcM7e57Wf7SzPPcfDLNbwiMMZuU0wJotgx0GZyYGpEId9O0meuwmW7JwnnWts2KRDg2EHwJUQQ2M81BAMVR4MHOvZOTwIJsuKRWE9ggwNWcFKRTiDc3FgdJLbxKANBY7G+0dt1TuCqAZg3OF8EXg1EnKIB3El+3A3tplaDtup0Ezil8gkN8D/bWCHjG8Y5PERwRkIDT+qKAJH1/iw30mEJSGA/0qC8aCZ6PFYHQlE4ggaEe/q8SSBIK/CYlBy9+rqEBGnNQApfg6n5ALw6B0pz6XH9lw/lv+jwvAGME6S8eQggAAAAASUVORK5CYII='/>"
+    },
+    "user": {
+        "minorcolor": "black",
+        "majorcolor": "red",
+        "textcolor": "white",
+        "name": "User",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAAA0ElEQVRIx2PYsGEDAy0xw8iwwMDA4D82TLEFMIN+TLDAiomxCK/huAxGxjciLPBagt/wC1BMgSX4Df/xA4IvELYAlyX0tQAj3EkIIlyWkBWxuAwfHBbM8CDfcJBeghZ4BASgWALiwzAug2GGg9QQZQEyXrDgADglgWgQH5uhyBivBTBLKioaEK6GJVUgRjcMGYP0EJ0Pbpz4ADYQpAndB9gMBqkHyRNlATZLYBgkhg3jMpxgYQfSiMtQmMH4DCe6uIYZhI4pKq7pUuGMVvogDAByfxK0YYaRJQAAAABJRU5ErkJggg=='/>"
+    },
+    "battleadmin": {
+        "minorcolor": "blue",
+        "majorcolor": "black",
+        "textcolor": "white",
+        "name": "Battle Admin",
+        "authlevel": "1",
+        "registered": "on",
+        "image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9kJDwkcEraJgvoAAAHHSURBVEjH7ZUhbNtAFIY/ZwUdCwkImFRDnzRwZjWcWQIGPGlSV7ZKA4U1DNikjR0Na9ka5rKUZdBlNrPZXFRb2oBhQaQOZLaa5Bxb3WB/4tO95/9/7929d/CMFhhdnKSUD7r9OI6NfxKoiE/8r1r7uZq0Chm7yJuIH+NndsuP4LxRxNgVtbTMVYRp1klEl82LTXJzdMW7t6+RlsmhtHg1HLBcLil+l40CUe7gvv9E9mvAYC/7XBTFl8rW2yR/KqKoZGg67Fv+2qXY23R0RQKACl7ik3YqUZ6FDE1Ha+ttOgIsEoFt9zlTsZZ8kQi+z8u6/o4oybOw/l8rEMexcZ+qtZR1qMSHplOLADhitb5P1dpB93Q3whUJeRZyPO431lsHs59s7W2dQRotAJfj8QEA8+Cito29j7giqSOvogbI7+4oi7RdoBJJo9X6g+dzdHTIbHbDZaCwbBdH7CZtbbTRyCP+qzAPgkcZeM1jxbK5vg62Gq2ncz7xzpgHAdKymc1uAOqvjng6uUSIN91nkZTy4eoi5EDuM5l8WxPWIUxjlDrVzqOdw873pziWbCxLmMarpmwg7zyufX+qtSt1+vRx/b8enGe04g91TtV3sbwzLQAAAABJRU5ErkJggg=='/>"
+    },
+    "battleplayer": {
+        "minorcolor": "black",
+        "majorcolor": "blue",
+        "textcolor": "white",
+        "name": "Battle Player",
+        "image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9kJDwkdDruT7/QAAAGXSURBVEjH7ZUhWMJAFMd/8BGkEbG5ONtJGhGbNtemTZrRxUVsM9KwOdpo0EZkSS8uronRBg0Dbh/I3Tb9jP7Lfd+9u/977//evYN/lKBW5ZAQYqPal1KW3m9UIX70LCwj2bPFqcn9gE2Zo1oR+S5xnJpEaQeAc+MFgCjtsFyukfOR1klNR348nDM1ZgCslyMG8xttpkVO6jpy22pB24G2w9FxP486y8DrPe/f6/WVtWpU7QbLSPbqEKfmz7soiz6DbbUAcGTvoMBZPTKJ8s76JlVhBmH8sV2ZbANYTJT6/7pN88wUxFVxUOSVnB8+qO6Vtnt2sV69lWfQjAJWQFN86e7fbp0AonuplWW9euPjPakmUTMKIAoAuLZdHMdiPI4JQp+2cV5KWvjQhBCbiwsbmbwCMA3D3HZp2/o6mWfMZuHBY6urDvfte6ZhiDDPGI9jgHxVEQ+9gNPTHj8aFZOnBSfiCM972HOswiKR+P6dclQUDjvXHdI1hVaWRSK3faAhL/0PstniukOl3ffv+PW4/qsP5x+l+ARo7Lk20tR5oAAAAABJRU5ErkJggg=='/>"
+    },
+    "battlespectator": {
+        "minorcolor": "black",
+        "majorcolor": "dodgerblue",
+        "textcolor": "white",
+        "name": "Battle Spectator",
+        "image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAAA9klEQVRIx+2VMQ7CMAxFcxzGHIOxI8dg7MjIyBFyhByBsWNHjsDYMVvQr+TKdZ3EooIFhidIhf9L4pC6GKP7JO43BN77rLFbQEGPYcq355SvQ5rBGFhE1fCU0oImCOE+U5OYwrmAwjk1iRqOIikAWnhLYpo9raAUjpWZBLyhMry0RdQXcDiPG8lGQGEyXGsyvp/CGrNAwmdKyHCTAIXvhpu26Nh1KwnGRCscvzEJODgd6AU+MdZCOVUBSfr+shTw0yTDOKgx/w8wO2wPiuQKtODSEa1eFVxC4JnW7FJ487Lje03IHtTCzdc1F3B2XddfeeH8X/rgBVW+XSxcnSe2AAAAAElFTkSuQmCC'/>"
+    },
+    "touradmin": {
+        "minorcolor": "green",
+        "majorcolor": "black",
+        "textcolor": "white",
+        "name": "Tour Admin",
+        "authlevel": "1",
+        "registered": "on",
+        "image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAABFklEQVRIx+2VLRLCMBCFcwQkx4jkCJWVyEokMhKJRCJ7hByhEonsMZB1Zd4Or5PZyR/TAQPiTadp9vvadJsa7735ZMxvCKy1cyyrBQQNfrfk6tu5uXSSGlEWDoiGMxw7diYrycIP/iwhDGOAj3cnqZFE4SgCeJomCWFcGgo43rmtJCZJClCcEuhs9rZOQDgL8RQlOAVIbKmSd8/iEhzQMEVB+BJDELsnFPMFvyXAJN0poUC3KIMlamoETdvKRICkCOevhN+EhnNunSBI3w/SSThSAii6Bjei52cFlDh3WgrYqoiGhUFN9Xcw3h4CRJF+ghgY83G9ShCTMBiLJQUvbnYoTEEJzsGrt2uCdFZt11/54fx/+sgTqY7ptSCoJIEAAAAASUVORK5CYII='/>"
+    },
+    "touruser": {
+        "minorcolor": "black",
+        "majorcolor": "green",
+        "textcolor": "white",
+        "name": "Tour User",
+        "image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kJDwkdA8Uik0kAAAF+SURBVEjH7VUrkMMgEH3NnIiMjEQikZGVkZHIykpkZWUlMvIkshJZiURWIiORuJ5Im34CSXpzMzc3c2vIsOS93bfsAvzbb9tqySHG2CW2b62d/f9jCbCi1dO+oR6nygO73j9FtJoCFw1FdS5GvsPGDd/OBfjWJ0myFDg7lOCEg9T1yL82d1JCchTbIiljlgJvuy3Aa4DXI5JYVimS7J0bUTAfzWLKslj0a1PAaQ0YDigNkM+eoApvZxHN4FTdI3VaRyO7Fdq5sDyDVwBvcgAYrY+36C2JXiPaXTX3tpdDh/EVfTRvw3yj5bqAqz0I6aMVoRt85bUGMVm8DSi7Eh3cfCfnusANljcCnFdQykC1EqH2I1AAKJd2MmPsUtcN7NkCAI5KDb6G8/RYoQxaH0cdHS3yphE4KgVGGZQyADCsMWC5+wSl6+WziDF2Ue0JhOXY7w9PxDEzZwspRXQeTQ87IVFRlpTFXGVMgc++B7euFEJG/VIKfHtc/9SD8/ftCw9Ssx2qp7vqAAAAAElFTkSuQmCC'/>"
+    },
+    "gameadmin": {
+        "minorcolor": "indigo",
+        "majorcolor": "black",
+        "textcolor": "white",
+        "name": "Game Admin",
+        "authlevel": "1",
+        "registered": "on",
+        "image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAABD0lEQVRIx+2VIRKDMBBFOUKPwlEqKysrKysrOUKPgMwRkMjISmQlEkf5gd9ZwhJCmda04k9gAu9tEhISY0zyySS/IUjTtNWyWUBQc7JqYkRB+BxY5rEvgpIw3FR9NkjC8KbpsyCBoM6MKtEFte3jC9CyT0ijBQ7uQ2T1sk9IKKjMeSKZr35uWnxJmTsBgut4QWhhpaSDovpoQZbfJ/P7qlBKBjjDZxYFh6wcwSFkKGG1vgDvRgkuN+viwNeyPR0L11Ii5xzPywQFlEgB4Lh2ku6efT5Yg8/vg2HI2gg0waqNJiV2l4/WAPeIXAN+QdFHhZRg4xBKsLbAqw87/7gmGNUSyl379nH9lR/O/6ePPAFPNHDMqGNfEwAAAABJRU5ErkJggg=='/>"
+    },
+    "gameuser": {
+        "minorcolor": "black",
+        "majorcolor": "indigo",
+        "textcolor": "white",
+        "name": "Game User",
+        "image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9oJGAkSEI1e09AAAABGaVRYdENvbW1lbnQAAAAAAFRBS0VOIEZST00gVEhFIEdBTUUgQlkgVFRFQ0hJRE5BCgpET04nVCBKQUNLIFRISVMgT1IgRUxTRS6vLZE4AAABV0lEQVRIx+1VLXPDMAx96e0HFAoaGgYaGgYGFg4aFgYaBhYWFgYWBgYaDgYKGgaOZaBds6ax49vWu4GJ5EPye7JkPWdueMczbYMn29MJXlKCjFbj0v9j57IfEXwCu3y/6FdXf4woCzXZaDU6ewLOb9EMvSKUxypIsomCCwLKPIwuCESEs6mDZdxEweUWKGSYJKfba4gkqckQ9PidU9LSux7csp8Ds4/3wU/+eT/iO1gBnoP/jUl2ziUvnmfPzOuDVvctKgBKqUtNT3Y6Ka82WBZmRt23aZNc9y1wDc5lDmsrWFujPFkcC7MKGp1ko9VIQkxZN810Qna7eMmYHyZ6scmVLFDJAgBgbX33XItP0iKj1XgoDDov4YbDJG7bPTT1ENcdMjM6L+EHB8fNoh5FxU6JHWirHnyaegBA0w+XkxcAjxJ8lWsllmvvuMG35fq3Lpzs/9Jfsw/N06/H/3F3bgAAAABJRU5ErkJggg=='/>"
+    },
+    "channel": {
+        "minorcolor": "red",
+        "majorcolor": "darkslategray",
+        "textcolor": "white",
+        "name": "Channel",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAABFElEQVRIx+2VIRLCMBBFe6TKHKEykiNwhEqOUFnJEXIEJLKyEolExoX+0GWWnSTdwhQD4k+mneS/bHY3qZxz1ZaqfgNQ13VI6WMAGbXtISkNqGg+9HlzCVoFwIJxZ4K/2iiAvPdxlOobE5w1WUjSHLuC8cXtgx8mUGcewHmEKRdAjbVJSBYwnm9x11GIJBMB5sJcBZAJBQRaygEBUpAiQCNurgJg0qYAeSSUh+PxVDTHOsxZBKDkKMFYgG8kk/7njGmuKgKqEJRp7IG5F2AAsDTlKgI45Gnuu5eG42D0BBmnjqfcaNNO6Xhy5lFzNOpG45BUDuQRUU7UV4UsWZgsVdHqy05e17LWufHb1/VXHpz/ow/dARdX+fXBzer9AAAAAElFTkSuQmCC'/>"
+    },
+    "chanowner": {
+        "minorcolor": "deeppink",
+        "majorcolor": "darkorchid",
+        "textcolor": "white",
+        "name": "Chan Owner",
+        "globalauth": "off",
+        "registered": "on",
+        "image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9kJDwkdGThAajMAAAF7SURBVEjH7ZUte4JQFIBffRb8Cdggaru0LRKljebi1lyTSNwaayMujoYNo1EbNGli059Ac0HhYXr5cM+ip8C9h/ueL865cJMG6bT5SAhxkO3Hcdx4/q4NeGa9SfWPOIcmQ506eOTNAcjSHT2tX+iydMc+3QGQrvdMk89KI506+HYRAaAaevGer9sa6dbBFa1fwFVDRzV0FK3PdhH9igjgY/AqrVW3rgY5RDX0i7220j33Pi+ociWoKgppBHkKynkv68o1Sdf79hHUgar2rkrRuUdlYJbuLuDn3kfZprnR3CzEXptoQwUA052cToOnP1emJco2LEjadbKbhXBy9MmyGY/v8f0Vk8DF7pmN0NpGE0IcRiOLODlaCIOg0JmWVT1WBjrzeXDRbNIiv1hTwiBADHR8fwVQPGVgz/lmODS4alTMvpaooofjvP8yLJNlEuO6E+moqB12tu3xMBCVaVkm8bFmFfDG+yDvStv2pHr39If9aVz/14Vzk0b5AaK7zMPqrUF1AAAAAElFTkSuQmCC'/>"
+    },
+    "chanadmin": {
+        "minorcolor": "gold",
+        "majorcolor": "darkslategray",
+        "textcolor": "white",
+        "name": "Chan Admin",
+        "globalauth": "off",
+        "registered": "on",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAAA/0lEQVRIx+2VsRHCMAxFPY7LjEGZMVKmZARKSsZw6REoXWYUdSGKT5wiZNkJBw0U/0gO+z1FENmFENwn435D0HXdrOVtAYHiFOYxwktaRCYcwBXhGPzuHr0pMeEAaY5Qhuc1zpSo8Lw5LYE1UsLhJChJDgk4nAT+kuoCXLCtMOU2sd9BVs8FmkQV8Co5sAbfJdBgWji8SXC7+iawBvfDuS449f1GgveUUlsIjmuaBDwIw38SftI9BQuR600BSYZhZFXDMxLGg3ua34NctVs3ySeQwaco9d8cFVxC4e2hFlnw6rDDjRKqSXYPOzmuEbJWuwjpmsCHx/VXDpz/oY95AIGUG4SUF+GvAAAAAElFTkSuQmCC'/>"
+    },
+    "chanmod": {
+        "minorcolor": "red",
+        "majorcolor": "dodgerblue",
+        "textcolor": "white",
+        "name": "Chan Mod",
+        "globalauth": "off",
+        "registered": "on",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sCDQUqCFv8SwAAAAFuSURBVEjH7ZUhk4MwEIVfmROVlZWRkSuRyEhkZH9CJBJZiaysXIlEIpGRSGQlEteKHHdXSIDOzc3NzdwzYRLme7sb5gH867e12/ISEd19+9ba3bcMRjDL+Gm/lgolSdxyvWoULcGPOc/gAFCSBAAcc8ZwugQ7DBqM8LJvIZSanae2/XgW4rBoEi3BoRWg1cwkaasZKGQSvfJFHKj3drGkyFd9alt0VQU0GuAKEFdnEA8vd+HtYLxEAM7II6ONO+/67R1MAX2zB4DZOsJfHtG0opPMHdgeXGeDfoJPqxddPTN4m26I+owuySCEg5rh9uWSZHAsoquBrlk3GE1G6dRA6xjMDfiaoUuyVehiVBDRXakUtrVuLMyfn6bW4ViRhKoqZ7HhveRTalAygySB2VU4rj5wkV0hZbI97IjozpcagvbI8/OTsU9Na1EUxht6u6WwM6ZALCk4luZ9jCH45rg2pvCeF4VZjesf/+H8fT0A7C6xGiiBKzMAAAAASUVORK5CYII='/>"
+    },
+    "chanuser": {
+        "minorcolor": "black",
+        "majorcolor": "tomato",
+        "textcolor": "white",
+        "name": "Chan User",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9kJDwkvDlbju4UAAAFjSURBVEjH7VUtd4MwFL30TOQv4GZTF9xw3Vxxw3Vup2qVQ2LnsFRtc8OljroWVeqKRK4OW1nXCT76QRJgm+w14bwX7n3n5uUFuKIBWptNjLGDKJ4kifYngZJ4MybCvPG+bxTSVOQy4lNsV8BjupeKaEryQRGg8TE5NTuJaErykjg1gQjH2IXIdpWvIpGbVq1AY4AW1Udmpy7qSX2PisrTC8KBnGxGSa3jeo2Vl75PTeAlFvqvgtqikpTi/Cw6oCbwGQLPFpRdI6t+uWshwIkOhFklYi30Khc+ZFJblrviX3w3W8SJDr7Iv59sB6PRHYJgDYt78EkmIAVAWt5kxthhOLSRpJu8as6rnGXb8rFCDcznvHYPhF00tl8Rcg5GDQTBGgCqVUTsu1/o9+/RaVTMPmLcMgLXfTsTFiFOE3jepN2oOBVxHB8mZVJb4jQBACl563HtOL4w73mT34/r/3pwrmjED/a2mKW3CT5NAAAAAElFTkSuQmCC'/>"
+    },
+    "chantouradmin": {
+        "minorcolor": "green",
+        "majorcolor": "darkslategray",
+        "textcolor": "white",
+        "name": "Chan Tour Admin",
+        "authlevel": "1",
+        "globalauth": "off",
+        "registered": "on",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAAA+UlEQVRIx+2VMQ6DMAxFORIjY0fGHKHHYOQIHTsyMuYIjByhI0fIyEb7IxkF1zGWonZphy8E2O8pISSV9776ZKrfENR1vUkpFhComxoxFpEKH8c2C6egRpOo8BDumw+6YFl6VSLC0Qj4uq4xkgRgCgTX20WUZAWAkgCyFMgDuEnAPyjAZ3DUkUCaqjcBNeWmIwWn8CKBlhRuEqDIKuFw1zXngta5gwT3lNy0EBw1JkGaYZjiSsIV9xzM61XBvpK6fm+gpYpw2GF0rx7zf/CYQwSiiY9AAqMe700CSULBMyk5+Olmh8YclMAa3LxdE4inaLv+yoHzP/SRJ8P4DtwwZdMiAAAAAElFTkSuQmCC'/>"
+    },
+    "chantouruser": {
+        "minorcolor": "black",
+        "majorcolor": "mediumseagreen",
+        "textcolor": "white",
+        "name": "Chan Tour User",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9kJDwkcIH5e03oAAAGESURBVEjH7ZUvcMIwFMY/uInimFvdKsEFt04NCbKO2rniFjfk5iJXOUld50DONTgiIyuZ69zqmOg1/Gn6B243xWdyl5f83uVL3gtwUY1aTRYRQra6eSFE7f6rJmDXN/QLvCxelahVBS8F7ymJgSVLS5O0quADawwAWMeLs5O0q+APN8+ZE6aEZ8rKJCNqaO+q/a+vaN93l2f2SPfQIvvtGgDAp8mBRbmOrSp9RfGaZ/7bO5AlDK3/Jz1TSxiISQo+TQpAM+pgc/+DmKSNLSrcgRl1FPgYxKeJmrOEoexSp46G9Sd4SQ2QboJ86yczVWxINwpuRp0C/PtLNqtkEe6grkMxmdwhCFaYMwbibJB0U2CcZtAwh8pmlUwI2Y5GDoRcAwAWYahiY8cpbyu9AZbLsFBs2jp4dJ6wCEOQ3gBBsAIANerA/myOfn+Ik1rFxzvHLTEwm70eJNaJSwHGPG2rqGx2lPqwe6TUFi4FAJTCa/+DvLdQ6mvjjHk4u13/1YdzUa1+Acqrryeq+6NmAAAAAElFTkSuQmCC'/>"
+    },
+    "changameadmin": {
+        "minorcolor": "indigo",
+        "majorcolor": "darkslategray",
+        "textcolor": "white",
+        "name": "Chan Game Admin",
+        "authlevel": "1",
+        "globalauth": "off",
+        "registered": "on",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAABEElEQVRIx+WVsRHCMAxFPVLKjJAyJaNQMgIlZUbICJSUKRmD0l3Id6ycELJQCNxxR/GLOMd7koPs0Pd9+GbCzwiqqhp5PioAMA71GI9zTk3tlriq5vDrbhbs9wdXNyYcEABl9VinNG1rSkx4150fBLx6HqyXJMX9TvDLba580KvngpLEJ4ixWD3W3IIEz3sNKCQEkHC8p1gSXcB+TABErqfOpi5TtgisrBaUKjXhWaAN4JMA/2u+x3imqOAcwLWZUAU8+ND0wfHMoTRoPKaAb5OsWnYjUzqfVEGa3glI08w7kEmDNnWD9y7BIsGQZckyscreW/CXhx1NswW24O7jmkAym45r6zZbc6uF/7n0380dP70/gMeuA6wAAAAASUVORK5CYII='/>"
+    },
+    "changameuser": {
+        "minorcolor": "black",
+        "majorcolor": "darkorchid",
+        "textcolor": "white",
+        "name": "Chan Game User",
+		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAABEElEQVRIx+2VMRaCMBBEORJljkBJyVEsLS0pLTkCR7CktOQIlpTp0FkZXfPCEuRpo8UUQPI/STZJ1rZt9slkvyHI83yMZbOAoL5yY9+5sWlOkt1uP7aNSxKZcF87gQ+XVzieIRRx5UyJCffnG3w4CAxQhnBpU9sSE+69l/TdIH+OEVBCOAVzklUCLcEoVgse8Cn36XnClwQxiSng3HOB9RRRoOGrBCxNvbgh/C3BsbD/XldQCEffRUFRltKQcDwzWoKNFsLRJkkQQlFJlMkIJgGhOqaAElQLO7BUkRCmgz7J+wClCSDLUo8gBkZ7fE8SxCQM3sUyB1887NBxDkqwBU8+rnWp6mw6rr9y4fwvfeQKF1EdbO3qftkAAAAASUVORK5CYII='/>"
+    }
 }

@@ -74,6 +74,19 @@
 			sys.sendHtmlMessage(id, display);
 		}
 	}
+	/* Command Display Message Function */
+	commanddisplay = function (id, header, body, channel){
+		var display = "<timestamp/><table width='100%'; style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:0.25, stop:0.1 mediumorchid stop:0.5 papayawhip);' color:'black;'>"
+		+ "<tr><td><center><h2><u><font color='black'>" + header + "</font></u></h2></center></td></tr>"
+		+ body
+		+ "</table>";
+		if (channel > -1){
+			sys.sendHtmlMessage(id, display, channel);
+		}
+		else {
+			sys.sendHtmlMessage(id, display);
+		}
+	}
 	/* Escape Html Function */
 	escapehtml = function(str){
 		return str.replace(/&/g,'&amp;').replace(/\>/g,'&gt;').replace(/\</g,'&lt;'); 
@@ -142,14 +155,11 @@
 	typecommands = "<center><b><font color='orangered'>The following commands need to be entered into a channel's main chat:</font></b></center>";
 	commands = {
 		commands: function(src, channel, command){
-			var index, display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:0.3, stop:0.1 mediumorchid stop:0.5 papayawhip); color: black;'>"
-			+ "<tr><td><center><h2><font color='green'>Commands</font></h2></center></td></tr>"
-			+ typecommands;
+			var index, display = typecommands;
 			for (index in construction.units){
 				display += "<tr><td><center><font color='darkgreen'><b>/" + construction.units[index] + "commands</b></font>: displays the " + construction.units[index] + "commands.</center></td></tr>";
 			}
-			display += "</table>";
-			sys.sendHtmlMessage(src, display, channel);
+			commanddisplay(src, "Commands", display, channel);
 		}
 	}
 	/* Script Reload Message */
