@@ -21,7 +21,15 @@ tiers.install = function(user, key){
 			}
 			return;
 		}
-		print("The server's tiers are up to date with " + tiers.options["autoupdate"] + "'s.");
+		if (user != "~~Server~~"){
+			commanderror(sys.id(user), "The server's tiers are already up-to-date.");
+		}
+		print("The server's tiers are up to date with " + key + "'s.");
+		return;
+	}
+	print(key + "'s tiers could not be downloaded.");
+	if (user != "~~Server~~"){
+		commanderror(sys.id(user), "Sorry, " + key + "'s tiers could not be downloaded.");
 	}
 }
 tiers.download = function(user, key){
@@ -32,4 +40,24 @@ if (tiers.links[tiers.options["autoupdate"]] != undefined){
 	tiers.download("~~Server~~", tiers.options["autoupdate"]);
 }
 /* Tiers Commands */
-tiers.commands = {};
+tiers.commands = {
+	tierscommands: function(src, channel, command){
+		var osymbol = auth === undefined ? "" : auth.options["owner"].image;
+		var display = typecommands
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/installtiers</font><font color='red'> tierskey</font></b>: installs tiers from the URL address of <b>tierskey</b>. </center></td></tr>";
+		commanddisplay(src, "Tiers Commands", display, channel);		
+	}
+	,
+	installtiers: function(src, channel, command){
+		if (sys.auth(src) < 3){
+			commanderror(src, "Sorry, you do not have permission to use the install tiers command (owner command).", channel);
+			return;
+		}
+		var key = command[1].toUpperCase();
+		if (tiers.links[command[1].toUpperCase()] === undefined){
+			commanderror(src, "Sorry, " + command[1].toUpperCase() + " does not exist as a tiers key.", channel);
+			return;
+		}
+		tiers.download(sys.name(src), key);
+	}
+}
