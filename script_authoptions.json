@@ -104,7 +104,7 @@
         "minorcolor": "deeppink",
         "majorcolor": "darkorchid",
         "textcolor": "white",
-        "name": "Chan Owner",
+        "name": "Channel Owner",
         "globalauth": "off",
         "registered": "on",
         "image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9kJDwkdGThAajMAAAF7SURBVEjH7ZUte4JQFIBffRb8Cdggaru0LRKljebi1lyTSNwaayMujoYNo1EbNGli059Ac0HhYXr5cM+ip8C9h/ueL865cJMG6bT5SAhxkO3Hcdx4/q4NeGa9SfWPOIcmQ506eOTNAcjSHT2tX+iydMc+3QGQrvdMk89KI506+HYRAaAaevGer9sa6dbBFa1fwFVDRzV0FK3PdhH9igjgY/AqrVW3rgY5RDX0i7220j33Pi+ociWoKgppBHkKynkv68o1Sdf79hHUgar2rkrRuUdlYJbuLuDn3kfZprnR3CzEXptoQwUA052cToOnP1emJco2LEjadbKbhXBy9MmyGY/v8f0Vk8DF7pmN0NpGE0IcRiOLODlaCIOg0JmWVT1WBjrzeXDRbNIiv1hTwiBADHR8fwVQPGVgz/lmODS4alTMvpaooofjvP8yLJNlEuO6E+moqB12tu3xMBCVaVkm8bFmFfDG+yDvStv2pHr39If9aVz/14Vzk0b5AaK7zMPqrUF1AAAAAElFTkSuQmCC'/>"
@@ -113,7 +113,7 @@
         "minorcolor": "gold",
         "majorcolor": "darkslategray",
         "textcolor": "white",
-        "name": "Chan Admin",
+        "name": "Channel Admin",
         "globalauth": "off",
         "registered": "on",
 		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAAA/0lEQVRIx+2VsRHCMAxFPY7LjEGZMVKmZARKSsZw6REoXWYUdSGKT5wiZNkJBw0U/0gO+z1FENmFENwn435D0HXdrOVtAYHiFOYxwktaRCYcwBXhGPzuHr0pMeEAaY5Qhuc1zpSo8Lw5LYE1UsLhJChJDgk4nAT+kuoCXLCtMOU2sd9BVs8FmkQV8Co5sAbfJdBgWji8SXC7+iawBvfDuS449f1GgveUUlsIjmuaBDwIw38SftI9BQuR600BSYZhZFXDMxLGg3ua34NctVs3ySeQwaco9d8cFVxC4e2hFlnw6rDDjRKqSXYPOzmuEbJWuwjpmsCHx/VXDpz/oY95AIGUG4SUF+GvAAAAAElFTkSuQmCC'/>"
@@ -122,7 +122,7 @@
         "minorcolor": "red",
         "majorcolor": "dodgerblue",
         "textcolor": "white",
-        "name": "Chan Mod",
+        "name": "Channel Mod",
         "globalauth": "off",
         "registered": "on",
 		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sCDQUqCFv8SwAAAAFuSURBVEjH7ZUhk4MwEIVfmROVlZWRkSuRyEhkZH9CJBJZiaysXIlEIpGRSGQlEteKHHdXSIDOzc3NzdwzYRLme7sb5gH867e12/ISEd19+9ba3bcMRjDL+Gm/lgolSdxyvWoULcGPOc/gAFCSBAAcc8ZwugQ7DBqM8LJvIZSanae2/XgW4rBoEi3BoRWg1cwkaasZKGQSvfJFHKj3drGkyFd9alt0VQU0GuAKEFdnEA8vd+HtYLxEAM7II6ONO+/67R1MAX2zB4DZOsJfHtG0opPMHdgeXGeDfoJPqxddPTN4m26I+owuySCEg5rh9uWSZHAsoquBrlk3GE1G6dRA6xjMDfiaoUuyVehiVBDRXakUtrVuLMyfn6bW4ViRhKoqZ7HhveRTalAygySB2VU4rj5wkV0hZbI97IjozpcagvbI8/OTsU9Na1EUxht6u6WwM6ZALCk4luZ9jCH45rg2pvCeF4VZjesf/+H8fT0A7C6xGiiBKzMAAAAASUVORK5CYII='/>"
@@ -131,14 +131,14 @@
         "minorcolor": "black",
         "majorcolor": "tomato",
         "textcolor": "white",
-        "name": "Chan User",
+        "name": "Channel User",
 		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9kJDwkvDlbju4UAAAFjSURBVEjH7VUtd4MwFL30TOQv4GZTF9xw3Vxxw3Vup2qVQ2LnsFRtc8OljroWVeqKRK4OW1nXCT76QRJgm+w14bwX7n3n5uUFuKIBWptNjLGDKJ4kifYngZJ4MybCvPG+bxTSVOQy4lNsV8BjupeKaEryQRGg8TE5NTuJaErykjg1gQjH2IXIdpWvIpGbVq1AY4AW1Udmpy7qSX2PisrTC8KBnGxGSa3jeo2Vl75PTeAlFvqvgtqikpTi/Cw6oCbwGQLPFpRdI6t+uWshwIkOhFklYi30Khc+ZFJblrviX3w3W8SJDr7Iv59sB6PRHYJgDYt78EkmIAVAWt5kxthhOLSRpJu8as6rnGXb8rFCDcznvHYPhF00tl8Rcg5GDQTBGgCqVUTsu1/o9+/RaVTMPmLcMgLXfTsTFiFOE3jepN2oOBVxHB8mZVJb4jQBACl563HtOL4w73mT34/r/3pwrmjED/a2mKW3CT5NAAAAAElFTkSuQmCC'/>"
     },
     "chantouradmin": {
         "minorcolor": "green",
         "majorcolor": "darkslategray",
         "textcolor": "white",
-        "name": "Chan Tour Admin",
+        "name": "Channel Tour Admin",
         "authlevel": "1",
         "globalauth": "off",
         "registered": "on",
@@ -148,14 +148,14 @@
         "minorcolor": "black",
         "majorcolor": "mediumseagreen",
         "textcolor": "white",
-        "name": "Chan Tour User",
+        "name": "Channel Tour User",
 		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9kJDwkcIH5e03oAAAGESURBVEjH7ZUvcMIwFMY/uInimFvdKsEFt04NCbKO2rniFjfk5iJXOUld50DONTgiIyuZ69zqmOg1/Gn6B243xWdyl5f83uVL3gtwUY1aTRYRQra6eSFE7f6rJmDXN/QLvCxelahVBS8F7ymJgSVLS5O0quADawwAWMeLs5O0q+APN8+ZE6aEZ8rKJCNqaO+q/a+vaN93l2f2SPfQIvvtGgDAp8mBRbmOrSp9RfGaZ/7bO5AlDK3/Jz1TSxiISQo+TQpAM+pgc/+DmKSNLSrcgRl1FPgYxKeJmrOEoexSp46G9Sd4SQ2QboJ86yczVWxINwpuRp0C/PtLNqtkEe6grkMxmdwhCFaYMwbibJB0U2CcZtAwh8pmlUwI2Y5GDoRcAwAWYahiY8cpbyu9AZbLsFBs2jp4dJ6wCEOQ3gBBsAIANerA/myOfn+Ik1rFxzvHLTEwm70eJNaJSwHGPG2rqGx2lPqwe6TUFi4FAJTCa/+DvLdQ6mvjjHk4u13/1YdzUa1+Acqrryeq+6NmAAAAAElFTkSuQmCC'/>"
     },
     "changameadmin": {
         "minorcolor": "indigo",
         "majorcolor": "darkslategray",
         "textcolor": "white",
-        "name": "Chan Game Admin",
+        "name": "Channel Game Admin",
         "authlevel": "1",
         "globalauth": "off",
         "registered": "on",
@@ -165,7 +165,7 @@
         "minorcolor": "black",
         "majorcolor": "darkorchid",
         "textcolor": "white",
-        "name": "Chan Game User",
+        "name": "Channel Game User",
 		"image": "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXZwQWcAAAAgAAAAIACH+pydAAABEElEQVRIx+2VMRaCMBBEORJljkBJyVEsLS0pLTkCR7CktOQIlpTp0FkZXfPCEuRpo8UUQPI/STZJ1rZt9slkvyHI83yMZbOAoL5yY9+5sWlOkt1uP7aNSxKZcF87gQ+XVzieIRRx5UyJCffnG3w4CAxQhnBpU9sSE+69l/TdIH+OEVBCOAVzklUCLcEoVgse8Cn36XnClwQxiSng3HOB9RRRoOGrBCxNvbgh/C3BsbD/XldQCEffRUFRltKQcDwzWoKNFsLRJkkQQlFJlMkIJgGhOqaAElQLO7BUkRCmgz7J+wClCSDLUo8gBkZ7fE8SxCQM3sUyB1887NBxDkqwBU8+rnWp6mw6rr9y4fwvfeQKF1EdbO3qftkAAAAASUVORK5CYII='/>"
     }
 }
