@@ -14,6 +14,7 @@ Created by Lutra (Jakilutra) for use with the Online Pokemon Battle Simulator - 
 * PO Server Website
 * PO Client Scripts
 * PO Client Assists
+* PO Battle Scripts
 * PO Themes
 * PO Boxes
 * PO Teams
