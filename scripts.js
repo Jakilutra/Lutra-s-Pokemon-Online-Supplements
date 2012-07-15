@@ -173,10 +173,28 @@
 		/* Script Update Startup Check */
 		sys.webCall(construction.source + "scripts.js", "download4('start');");
 	}
-	,	
-	beforeChannelJoin: function(src, channel){
+	,
+	beforeChannelCreated: function (channel, channelname, creator){
 	}
-	,	
+	,
+	afterChannelCreated: function (channel, channelname, creator){
+	}
+	,
+	beforeChannelDestroyed: function(channel){
+	}
+	,
+	afterChannelDestroyed: function(channel){
+	}
+	,
+	serverShutDown: function(){
+	}
+	,
+	step: function(){
+	}
+	,
+	beforeNewMessage: function(message){
+	}
+	,
 	afterNewMessage: function(message){
 		/* Script Update Script Load Check */
 		if (message === "Script Check: OK"){
@@ -200,9 +218,108 @@
 		}
 	}
 	,
+	afterChatMessage: function(src, message, channel){
+	}
+	,
+	beforeLogIn: function(src, channel){
+	}
+	,	
 	afterLogIn: function (src){
 		/* LogIn Notifications*/
 		var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 mediumorchid stop:0.5 papayawhip); color: black;'><tr><td><center><b><big>Type: <font color='darkgreen'>/Commands</font> into a channel's main chat to view a list of commands.</big></b></center></td></tr></table>";
 		sys.sendHtmlMessage (src, display);
+	}
+	,
+	beforeChannelJoin: function(src, channel){
+	}
+	,
+	afterChannelJoin: function(src, channel){
+	}
+	,
+	beforeChannelLeave: function(src, channel){
+	}
+	,
+	afterChannelLeave: function(src, channel){
+	}
+	,
+	beforeLogOut: function(src){
+	}
+	,
+	afterLogOut: function(src){
+	}
+	,
+	beforeChangeTeam: function(src){
+	}
+	,
+	afterChangeTeam: function (src){
+	}
+	,
+	beforeChangeTier: function(src, team, oldtier, newtier){
+	}
+	,
+	afterChangeTier: function(src, team, oldtier, newtier){
+	}
+	,
+	beforePlayerAway: function(src, away){
+	}
+	,
+	afterPlayerAway: function(src, away){
+	}
+	,
+	beforePlayerKick : function (src, trgt){
+	}
+	,
+	afterPlayerKick : function (src, trgt){
+	}
+	,
+	beforePlayerBan : function(src, trgt){
+	}
+	,
+	afterPlayerBan : function(src, trgt){
+	}
+	,
+	beforeNewPM: function(src){
+	}
+	,
+	beforeFindBattle: function (src){
+	}
+	,
+	afterFindBattle: function (src){
+	}
+	,
+	beforeChallengeIssued: function(src, trgt, clauses, rated, mode, srcteam, trgttier){
+	}
+	,
+	afterChallengeIssued: function(src, trgt, clauses, rated, mode, srcteam, trgttier){
+	}
+	,
+	beforeBattleMatchup: function (src, trgt, clauses, rated, mode){
+	}
+	,
+	afterBattleMatchup: function (src, trgt, clauses, rated, mode){
+	}
+	,
+	beforeBattleStarted: function(src, trgt, clauses, rated, mode, battle, srcteam, trgtteam){
+	}
+	,
+	battleSetup: function (src, trgt, battle){
+	}
+	,
+	afterBattleStarted: function(src, trgt, clauses, rated, mode, battle, srcteam, trgtteam){
+	}
+	,
+	attemptToSpectateBattle: function(src, battler1, battler2){
+	}
+	,
+	beforeSpectateBattle: function(src, battler1, battler2){
+	}
+	,
+	afterSpectateBattle: function(src, battler1, battler2){
+	}
+	,	
+	beforeBattleEnded: function(winner, loser, result, battle){
+	}
+	,
+	afterBattleEnded: function(winner, loser, result, battle){
 	}
 })
