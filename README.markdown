@@ -7,7 +7,7 @@ Created by Lutra (Jakilutra) for use with the Online Pokemon Battle Simulator - 
 2. Extract `Lutra-s-Pokemon-Online-Supplements.7z`
 3. Refer to the specific instructions on how to setup your chosen supplement.
 
-## Subpages
+## Supplements
 
 * PO Server Scripts
 * PO Server Assists 
