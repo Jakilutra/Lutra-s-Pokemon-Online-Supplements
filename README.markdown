@@ -24,5 +24,5 @@ Created by Lutra (Jakilutra) for use with the Online Pokemon Battle Simulator - 
 
 ## License
 
-All files in this repository are copyright under version 2.5 creative commmons attribution-noncommercial-sharealike license.
+All files originally created (by Lutra) in this repository are copyright under version 2.5 creative commmons attribution-noncommercial-sharealike license.
 Persons can use and modify them, but not claim them as their own, and by extension sell them.
