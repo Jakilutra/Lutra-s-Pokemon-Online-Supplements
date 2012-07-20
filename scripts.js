@@ -91,6 +91,10 @@
 	escapehtml = function(str){
 		return str.replace(/&/g,'&amp;').replace(/\>/g,'&gt;').replace(/\</g,'&lt;'); 
 	}
+	/* Remove Spaces Function */
+	removespaces = function(str){
+			return str.split(' ').join('');
+	}
 	/* Loading External JavaScript Files */
 	construction = {};
 	construct = function(){

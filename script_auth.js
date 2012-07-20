@@ -32,7 +32,7 @@ auth.commands = {
 	authcommands:function(src, channel, command){
 		var osymbol = auth.options["owner"].image, msymbol = auth.options["mod"].image, usymbol = auth.options["user"].image;
 		var display = typecommands
-		+ "<tr><td><center>" + msymbol + "<b><font color='darkgreen'>/echo</font><font color='red'> authgroup</font><font color='blue'>*message</font><font color='darkviolet'>*channel</font></b>: displays <b>message</b> with the announcement background of <b>authgroup</b> - in <b>channel</b> if a name of a channel is specified. </center></td></tr>"
+		+ "<tr><td><center>" + msymbol + "<b><font color='darkgreen'>/echo</font><font color='darkred'> authgroup</font><font color='darkblue'>*message</font><font color='darkviolet'>*channel</font></b>: displays <b>message</b> with the announcement background of <b>authgroup</b> - in <b>channel</b> if a name of a channel is specified. </center></td></tr>"
 		+ "<tr><td><center>" + usymbol + "<b><font color='darkgreen'>/authranks</font></b>: displays the auth groups and symbols.</center></td></tr>";
 		commanddisplay(src, "Auth Commands", display, channel);		
 	}
@@ -55,7 +55,7 @@ auth.commands = {
 		for (index in auth.options){
 			var name = auth.options[index].name.toLowerCase();
 			authnames.push(name);
-			if (name === command[1].toLowerCase()){
+			if (name === command[1].toLowerCase() || removespaces(name) === command[1].toLowerCase()){
 				authgroup = index;
 			}
 		}
@@ -68,7 +68,13 @@ auth.commands = {
 			return;
 		}
 		sys.sendAll(sys.name(src) + ":");
-		auth.echo(authgroup, command[2], sys.channelId(command[3]));
+		var channelid = sys.channelId(command[command.length-1]);
+		command.splice(0,2);
+		if (channelid !== undefined){
+			command.splice(command.length-1, 1);
+		}
+		command = command.join("*");
+		auth.echo(authgroup, command, channelid);
 	}
 	,	
 	pm: function(src, channel, command){
