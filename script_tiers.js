@@ -258,7 +258,7 @@ tiers.commands = {
 	tsettings: function(src, channel, command){
 		var index, display = "<tr><td><b>Auto-Update Tiers: </b>" + tiers.options.autoupdate + "</td></tr>"
 		+ "<tr><td><b>Tiers File: </b>" + tiers.options.name + ".xml</td></tr>"
-		+ "<tr><td><b>Auto-Update Setting: </b>" + tiers.options.autoupdatesettings + "</td></tr>"
+		+ "<tr><td><b>Auto-Update Settings: </b>" + tiers.options.autoupdatesettings + "</td></tr>"
 		+ "<tr><td></td></tr>"
 		+ "<tr><td><h3><u>Tiers Keys</u></h3></td></tr>";
 		for (index in tiers.links){
@@ -289,13 +289,13 @@ tiers.commands = {
 			return;
 		}
 		if (command[1] === tiers.options.autoupdatesettings){
-			commanderror(src, "The tiers auto-update settings are already set to " + command[1] + ".", channel);
+			commanderror(src, "The tiers auto-update settings is already set to " + command[1] + ".", channel);
 			return;
 		}		
 		tiers.options.autoupdatesettings = command[1];
 		sys.writeToFile("script_tiersoptions.json", JSON.stringify(tiers.options));
 		if (global.auth !== undefined){
-			auth.echo("owner", "The tiers auto-update settings have been changed to " + command[1] + " by " + sys.name(src) + "!" , -1);
+			auth.echo("owner", "The tiers auto-update settings has been changed to " + command[1] + " by " + sys.name(src) + "!" , -1);
 		}
 	}
 }
