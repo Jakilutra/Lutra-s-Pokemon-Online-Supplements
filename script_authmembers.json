@@ -1,87 +1,87 @@
 {
-    "owner": {
-        "perm": [],
-        "temp": [],
-        "transit": []
-    },
-    "admin": {
-        "perm": [],
-        "temp": [],
-        "transit": []
-    },
-    "mod": {
-        "perm": [],
-        "temp": [],
-        "transit": []
-    },
-    "battleadmin": {
-        "perm": [],
-        "temp": [],
-        "transit": []
-    },
-    "touradmin": {
-        "perm": [],
-        "temp": [],
-        "transit": []
-    },
-    "gameadmin": {
-        "perm": [],
-        "temp": [],
-        "transit": []
-    },
-    "chanowner": {
-        "perm": {
-            "|main|": []
-        },
-        "temp": {
-            "|main|": []
-        },
-        "transit": {
-            "|main|": []
-        }
-    },
-    "chanadmin": {
-        "perm": {
-            "|main|": []
-        },
-        "temp": {
-            "|main|": []
-        },
-        "transit": {
-            "|main|": []
-        }
-    },
-    "chanmod": {
-        "perm": {
-            "|main|": []
-        },
-        "temp": {
-            "|main|": []
-        },
-        "transit": {
-            "|main|": []
-        }
-    },
-    "chantouradmin": {
-        "perm": {
-            "|main|": []
-        },
-        "temp": {
-            "|main|": []
-        },
-        "transit": {
-            "|main|": []
-        }
-    },
-    "changameadmin": {
-        "perm": {
-            "|main|": []
-        },
-        "temp": {
-            "|main|": []
-        },
-        "transit": {
-            "|main|": []
-        }
-    }
+   "owner": {
+      "perm": [],
+      "temp": [],
+      "transit": []
+   },
+   "admin": {
+      "perm": [],
+      "temp": [],
+      "transit": []
+   },
+   "mod": {
+      "perm": [],
+      "temp": [],
+      "transit": []
+   },
+   "battleadmin": {
+      "perm": [],
+      "temp": [],
+      "transit": []
+   },
+   "touradmin": {
+      "perm": [],
+      "temp": [],
+      "transit": []
+   },
+   "gameadmin": {
+      "perm": [],
+      "temp": [],
+      "transit": []
+   },
+   "chanowner": {
+      "perm": {
+         "|main|": []
+      },
+      "temp": {
+         "|main|": []
+      },
+      "transit": {
+         "|main|": []
+      }
+   },
+   "chanadmin": {
+      "perm": {
+         "|main|": []
+      },
+      "temp": {
+         "|main|": []
+      },
+      "transit": {
+         "|main|": []
+      }
+   },
+   "chanmod": {
+      "perm": {
+         "|main|": []
+      },
+      "temp": {
+         "|main|": []
+      },
+      "transit": {
+         "|main|": []
+      }
+   },
+   "chantouradmin": {
+      "perm": {
+         "|main|": []
+      },
+      "temp": {
+         "|main|": []
+      },
+      "transit": {
+         "|main|": []
+      }
+   },
+   "changameadmin": {
+      "perm": {
+         "|main|": []
+      },
+      "temp": {
+         "|main|": []
+      },
+      "transit": {
+         "|main|": []
+      }
+   }
 }
