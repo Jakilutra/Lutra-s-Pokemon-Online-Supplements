@@ -2,14 +2,16 @@
 tiers = {};
 set(construction.source, "tiersoptions", "tiers", "options");
 set(construction.source, "tierslinks", "tiers", "links");
+
 /* Installing Tiers Functions */
-tiers.install = function(user, key){
+tiers.install = function(resp, user, key){
 	var current_tiers = sys.getFileContent("tiers.xml");
-	if (/category/gi.test(resp)){
+	if (/category/i.test(resp)){
 		if (current_tiers !== resp){
-			sys.writeToFile("tiers (last).xml", sys.getFileContent("tiers.xml"));
+			sys.writeToFile("tiers (last).xml", current_tiers);
 			sys.writeToFile("tiers.xml", resp); 
 			sys.reloadTiers();
+			
 			print(tiers.options["autoupdate"] + " tiers have been installed.");
 			if (global.auth !== undefined){
 				if (user != "~~Server~~"){
@@ -32,20 +34,23 @@ tiers.install = function(user, key){
 		commanderror(sys.id(user), "Sorry, " + key + "'s tiers could not be downloaded.");
 	}
 }
+
 tiers.download = function(user, key){
-	sys.webCall(tiers.links[key], "tiers.install('" + user + "','" + key + "')");
+	sys.webCall(tiers.links[key], tiers.install(resp, user, key));
 }
+
 /* Auto-Update Tiers */
 if (tiers.links[tiers.options["autoupdate"]] != undefined){
 	tiers.download("~~Server~~", tiers.options["autoupdate"]);
 }
+
 /* Auto-Update Tiers Settings */
 tiers.updatejsons = function(){
 	if (tiers.options.autoupdatesettings === "1" || tiers.options.autoupdatesettings === "2"){
-		sys.webCall(construction.source + "script_tiersoptions.json", "download2('" + construction.source + "', 'tiersoptions', 'tiers', 'options');");
+		sys.webCall(jsonf(construction.source, "tieroptions"), dljson(resp, contruction.source, "tiersoptions", "tiers", "options"));
 	}
 	if (tiers.options.autoupdatesettings === "1" || tiers.options.autoupdatesettings === "3"){
-		sys.webCall(construction.source + "script_tierslinks.json", "download2('" + construction.source + "', 'tierslinks', 'tiers', 'links');");
+		sys.webCall(jsonf(construction.source, "tierlinks"), dljson(resp, contruction.source, "tierslinks", "tiers", "links"));
 	}
 }
 tiers.updatejsons();
@@ -139,7 +144,7 @@ tiers.commands = {
 			return;
 		}
 		tiers.options.name = command[1];
-		sys.writeToFile("script_tiersoptions.json", JSON.stringify(tiers.options));
+		sys.writeToFile(jsonf("", "tiersoptions"), JSON.stringify(tiers.options));
 		if (global.auth !== undefined){
 			auth.echo("owner", "The server's tiers filename has been changed to " + tiers.options.name + " by " + sys.name(src) + "." , -1);
 		}
@@ -159,7 +164,7 @@ tiers.commands = {
 			return;
 		}
 		tiers.options.autoupdate = command[1].toUpperCase();
-		sys.writeToFile("script_tiersoptions.json", JSON.stringify(tiers.options));
+		sys.writeToFile(jsonf("", "tiersoptions"), JSON.stringify(tiers.options));
 		if (global.auth !== undefined){
 			auth.echo("owner", "The server's tiers to auto-update has been changed to " + tiers.options.autoupdate + " by " + sys.name(src) + "." , -1);
 		}
@@ -216,7 +221,7 @@ tiers.commands = {
 			commanderror(src, "Sorry, you do not have permission to use the download tiers command (owner command).", channel);
 			return;
 		}
-		sys.webCall(command[1], "tiers.install('" + sys.name(src) + "','" + command[1] + "')");
+		sys.webCall(command[1], tiers.install(resp, sys.name(src), command[1]));
 	}
 	,
 	writetierskey: function(src, channel, command){
@@ -233,7 +238,7 @@ tiers.commands = {
 			return;
 		}
 		tiers.links[command[1].toUpperCase()] = command[2];
-		sys.writeToFile("script_tierslinks.json", JSON.stringify(tiers.links));
+		sys.writeToFile(jsonf("", "tierslinks"), JSON.stringify(tiers.links));
 		if (global.auth !== undefined){
 			auth.echo("owner", "The " + command[1].toUpperCase() + " tiers key was written with " + command[2] + " by " + sys.name(src) + "!" , -1);
 		}
@@ -249,7 +254,7 @@ tiers.commands = {
 			return;
 		}
 		delete tiers.links[command[1].toUpperCase()];
-		sys.writeToFile("script_tierslinks.json", JSON.stringify(tiers.links));
+		sys.writeToFile(jsonf("", "tierslinks"), JSON.stringify(tiers.links));
 		if (global.auth !== undefined){
 			auth.echo("owner", "The " + command[1].toUpperCase() + " tiers key has been removed by " + sys.name(src) + "!" , -1);
 		}
@@ -293,7 +298,7 @@ tiers.commands = {
 			return;
 		}		
 		tiers.options.autoupdatesettings = command[1];
-		sys.writeToFile("script_tiersoptions.json", JSON.stringify(tiers.options));
+		sys.writeToFile(jsonf("", "tiersoptions"), JSON.stringify(tiers.options));
 		if (global.auth !== undefined){
 			auth.echo("owner", "The tiers auto-update settings has been changed to " + command[1] + " by " + sys.name(src) + "!" , -1);
 		}

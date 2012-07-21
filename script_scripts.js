@@ -1,27 +1,31 @@
 /* Loading Scripts Object and Settings */
 scripts = {};
 set(construction.source, "options", "scripts", "options");
+
 if (construction.auto_update === "on"){
-	sys.webCall(construction.source + "script_about.json", "download2('" + construction.source + "', 'about', 'scripts', 'about');");
+	sys.webCall(jsonf(construction.source, "about"), dljson(resp, construction.source, "about", "scripts", "about");
 }
 else {
 	set(construction.source, "about", "scripts", "about");
 }
 /* Checking Version Status*/
-scripts.checkversion = function(){
-	if (resp === sys.getFileContent("script_about.json")){
+scripts.checkversion = function(resp){
+	if (resp === sys.getFileContent(jsonf("", "about"))){
 		scripts.version = "Synchronised with latest version.";
 	}
 	else {
 		scripts.version = "Not synchronised with latest version.";
 	}
 }
-sys.webCall(construction.source + "script_about.json", "scripts.checkversion();");
+
+sys.webCall(jsonf(construction.source, "about"), scripts.checkversion(resp));
+
 /* Script Registered Date */
 if (scripts.options.registered === undefined){
 	scripts.options.registered = String(new Date());
-	sys.writeToFile("script_options.json", JSON.stringify(scripts.options));
+	sys.writeToFile(jsonf("", "options"), JSON.stringify(scripts.options));
 }
+
 /* Script Load Date */
 scripts.load = new Date();
 /* Scripts Commands */

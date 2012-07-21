@@ -2,6 +2,7 @@
 auth = {};
 set(construction.source, "authoptions", "auth", "options");
 set(construction.source, "authmembers", "auth", "members");
+
 /* Auth-based Announcement Function */
 auth.echo = function(group, text, channel){
 	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 " + auth.options[group].minorcolor + ", stop:0.5 " + auth.options[group].majorcolor + "); color:" + auth.options[group].textcolor + ";'><tr><td><center><b><big>" + text + "</big></b></center></td></tr></table>";
@@ -51,12 +52,13 @@ auth.commands = {
 			commanderror(src, "Sorry, you do not have permission to use the echo command (mod command).", channel);
 			return;
 		}
-		var index, authgroup, authnames = [];
+		var index, authgroup, name, authnames = [];
 		for (index in auth.options){
-			var name = auth.options[index].name.toLowerCase();
+			name = auth.options[index].name.toLowerCase();
 			authnames.push(name);
 			if (name === command[1].toLowerCase() || removespaces(name) === command[1].toLowerCase()){
 				authgroup = index;
+				break;
 			}
 		}
 		if (command[1] === "undefined"){
