@@ -36,7 +36,7 @@ tiers.install = function (resp, user, key) {
 }
 
 tiers.download = function (user, key) {
-    sys.webCall(tiers.links[key], tiers.install(resp, user, key));
+    sys.webCall(tiers.links[key], function (resp) { tiers.install(resp, user, key); });
 }
 
 /* Auto-Update Tiers */
@@ -47,10 +47,10 @@ if (tiers.links[tiers.options["autoupdate"]] != undefined) {
 /* Auto-Update Tiers Settings */
 tiers.updatejsons = function () {
     if (tiers.options.autoupdatesettings === "1" || tiers.options.autoupdatesettings === "2") {
-        sys.webCall(jsonf(construction.source, "tieroptions"), dljson(resp, contruction.source, "tiersoptions", "tiers", "options"));
+        sys.webCall(jsonf(construction.source, "tieroptions"), function (resp) { dljson(resp, construction.source, "tiersoptions", "tiers", "options"); });
     }
     if (tiers.options.autoupdatesettings === "1" || tiers.options.autoupdatesettings === "3") {
-        sys.webCall(jsonf(construction.source, "tierlinks"), dljson(resp, contruction.source, "tierslinks", "tiers", "links"));
+        sys.webCall(jsonf(construction.source, "tierlinks"), function (resp) { dljson(resp, construction.source, "tierslinks", "tiers", "links"); });
     }
 }
 tiers.updatejsons(); /* Tiers Commands */
@@ -200,7 +200,7 @@ tiers.commands = {
             commanderror(src, "Sorry, you do not have permission to use the download tiers command (owner command).", channel);
             return;
         }
-        sys.webCall(command[1], tiers.install(resp, sys.name(src), command[1]));
+        sys.webCall(command[1], function (resp) { tiers.install(resp, sys.name(src), command[1]); });
     },
     writetierskey: function (src, channel, command) {
         if (sys.auth(src) < 3) {
