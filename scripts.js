@@ -4,6 +4,7 @@
     /* Functions to write less code */
     jsf = function (source, name) { /* Javascript File Name */
         return source + "script_" + name + ".js";
+		
     }
 
     jsonf = function (source, name) { /* JSON File Name */
@@ -14,7 +15,7 @@
     dljs = function (resp, filename) {
         var fname = jsf("", filename);
         sys.writeToFile(fname, resp);
-        if (sys.getFileContent(fname) === undefined) {
+        if (sys.getFileContent(fname) === "") {
             print(filename + ": could not be installed.");
         }
         else {
@@ -26,7 +27,7 @@
     dljson = function (resp, filename, object, key) {
         var fname = jsonf("", filename);
         sys.writeToFile(fname, resp);
-        if (sys.getFileContent(fname) === undefined) {
+        if (sys.getFileContent(fname) === "") {
             print(filename + ": default settings could not be installed.");
         }
         else {
@@ -38,7 +39,7 @@
     dlconstruction = function (resp) {
         var file = jsonf("", "construction");
         sys.writeToFile(file, resp);
-        if (sys.getFileContent(file) === undefined) {
+        if (sys.getFileContent(file) === "") {
             print(filename + ": default settings could not be installed.");
         }
         else {
@@ -74,7 +75,7 @@
             fname = jsf("", filename);
 
         if (sys.getFileContent(fname) === undefined || construction.auto_update === "on") {
-            sys.webCall(sname, dljs(resp, file));
+            sys.webCall(sname, function (resp) { dljs(resp, file); });
         }
         else {
             print("Loaded " + filename + " script.");
@@ -87,7 +88,7 @@
         var sname = jsonf(source, filename),
             fname = jsonf("", filename);
         if (sys.getFileContent(fname) === undefined) {
-            sys.webCall(sname, dljson(resp, filename, object, key));
+            sys.webCall(sname, function (resp) {  dljson(resp, filename, object, key); });
         }
         else {
             try {
@@ -96,7 +97,7 @@
             catch (error) {
                 sys.writeToFile("script_" + filename + " (corrupted).json", sys.getFileContent(fname));
                 print(filename + " file corrupted - downloading latest file...");
-                sys.webCall(sname, dljson(resp, filename, object, key));
+                sys.webCall(sname, function (resp) {  dljson(resp, filename, object, key); });
                 return;
             }
             print("Loaded " + filename + " settings.");
@@ -173,7 +174,7 @@
         fname = jsonf("", "construction");
 
     if (sys.getFileContent(fname) === undefined) {
-        sys.webCall(sname, dlconstruction(resp));
+        sys.webCall(sname, function (resp) { dlconstruction(resp); });
     }
     else {
         try {
@@ -182,11 +183,11 @@
         catch (error) {
             sys.writeToFile("script_construction (corrupted).json", sys.getFileContent(fname));
             print("Construction file corrupted - downloading latest file...");
-            sys.webCall(sname, dlconstruction(resp));
+            sys.webCall(sname, "dlconstruction(resp);");
             return;
         }
         if (construction.auto_update === "on") {
-            sys.webCall(jsonf(construction.source, "construction"), dlconstruction(resp));
+            sys.webCall(jsonf(construction.source, "construction"), function (resp) { dlconstruction(resp); });
         }
         else {
             construct();
@@ -214,7 +215,7 @@
 
 ({
     serverStartUp: function () { /* Script Update Startup Check */
-        sys.webCall(construction.source + "scripts.js", updatecheck(resp, true));
+        sys.webCall(construction.source + "scripts.js", function (resp) { updatecheck(resp, true); });
     },
     beforeChannelCreated: function (channel, channelname, creator) {},
     afterChannelCreated: function (channel, channelname, creator) {},
@@ -225,7 +226,7 @@
     beforeNewMessage: function (message) {},
     afterNewMessage: function (message) { /* Script Update Script Load Check */
         if (message === "Script Check: OK") {
-            sys.webCall(construction.source + "scripts.js", updatecheck(resp, false));
+            sys.webCall(construction.source + "scripts.js", function (resp) { updatecheck(resp, false); });
         }
     },
     beforeChatMessage: function (src, message, channel) { /* Command Execution */

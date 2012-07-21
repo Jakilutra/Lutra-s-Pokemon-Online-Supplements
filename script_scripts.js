@@ -3,7 +3,7 @@ scripts = {};
 set(construction.source, "options", "scripts", "options");
 
 if (construction.auto_update === "on") {
-    sys.webCall(jsonf(construction.source, "about"), dljson(resp, construction.source, "about", "scripts", "about");
+    sys.webCall(jsonf(construction.source, "about"), function (resp) { dljson(resp, construction.source, "about", "scripts", "about") });
     }
     else {
         set(construction.source, "about", "scripts", "about");
@@ -17,7 +17,7 @@ if (construction.auto_update === "on") {
         }
     }
 
-    sys.webCall(jsonf(construction.source, "about"), scripts.checkversion(resp));
+    sys.webCall(jsonf(construction.source, "about"), function (resp) { scripts.checkversion(resp); });
 
     /* Script Registered Date */
     if (scripts.options.registered === undefined) {
