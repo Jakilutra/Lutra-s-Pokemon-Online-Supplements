@@ -9,7 +9,7 @@ Created by Lutra (Jakilutra) for use with the Online Pokemon Battle Simulator - 
 
 ## Supplements
 
-* PO Server Scripts
+* [PO Server Scripts] (https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Supplements/wiki/PO-Server-Scripts)
 * PO Server Assists 
 * PO Server Website
 * PO Client Scripts
