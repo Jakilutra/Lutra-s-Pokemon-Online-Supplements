@@ -58,6 +58,7 @@ auth.commands = {
 			authnames.push(name);
 			if (name === command[1].toLowerCase() || removespaces(name) === command[1].toLowerCase()) {
 				authgroup = index;
+				break;
 			}
 		}
 		if (command[1] === "undefined") {

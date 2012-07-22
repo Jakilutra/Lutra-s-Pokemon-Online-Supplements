@@ -11,7 +11,12 @@
 		}
 		else {
 			print("Installed " + filename + " script.");
-			eval(sys.getFileContent("script_" + filename + ".js"));
+			try {
+				eval(sys.getFileContent("script_" + filename + ".js"));
+			}
+			catch(error){
+				print("Error loading " + filename + " script.");
+			}
 		}
 	}	
 	
@@ -22,7 +27,12 @@
 		}
 		else {
 			print("Loaded " + filename + " script.");
-			eval(sys.getFileContent("script_" + filename + ".js"));
+			try {
+				eval(sys.getFileContent("script_" + filename + ".js"));
+			}
+			catch(error){
+				print("Error loading " + filename + " script.");
+			}
 		}
 	}
 	
@@ -60,6 +70,10 @@
 	/* Function for Command Execution in an Object*/
 	commandtry = function (object, src, channel, command) {
 		validcommand = true;
+		if (global[object] === undefined) {
+			validcommand = false;
+			return;
+		}
 		if (global[object].commands[command[0].toLowerCase()] != undefined) {
 			command[0] += "*" + command[1];
 			command.splice(1, 1);
