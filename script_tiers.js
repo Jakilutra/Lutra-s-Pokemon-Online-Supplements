@@ -8,7 +8,7 @@ tiers.install = function (user, key) {
 	var current_tiers = sys.getFileContent("tiers.xml");
 	if (/category/gi.test(resp)) {
 		if (current_tiers !== resp) {
-			sys.writeToFile("tiers (last).xml", sys.getFileContent("tiers.xml"));
+			sys.writeToFile("tiers (last).xml", current_tiers);
 			sys.writeToFile("tiers.xml", resp);
 			sys.reloadTiers();
 			print(tiers.options["autoupdate"] + " tiers have been installed.");
