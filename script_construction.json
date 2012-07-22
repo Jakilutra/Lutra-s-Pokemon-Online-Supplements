@@ -1,5 +1,5 @@
 {
-    "units": ["auth", "tiers", "scripts"],
-    "source": "http://pokemonperfect.co.uk/",
-    "auto_update": "on"
+	"units": ["auth", "tiers", "scripts"],
+	"source": "http://pokemonperfect.co.uk/",
+	"auto_update": "on"
 }
