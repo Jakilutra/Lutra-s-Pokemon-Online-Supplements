@@ -43,8 +43,13 @@
 			print(filename + " default settings could not be installed.");
 		}
 		else {
-			global[object][key] = JSON.parse(sys.getFileContent("script_" + filename + ".json"));
 			print("Installed " + filename + " default settings.");
+			try {
+				global[object][key] = JSON.parse(sys.getFileContent("script_" + filename + ".json"));
+			}
+			catch (error){
+				print("Error loading " + filename + " settings.");
+			}
 		}
 	}
 		
@@ -54,6 +59,7 @@
 			sys.webCall(source + "script_" + filename + ".json", "downloadjson('" + source + "', '" + filename + "', '" + object + "', '" + key + "');");
 		}
 		else {
+			print("Loaded " + filename + " settings.");
 			try {
 				global[object][key] = JSON.parse(sys.getFileContent("script_" + filename + ".json"));
 			}
@@ -63,7 +69,6 @@
 				sys.webCall(source + "script_" + filename + ".json", "downloadjson('" + source + "', '" + filename + "', '" + object + "', '" + key + "');");
 				return;
 			}
-			print("Loaded " + filename + " settings.");
 		}
 	}
 
@@ -135,9 +140,15 @@
 			print(filename + " default settings could not be installed.");
 		}
 		else {
-			construction = JSON.parse(sys.getFileContent("script_construction.json"));
-			construct();
 			print("Installed construction default settings.");
+			try {
+				construction = JSON.parse(sys.getFileContent("script_construction.json"));
+			}
+			catch(error){
+				print("Error loading construction settings.");
+				return;
+			}
+			construct();
 		}
 	}
 	
