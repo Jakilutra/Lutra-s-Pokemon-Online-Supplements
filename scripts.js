@@ -15,7 +15,7 @@
 				eval(sys.getFileContent("script_" + filename + ".js"));
 			}
 			catch(error){
-				print("Error loading " + filename + " script.");
+				print("Fatal " + filename + " Script Error line " + error.lineNumber + ": " + error.message);
 			}
 		}
 	}	
@@ -31,7 +31,7 @@
 				eval(sys.getFileContent("script_" + filename + ".js"));
 			}
 			catch(error){
-				print("Error loading " + filename + " script.");
+				print("Fatal " + filename + " Script Error line " + error.lineNumber + ": " + error.message);
 			}
 		}
 	}
@@ -76,6 +76,10 @@
 	commandtry = function (object, src, channel, command) {
 		validcommand = true;
 		if (global[object] === undefined) {
+			validcommand = false;
+			return;
+		}
+		if (global[object].commands === undefined) {
 			validcommand = false;
 			return;
 		}
