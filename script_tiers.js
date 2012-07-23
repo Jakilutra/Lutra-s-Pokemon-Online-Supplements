@@ -39,7 +39,7 @@ tiers.download = function (user, key) {
 }
 
 /* Auto-Update Tiers */
-if (tiers.links[tiers.options["autoupdate"]] != undefined) {
+if (tiers.links[tiers.options["autoupdate"]] !== undefined) {
 	tiers.download("~~Server~~", tiers.options["autoupdate"]);
 }
 
@@ -59,7 +59,21 @@ tiers.commands = {
 	tierscommands: function (src, channel, command) {
 		var osymbol = global.auth === undefined ? "" : auth.options["owner"].image,
 			usymbol = global.auth === undefined ? "" : auth.options["user"].image;
-		var display = typecommands + "<tr><td><center>" + usymbol + "<b><font color='darkgreen'>/tsettings</font></b>: displays the tiers settings. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/autsettings</font><font color='darkred'> value</font></b>: if <b>value</b> is 0, 1, 2 or 3 - auto-updates: no settings, all settings, only tiersoptions or only tierslinks respectively. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/utsettings</font></b>: updates the tiers settings according to the auto-update tiers setting. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/nametiers</font><font color='darkred'> name</font></b>: set the filename of <b>name</b> for importing and exporting the tiers. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/importtiers</font><font color='darkred'> name</font></b>: imports the server's tiers from <b>name</b>.xml or " + tiers.options.name + ".xml if no <b>name</b> is given. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/exporttiers</font><font color='darkred'> name</font></b>: exports to the server's tiers to <b>name</b>.xml or " + tiers.options.name + ".xml if no <b>name</b> is given. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/reloadtiers</font></b>: reloads the server's tiers from file. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/reverttiers</font></b>: reverts to the server's last tiers. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/writetierskey</font><font color='darkred'> key</font><font color='darkblue'>*URL</font></b>: Writes the tiers key: <b>key</b> with <b>URL</b>. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/removetierskey</font><font color='darkred'> key</font></b>: removes the tiers key: <b>key</b>. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/autiers</font><font color='darkred'> key</font></b>: set <b>key</b>'s tiers as the server's tiers to auto-update. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/updatetiers</font></b>: updates the server's tiers. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/downloadtiers</font><font color='darkred'> URL</font></b>: installs tiers from <b>URL</b>. </center></td></tr>" + "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/installtiers</font><font color='darkred'> key</font></b>: installs tiers from the URL address of <b>key</b>. </center></td></tr>";
+		var display = typecommands 
+		+ "<tr><td><center>" + usymbol + "<b><font color='darkgreen'>/tsettings</font></b>: displays the tiers settings. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/autsettings</font><font color='darkred'> value</font></b>: if <b>value</b> is 0, 1, 2 or 3 - auto-updates: no settings, all settings, only tiersoptions or only tierslinks respectively. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/utsettings</font></b>: updates the tiers settings according to the auto-update tiers setting. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/nametiers</font><font color='darkred'> name</font></b>: set the filename of <b>name</b> for importing and exporting the tiers. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/importtiers</font><font color='darkred'> name</font></b>: imports the server's tiers from <b>name</b>.xml or " + tiers.options.name + ".xml if no <b>name</b> is given. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/exporttiers</font><font color='darkred'> name</font></b>: exports to the server's tiers to <b>name</b>.xml or " + tiers.options.name + ".xml if no <b>name</b> is given. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/reloadtiers</font></b>: reloads the server's tiers from file. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/reverttiers</font></b>: reverts to the server's last tiers. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/writetierskey</font><font color='darkred'> key</font><font color='darkblue'>*URL</font></b>: Writes the tiers key: <b>key</b> with <b>URL</b>. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/removetierskey</font><font color='darkred'> key</font></b>: removes the tiers key: <b>key</b>. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/autiers</font><font color='darkred'> key</font></b>: set <b>key</b>'s tiers as the server's tiers to auto-update. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/updatetiers</font></b>: updates the server's tiers. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/downloadtiers</font><font color='darkred'> URL</font></b>: installs tiers from <b>URL</b>. </center></td></tr>" 
+		+ "<tr><td><center>" + osymbol + "<b><font color='darkgreen'>/installtiers</font><font color='darkred'> key</font></b>: installs tiers from the URL address of <b>key</b>. </center></td></tr>";
 		commanddisplay(src, "Tiers Commands", display, channel);
 	},
 	installtiers: function (src, channel, command) {

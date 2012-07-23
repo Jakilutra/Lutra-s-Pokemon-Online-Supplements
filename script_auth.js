@@ -36,7 +36,9 @@ auth.commands = {
 		var osymbol = auth.options["owner"].image,
 			msymbol = auth.options["mod"].image,
 			usymbol = auth.options["user"].image;
-		var display = typecommands + "<tr><td><center>" + msymbol + "<b><font color='darkgreen'>/echo</font><font color='darkred'> authgroup</font><font color='darkblue'>*message</font><font color='darkviolet'>*channel</font></b>: displays <b>message</b> with the announcement background of <b>authgroup</b> - in <b>channel</b> if a name of a channel is specified. </center></td></tr>" + "<tr><td><center>" + usymbol + "<b><font color='darkgreen'>/authranks</font></b>: displays the auth groups and symbols.</center></td></tr>";
+		var display = typecommands 
+		+ "<tr><td><center>" + msymbol + "<b><font color='darkgreen'>/echo</font><font color='darkred'> authgroup</font><font color='darkblue'>*message</font><font color='darkviolet'>*channel</font></b>: displays <b>message</b> with the announcement background of <b>authgroup</b> - in <b>channel</b> if a name of a channel is specified. </center></td></tr>" 
+		+ "<tr><td><center>" + usymbol + "<b><font color='darkgreen'>/authranks</font></b>: displays the auth groups and symbols.</center></td></tr>";
 		commanddisplay(src, "Auth Commands", display, channel);
 	},
 	authranks: function (src, channel, command) {
@@ -52,9 +54,9 @@ auth.commands = {
 			commanderror(src, "Sorry, you do not have permission to use the echo command (mod command).", channel);
 			return;
 		}
-		var index, authgroup, authnames = [];
+		var index, authgroup, name, authnames = [];
 		for (index in auth.options) {
-			var name = auth.options[index].name.toLowerCase();
+			name = auth.options[index].name.toLowerCase();
 			authnames.push(name);
 			if (name === command[1].toLowerCase() || removespaces(name) === command[1].toLowerCase()) {
 				authgroup = index;
