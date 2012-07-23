@@ -14,7 +14,7 @@ tiers.install = function (user, key) {
 			sys.reloadTiers();
 			print(tiers.options["autoupdate"] + " tiers have been installed.");
 			if (global.auth !== undefined) {
-				if (user != "~~Server~~") {
+				if (user !== "~~Server~~") {
 					auth.echo("owner", key + " tiers have been installed as the server's tiers by " + user + "!", -1);
 				}
 				else {
@@ -23,14 +23,14 @@ tiers.install = function (user, key) {
 			}
 			return;
 		}
-		if (user != "~~Server~~") {
+		if (user !== "~~Server~~") {
 			commanderror(sys.id(user), "The server's tiers are already up-to-date.");
 		}
 		print("The server's tiers are up to date with " + key + "'s.");
 		return;
 	}
 	print(key + "'s tiers could not be downloaded.");
-	if (user != "~~Server~~") {
+	if (user !== "~~Server~~") {
 		commanderror(sys.id(user), "Sorry, " + key + "'s tiers could not be downloaded.");
 	}
 }

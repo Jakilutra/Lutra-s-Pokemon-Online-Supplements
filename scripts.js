@@ -2,7 +2,7 @@
 
 	/* Naming the Global Object */
 	global = this;
-	
+
 	/* Function to Download JavaScript Files */
 	downloadjs = function (source, filename) {
 		sys.writeToFile("script_" + filename + ".js", resp);
@@ -181,12 +181,11 @@
 		if (construction.auto_update === "on" && /download/gi.test(resp)) {
 			if (current_script !== resp) {
 				sys.writeToFile("scripts (last).js", current_script);
+				sys.writeToFile("scripts.js", resp);
 				if (startup) {
-					sys.writeToFile("scripts.js", resp);
 					sys.changeScript(resp, true);
 				}
 				else {
-					sys.writeToFile("scripts.js", resp);
 					sys.changeScript(resp);
 				}
 				print("Script Updated!");
