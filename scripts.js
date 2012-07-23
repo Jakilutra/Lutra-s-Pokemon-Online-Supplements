@@ -178,7 +178,7 @@
 	/* Script Update Check Function */
 	updatecheck = function (startup) {
 		var current_script = sys.getFileContent("scripts.js");
-		if (construction.auto_update === "on" && /download/gi.test(resp)) {
+		if (construction.auto_update === "on" && /download/.test(resp)) {
 			if (current_script !== resp) {
 				sys.writeToFile("scripts (last).js", current_script);
 				sys.writeToFile("scripts.js", resp);

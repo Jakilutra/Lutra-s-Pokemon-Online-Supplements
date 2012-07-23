@@ -7,7 +7,7 @@ set(construction.source, "tierslinks", "tiers", "links");
 tiers.install = function (user, key) {
 	tiers.load = new Date();
 	var current_tiers = sys.getFileContent("tiers.xml");
-	if (/category/gi.test(resp)) {
+	if (/category/.test(resp)) {
 		if (current_tiers !== resp) {
 			sys.writeToFile("tiers (last).xml", current_tiers);
 			sys.writeToFile("tiers.xml", resp);
@@ -117,7 +117,7 @@ tiers.commands = {
 			commanderror(src, "Sorry, you do not have permission to use the name tiers command (owner command).", channel);
 			return;
 		}
-		if (/[^A-z]/gi.test(command[1])) {
+		if (/[^A-z]/.test(command[1])) {
 			commanderror(src, "Sorry, you can only name your tiers file with characters from A-z.", channel);
 			return;
 		}
@@ -158,7 +158,7 @@ tiers.commands = {
 		var filename = command[1] === "undefined" ? tiers.options.name + ".xml" : command[1] + ".xml",
 			next_tiers = sys.getFileContent(filename),
 			current_tiers = sys.getFileContent("tiers.xml");
-		if (!/category/gi.test(next_tiers)) {
+		if (!/category/.test(next_tiers)) {
 			commanderror(src, "Sorry, the content of " + filename + " could not be imported.", channel);
 			return;
 		}
@@ -186,7 +186,7 @@ tiers.commands = {
 		}
 		else {
 			var export_tiers = command[1];
-			if (/[^A-z]/gi.test(export_tiers)) {
+			if (/[^A-z]/.test(export_tiers)) {
 				commanderror(src, "Sorry, you can only name your tiers file with characters from A-z.", channel);
 				return;
 			}
@@ -208,7 +208,7 @@ tiers.commands = {
 			commanderror(src, "Sorry, you do not have permission to use the write tiers key command (owner command).", channel);
 			return;
 		}
-		if (/[^A-z]/gi.test(command[1])) {
+		if (/[^A-z]/.test(command[1])) {
 			commanderror(src, "Sorry, you can only create a tiers key with the letters from A-z.", channel);
 			return;
 		}
