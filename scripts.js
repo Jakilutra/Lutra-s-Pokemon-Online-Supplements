@@ -2,6 +2,12 @@
 
 	/* Naming the Global Object */
 	global = this;
+	
+	/* Arrays of files installed/loaded */
+	installedscripts = new Array();
+	loadedscripts = new Array();
+	installedjsons = new Array();
+	loadedjsons = new Array();
 
 	/* Function to Download JavaScript Files */
 	downloadjs = function (source, filename) {
@@ -10,7 +16,7 @@
 			print(filename + " could not be installed.");
 		}
 		else {
-			print("Installed " + filename + " script.");
+			installedscripts.push(filename);
 			try {
 				eval(sys.getFileContent("script_" + filename + ".js"));
 			}
@@ -26,7 +32,7 @@
 			sys.webCall(source + "script_" + filename + ".js", "downloadjs('" + source + "', '" + filename + "');");
 		}
 		else {
-			print("Loaded " + filename + " script.");
+			loadedscripts.push(filename);
 			try {
 				eval(sys.getFileContent("script_" + filename + ".js"));
 			}
@@ -43,7 +49,7 @@
 			print(filename + " default settings could not be installed.");
 		}
 		else {
-			print("Installed " + filename + " default settings.");
+			installedjsons.push(filename);
 			try {
 				global[object][key] = JSON.parse(sys.getFileContent("script_" + filename + ".json"));
 			}
@@ -59,7 +65,7 @@
 			sys.webCall(source + "script_" + filename + ".json", "downloadjson('" + source + "', '" + filename + "', '" + object + "', '" + key + "');");
 		}
 		else {
-			print("Loaded " + filename + " settings.");
+			loadedjsons.push(filename);
 			try {
 				global[object][key] = JSON.parse(sys.getFileContent("script_" + filename + ".json"));
 			}
@@ -144,7 +150,7 @@
 			print(filename + " default settings could not be installed.");
 		}
 		else {
-			print("Installed construction default settings.");
+			installedjsons.push("construction");
 			try {
 				construction = JSON.parse(sys.getFileContent("script_construction.json"));
 			}
@@ -175,7 +181,7 @@
 		}
 		else {
 			construct();
-			print("Loaded construction settings.");
+			loadedjsons.push("construction");
 		}
 	}
 
@@ -200,16 +206,33 @@
 	}
 
 	/* Base Commands */
-	typecommands = "<center><b><font color='orangered'>The following commands need to be entered into a channel's main chat:</font></b></center>";
+	typecommands = "<b><font color='orangered'>The following commands need to be entered into a channel's main chat:</font></b>";
 	commands = {
 		commands: function (src, channel, command) {
 			var index, display = typecommands;
 			for (index in construction.units) {
-				display += "<tr><td><center><font color='darkgreen'><b>/" + construction.units[index] + "commands</b></font>: displays the " + construction.units[index] + "commands.</center></td></tr>";
+				display += "<tr><td><font color='darkgreen'><b>/" + construction.units[index] + "commands</b></font>: displays the " + construction.units[index] + "commands.</td></tr>";
 			}
 			commanddisplay(src, "Commands", display, channel);
 		}
 	}
+	
+	/* Empty Installed/Loaded Array Check function */
+	nonecheck = function(array){
+		if (array.length === 0){
+			array.push("*none*");
+		}
+	}
+	
+	/* Installed/Loaded Messages */
+	nonecheck(installedscripts);
+	nonecheck(loadedscripts);
+	nonecheck(installedjsons);
+	nonecheck(loadedjsons);
+	print("The following scripts were installed: " + String(installedscripts).replace(/,/gi, ", ") + ".");
+	print("The following scripts were loaded: " + String(loadedscripts).replace(/,/gi, ", ") + ".");
+	print("The following default settings were installed: " + String(installedjsons).replace(/,/gi, ", ") + ".");
+	print("The following settings were loaded: " + String(loadedjsons).replace(/,/gi, ", ") + ".");
 
 	/* Script Reload Message */
 	if (global.auth !== undefined) {

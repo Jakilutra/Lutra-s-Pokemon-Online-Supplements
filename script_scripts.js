@@ -31,8 +31,14 @@ scripts.load = new Date();
 /* Scripts Commands */
 scripts.commands = {
 	scriptscommands: function (src, channel, command) {
-		var usymbol = global.auth === undefined ? "" : auth.options["user"].image;
-		var display = typecommands + "<tr><td><center>" + usymbol + "<b><font color='green'>/about</font></b>: displays script information. </center></td></tr>"
+		var usymbol = global.auth === undefined ? "" : auth.options["user"].image,
+		osymbol = global.auth === undefined ? "" : auth.options["owner"].image;
+		var display = typecommands
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/about</font></b>: displays script information. </td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/eval</font><font color='darkred'> string</font></b>: evaluates/executes <b>string</b>. <b>string</b> is a JavaScript expression, variable, statement or sequence of statements.</td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/system</font><font color='darkred'> command</font></b>: runs <b>command</b> on the underlying operating system.</td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/print</font><font color='darkred'> data</font></b>: prints <b>data</b> on the server window. <b>data</b> is a global variable, object, string, number or boolean.</td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/clear</font></b>: clears the server window text. </td></tr>"
 		commanddisplay(src, "Scripts Commands", display, channel);
 	},
 	about: function (src, channel, command) {
@@ -62,5 +68,60 @@ scripts.commands = {
 		+ "<tr><td><b>Special Thanks to:</b> " + String(scripts.about.specialthanks).replace(/,/gi, ", ") + ".</td></tr>" 
 		+ "<tr><td><b>Additional Thanks:</b> All the server hosts that use and recommend this script; all the users who discuss it: give feedback and request features for it.</td></tr>"
 		commanddisplay(src, "About", display, channel);
+	},
+	clear: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the clear command (owner command).", channel);
+			return;
+		}
+		sys.clearChat();
+		if (global.auth !== undefined) {
+			auth.echo("owner", "The server window has been cleared by " + sys.name(src) + "!", -1);
+		}
+	},
+	print: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the print command (owner command).", channel);
+			return;
+		}
+		command.splice(0,1);
+		command = command.join("*");
+		try { 
+			eval("print(" + command + ")");
+			commanddisplay(src, "Print Successful!", "<tr><td><center><b>Printed: </b> " + escapehtml(command) + "</center></td></tr>", channel);
+		}
+		catch(error){
+			commanderror(src,error.message);
+		}
+	},
+	system: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the system command (owner command).", channel);
+			return;
+		}
+		command.splice(0,1);
+		command = command.join("*");
+		sys.system(command);
+		commanddisplay(src, "System Command", "<tr><td><center>" + escapehtml(command) + "</center></td></tr>", channel);
+	},
+	eval: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the evaluation command (owner command).", channel);
+			return;
+		}
+		command.splice(0,1);
+		command = command.join("*");
+		var display = "<tr><td><center><b>Evaluated Code: </b>" + escapehtml(command) + "</center></td></tr>";
+		var starttime = new Date();
+		try {
+			eval(command);
+		}
+		catch (error) { 
+			commanderror(src,error.message, channel);
+			return;
+		}
+		var runtime = new Date() - starttime;
+		display += "<tr><td><center><b>Evaluation Runtime:</b> " + runtime + " milliseconds</center></td></tr>";
+		commanddisplay(src, "Script Evaluation", display, channel);
 	}
 }
