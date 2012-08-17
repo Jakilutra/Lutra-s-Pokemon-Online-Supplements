@@ -35,10 +35,14 @@ scripts.commands = {
 		osymbol = global.auth === undefined ? "" : auth.options["owner"].image;
 		var display = typecommands
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/about</font></b>: displays script information. </td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/settings</font></b>: displays other script settings. </td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/get</font><font color='darkred'> variable</font></b>: displays the data within <b>variable</b>.</td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/delete</font><font color='darkred'> variable</font></b>: deletes <b>variable</b>."
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/eval</font><font color='darkred'> string</font></b>: evaluates/executes <b>string</b>. <b>string</b> is a JavaScript expression, variable, statement or sequence of statements.</td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/system</font><font color='darkred'> command</font></b>: runs <b>command</b> on the underlying operating system.</td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/print</font><font color='darkred'> data</font></b>: prints <b>data</b> on the server window. <b>data</b> is a global variable, object, string, number or boolean.</td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/clear</font></b>: clears the server window text. </td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/broadcast</font><font color='darkred'> status</font></b>: turns the broadcasting of get, delete, eval, system, print and clear commands <b>status</b>. <b>status</b> is either on or off. </td></tr>"
 		commanddisplay(src, "Scripts Commands", display, channel);
 	},
 	about: function (src, channel, command) {
@@ -75,9 +79,13 @@ scripts.commands = {
 			return;
 		}
 		sys.clearChat();
-		if (global.auth !== undefined) {
-			auth.echo("owner", "The server window has been cleared by " + sys.name(src) + "!", -1);
+		if (scripts.options.broadcast === "on") {
+			if (global.auth !== undefined) {
+				auth.echo("owner", "The server window has been cleared by " + sys.name(src) + "!", -1);
+			}
+			return;
 		}
+		commanddisplay(src,"Server Window Cleared!", "", channel);
 	},
 	print: function (src, channel, command) {
 		if (sys.auth(src) < 3) {
@@ -88,6 +96,12 @@ scripts.commands = {
 		command = command.join("*");
 		try { 
 			eval("print(" + command + ")");
+			if (scripts.options.broadcast === "on") {
+				if (global.auth !== undefined) {
+					auth.echo("owner", sys.name(src) + " has printed the following code on the server window:<br/>" + escapehtml(command), -1);
+				}
+				return;
+			}
 			commanddisplay(src, "Print Successful!", "<tr><td><center><b>Printed: </b> " + escapehtml(command) + "</center></td></tr>", channel);
 		}
 		catch(error){
@@ -102,6 +116,12 @@ scripts.commands = {
 		command.splice(0,1);
 		command = command.join("*");
 		sys.system(command);
+		if (scripts.options.broadcast === "on") {
+			if (global.auth !== undefined) {
+				auth.echo("owner", sys.name(src) + " has used the following system command:<br/>" + escapehtml(command), -1);
+			}
+			return;
+		}
 		commanddisplay(src, "System Command", "<tr><td><center>" + escapehtml(command) + "</center></td></tr>", channel);
 	},
 	eval: function (src, channel, command) {
@@ -122,6 +142,96 @@ scripts.commands = {
 		}
 		var runtime = new Date() - starttime;
 		display += "<tr><td><center><b>Evaluation Runtime:</b> " + runtime + " milliseconds</center></td></tr>";
+		if (scripts.options.broadcast === "on") {
+			if (global.auth !== undefined) {
+				auth.echo("owner", sys.name(src) + " has evaluated the following code in " + runtime + " milliseconds:<br/>" + escapehtml(command), -1);
+			}
+			return;
+		}
 		commanddisplay(src, "Script Evaluation", display, channel);
+	},
+	get: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the get command (owner command).", channel);
+			return;
+		}
+		var globalvariable;
+		try { 
+			globalvariable = eval("global." + command[1]);
+		}
+		catch(error){
+			commanderror(src, "Sorry, you cannot get the content of " + command[1] + " because it is not a valid name for a variable.", channel);
+			return;
+		}
+		globalvariable = globalvariable === undefined ? "undefined" : globalvariable; 
+		var datatype = typeof globalvariable;
+		var display = "<tr><td><b>Variable: </b>" + command[1] + "</td></tr>"
+		+ "<tr><td><b>Type: </b>" + datatype + "</td></tr>"
+		+ "<tr><td></td></tr>"
+		+ "<tr><td>" + escapehtml(String(globalvariable)).replace(/\n/g, "<br/>").replace(/\t/g, "&nbsp;") + "</td></tr>";
+		if (scripts.options.broadcast === "on") {
+			if (global.auth !== undefined) {
+				auth.echo("owner", "<u>" + sys.name(src) + " has got the content of " + command[1] + "</u>" + "<p align='left'> Type: " + datatype + "<br/><br/>" + escapehtml(String(globalvariable)).replace(/\n/g, "<br/>").replace(/\t/g, "&nbsp;") + "</p>", -1);
+			}
+			return;
+		}
+		commanddisplay(src, "Variable Content", display, channel);
+	},
+	'delete': function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the delete command (owner command).", channel);
+			return;
+		}
+		try { 
+			var globalvariable = eval("global." + command[1]);
+		}
+		catch(error) {
+			commanderror(src, "Sorry, you cannot delete " + command[1] + " because it is not a valid name for a variable.</i>", channel);
+			return;
+		}
+		eval("delete global." + command[1]);
+		if (scripts.options.broadcast === "on"){
+			if (global.auth !== undefined) {
+				auth.echo("owner", sys.name(src) + " has deleted the variable: " + command[1], -1);
+			}
+			return;
+		}
+		commanddisplay(src, "Variable Deletion", "<tr><td><center><b>Deleted: </b>" + command[1] + "</center></td></tr>", channel);	
+	},
+	broadcast: function(src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the broadcast command (owner command).", channel);
+			return;
+		}
+		var arg = command[1].toLowerCase(), srcname = sys.name(src);
+		if (arg !== "on" && arg !== "off") {
+			commanderror(src, "Sorry, you are required to specify on or off.", channel);
+			return;
+		}
+		if (arg === "on") {
+			if (scripts.options.broadcast === "on") {
+				commanderror(src, "Sorry, broadcasting script changes is already turned on.", channel);
+				return;
+			}
+			scripts.options.broadcast = "on";
+			sys.writeToFile("script_options.json", JSON.stringify(scripts.options));
+			if (global.auth !== undefined) {
+				auth.echo("owner", "Broadcasting script changes has been turned on by " + srcname + "!", -1);
+			}
+			return;
+		}
+		if (scripts.options.broadcast === "off") {
+			commanderror(src, "Sorry, broadcasting script changes is already turned off.", channel);
+			return;
+		}
+		scripts.options.broadcast = "off";
+		sys.writeToFile("script_options.json", JSON.stringify(scripts.options));
+		if (global.auth !== undefined) {
+			auth.echo("owner", "Broadcasting script changes has been turned off by " + srcname + "!", -1);
+		}
+	},
+	settings: function(src, channel, command) {
+		var display = "<tr><td><b> Broadcasting Script Changes: </b>" + scripts.options.broadcast + "</td></tr>";
+		commanddisplay(src, "Settings", display, channel);
 	}
 }

@@ -4,10 +4,10 @@
 	global = this;
 	
 	/* Arrays of files installed/loaded */
-	installedscripts = new Array();
-	loadedscripts = new Array();
-	installedjsons = new Array();
-	loadedjsons = new Array();
+	installedscripts = [];
+	loadedscripts = [];
+	installedjsons = [];
+	loadedjsons = [];
 
 	/* Function to Download JavaScript Files */
 	downloadjs = function (source, filename) {
