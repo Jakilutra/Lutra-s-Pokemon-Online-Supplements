@@ -27,10 +27,10 @@ auth.pm = function (group, text, from, to, recipients, channel) {
 	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 " + auth.options[group].minorcolor + ", stop:0.5 " + auth.options[group].majorcolor + "); color:" + auth.options[group].textcolor + ";'><tr><th>Personal Message from <i>" + from + "</i> to <i>" + to + "</i>&nbsp;&nbsp;&nbsp;Sent to: <i>" + String(recipients).replace(/,/gi, ", ") + "</i></th></tr><tr><td><center><b><big>" + text + "</big></b></center></td></tr></table>";
 	var index;
 	if (channel > -1) {
-			sys.sendHtmlMessage(to, display, channel);
+			sys.sendHtmlMessage(sys.id(to), display, channel);
 	}
 	else {
-			sys.sendHtmlMessage(to, display);
+			sys.sendHtmlMessage(sys.id(to), display);
 	}
 }
 
