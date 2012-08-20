@@ -97,7 +97,7 @@ auth.commands = {
 		}
 		var sendTo=[command[1]];
 		if(command.length>3){
-			sentTo=sentTo.concat(command.slice(3));
+			sendTo=sendTo.concat(command.slice(3));
 		}
 		var message = command[2];
 		//ability to make maxmessagelength here
@@ -136,7 +136,7 @@ auth.commands = {
 	}
 }
 
-
+/*After a user logs in, will send all of their stored pms.  Then deletes them from storage*/
 append("afterLogIn",
 "\t\tvar lowerName=sys.name(src).toLowerCase() " +
 "\r\t\tif(auth.pms[lowerName]!=undefined){"+
