@@ -123,6 +123,28 @@
 			sys.sendHtmlMessage(id, display);
 		}
 	}
+	
+	/* Case Sensitive Member Names Load Function */
+	memberscase = function () {
+		var memberdb = sys.dbAll(), index, player_id;
+		members = {};
+		for (index in memberdb){
+			members[memberdb[index]] = memberdb[index];
+			player_id = sys.id(memberdb[index]);
+			if (player_id !== undefined) {
+				members[memberdb[index]] = sys.name(player_id);
+			}
+		}
+		print ("Case sensitive names loaded.");
+	}
+	memberscase();
+	
+	/* Add Case Sensitive Name Function */	
+	membersadd = function (srcname) {
+		if (members[srcname] === undefined) {
+			members[srcname.toLowerCase()] = srcname;
+		}
+	}
 
 	/* Escape Html Function */
 	escapehtml = function (str) {
@@ -217,6 +239,41 @@
 		}
 	}
 	
+	/* Event Body Function */
+	eventbody = function (event) {
+		var body = String(script[event]);
+		body = body.split("{");
+		body.splice(0, 1);
+		body = body.join("{");
+		body = body.split("}");
+		body.splice(body.length-1, 1);
+		body = body.join("}");
+		return body;
+	}
+	
+	/* Event Arguments Function */
+	eventargs = function (event) {
+		var args = String(script[event]);
+		args = args.split("(");
+		args.splice(0,1);
+		args = args.join("(");
+		args = args.split(")");
+		args = args[0];
+		return args;
+	}
+	
+	/* Prepend Event Function */
+	prepend = function (event, code){
+		var body = code + eventbody(event), args = eventargs(event);
+		script[event] = new Function([args], body);
+	}
+	
+	/* Append Event Function */
+	append = function (event, code){
+		var body = eventbody(event) + code, args = eventargs(event);
+		script[event] = new Function([args], body);
+	}
+	
 	/* Empty Installed/Loaded Array Check function */
 	nonecheck = function(array){
 		if (array.length === 0){
@@ -280,8 +337,11 @@
 	afterChatMessage: function (src, message, channel) {},
 	beforeLogIn: function (src, channel) {},
 	afterLogIn: function (src) {
-
-		/* LogIn Notifications*/
+		/* Case Sensitive Name Adding */
+		var srcname = sys.name(src);
+		membersadd(srcname);
+		
+		/* LogIn Notifications */
 		var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 mediumorchid stop:0.5 papayawhip); color: black;'><tr><td><center><b><big>Type: <font color='darkgreen'>/Commands</font> into a channel's main chat to view a list of commands.</big></b></center></td></tr></table>";
 		sys.sendHtmlMessage(src, display);
 	},

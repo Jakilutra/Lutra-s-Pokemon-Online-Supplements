@@ -3,6 +3,11 @@ auth = {};
 set(construction.source, "authoptions", "auth", "options");
 set(construction.source, "authmembers", "auth", "members");
 
+/* Creating PMs Object */
+if (auth.pms === undefined){
+	auth.pms = {};
+}
+
 /* Auth-based Announcement Function */
 auth.echo = function (group, text, channel) {
 	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 " + auth.options[group].minorcolor + ", stop:0.5 " + auth.options[group].majorcolor + "); color:" + auth.options[group].textcolor + ";'><tr><td><center><b><big>" + text + "</big></b></center></td></tr></table>";
