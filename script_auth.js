@@ -36,19 +36,8 @@ auth.pm = function (group, text, from, to, recipients, channel) {
 
 /* Finding correct group*/
 auth.groupName=function(name){
-	var authLevel=sys.auth(name);
-	if(authLevel===3){
-	return "owner"
-	}
-	else if(authLevel===2){
-	return "admin"
-	}
-	else if(authLevel===1){
-	return "mod"
-	}
-	else{
-	return "user"
-	}
+	var authLevel=sys.dbAuth(name);
+	return {3:"owner",2:"admin",1:"mod",0:"user"}[authLevel]
 }
 
 /* Auth Commands */
@@ -103,7 +92,8 @@ auth.commands = {
 	},
 	pm: function (src, channel, command) {
 		if(command.length <3){
-			sys.sendHtmlMessage(src, "PM command is used with the following Arguments: TO*MESSAGE*CC1*CC2...",channel);
+			commanderror(src, "PM command is used with the following Arguments: TO*MESSAGE*CC1*CC2...",channel);
+			return;
 		}
 		var sendTo=[command[1]];
 		if(command.length>3){
@@ -141,7 +131,7 @@ auth.commands = {
 			}
 		}
 		if(failure.length !==0){
-			sys.sendHtmlMessage(src,"The message failed to send to the following users: "+failure+".  Please check the spelling of all of the names",channel);
+			sys.sendHtmlMessage(src,"The message failed to send to the following users: "+failure.join()+".  Please check the spelling of all of the names",channel);
 		}
 	}
 }
