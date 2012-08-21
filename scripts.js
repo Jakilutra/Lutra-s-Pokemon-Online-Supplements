@@ -156,6 +156,41 @@
 		return str.split(' ').join('');
 	}
 	
+	/* Event Body Function */
+		eventbody = function (event) {
+		var body = String(script[event]);
+		body = body.split("{");
+		body.splice(0, 1);
+		body = body.join("{");
+		body = body.split("}");
+		body.splice(body.length-1, 1);
+		body = body.join("}");
+		return body;
+	}
+	
+	/* Event Arguments Function */
+	eventargs = function (event) {
+		var args = String(script[event]);
+		args = args.split("(");
+		args.splice(0,1);
+		args = args.join("(");
+		args = args.split(")");
+		args = args[0];
+		return args;
+	}
+	
+	/* Prepend Event Function */
+	prepend = function (event, code){
+		var body = code + eventbody(event), args = eventargs(event);
+		script[event] = new Function([args], body);
+	}
+	
+	/* Append Event Function */
+	append = function (event, code){
+		var body = eventbody(event) + code, args = eventargs(event);
+		script[event] = new Function([args], body);
+	}
+	
 	/* Loading External JavaScript Files */
 	construction = {};
 	construct = function () {
@@ -237,41 +272,6 @@
 			}
 			commanddisplay(src, "Commands", display, channel);
 		}
-	}
-	
-	/* Event Body Function */
-	eventbody = function (event) {
-		var body = String(script[event]);
-		body = body.split("{");
-		body.splice(0, 1);
-		body = body.join("{");
-		body = body.split("}");
-		body.splice(body.length-1, 1);
-		body = body.join("}");
-		return body;
-	}
-	
-	/* Event Arguments Function */
-	eventargs = function (event) {
-		var args = String(script[event]);
-		args = args.split("(");
-		args.splice(0,1);
-		args = args.join("(");
-		args = args.split(")");
-		args = args[0];
-		return args;
-	}
-	
-	/* Prepend Event Function */
-	prepend = function (event, code){
-		var body = code + eventbody(event), args = eventargs(event);
-		script[event] = new Function([args], body);
-	}
-	
-	/* Append Event Function */
-	append = function (event, code){
-		var body = eventbody(event) + code, args = eventargs(event);
-		script[event] = new Function([args], body);
 	}
 	
 	/* Empty Installed/Loaded Array Check function */
