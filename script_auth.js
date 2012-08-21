@@ -95,21 +95,25 @@ auth.commands = {
 			commanderror(src, "PM command is used with the following Arguments: TO*MESSAGE*CC1*CC2...",channel);
 			return;
 		}
-		var sendTo=[command[1]].push(sys.name(src));
+		var sendTo=[command[1]];
 		if(command.length>3){
 			sendTo=sendTo.concat(command.slice(3));
 		}
 		var message = command[2];
 		//ability to make maxmessagelength here
 		var failure=[]
-		auth.pm(auth.groupName(sys.name(src)),message,sys.name(src),command[1],sendTo,channel)
+		var confirmed=[]
 		for(var i=0;i<sendTo.length;i++){
 			//user doesn't exist
 			if(members[sendTo[i].toLowerCase()] === undefined){
 				failure.push(sendTo[i]);
+				continue;
+			}
+			else{
+				confirmed.push(sendTo[i]);
 			}
 			//user is offline
-			else if(sys.id(sendTo[i])===undefined){
+			if(sys.id(sendTo[i])===undefined){
 				if(auth.pms[sendTo[i]]!=undefined){
 					//potentially check for max mailbox size
 					auth.pms[sendTo[i].toLowerCase()].push({
@@ -128,12 +132,16 @@ auth.commands = {
 			}
 			//user is online
 			else{
-				auth.pm(auth.groupName(sys.name(src)),message,sys.name(src),sendTo[1],sendTo,channel)
+				auth.pm(auth.groupName(sys.name(src)),message,sys.name(src),sendTo[i],sendTo,channel)
 			}
 		}
 		if(failure.length !==0){
 			sys.sendHtmlMessage(src,"The message failed to send to the following users: "+failure.join()+".  Please check the spelling of all of the names",channel);
 		}
+		if(confirmed.length!==0){
+			sys.sendHtmlMessage(src,"Message sent successfully to: "+confirmed.join(),channel);
+		}
+		
 	}
 }
 
