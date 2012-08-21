@@ -95,13 +95,14 @@ auth.commands = {
 			commanderror(src, "PM command is used with the following Arguments: TO*MESSAGE*CC1*CC2...",channel);
 			return;
 		}
-		var sendTo=[command[1]];
+		var sendTo=[command[1]].push(sys.name(src));
 		if(command.length>3){
 			sendTo=sendTo.concat(command.slice(3));
 		}
 		var message = command[2];
 		//ability to make maxmessagelength here
 		var failure=[]
+		auth.pm(auth.groupName(sys.name(src)),message,sys.name(src),command[1],sendTo,channel)
 		for(var i=0;i<sendTo.length;i++){
 			//user doesn't exist
 			if(members[sendTo[i].toLowerCase()] === undefined){
@@ -127,7 +128,7 @@ auth.commands = {
 			}
 			//user is online
 			else{
-				auth.pm(auth.groupName(sys.name(src)),message,sys.name(src),command[1],sendTo,channel)
+				auth.pm(auth.groupName(sys.name(src)),message,sys.name(src),sendTo[1],sendTo,channel)
 			}
 		}
 		if(failure.length !==0){
