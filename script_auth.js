@@ -48,7 +48,7 @@ auth.commands = {
 			usymbol = auth.options["user"].image;
 		var display = typecommands 
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/echo</font><font color='darkred'> authgroup</font><font color='darkblue'>*message</font><font color='darkviolet'>*channel</font></b>: displays <b>message</b> with the announcement background of <b>authgroup</b> - in <b>channel</b> if a name of a channel is specified. </td></tr>"
-		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/pm</font><font color='darkred'> to</font><font color='darkblue'> message</font><font color='darkviolet'>*CC1*CC2...</font></b>: messages <b>to</b> through the server with <b>message</b>. <b>CC1,CC2...</b> also see the message.</td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/pm</font><font color='darkred'> to</font><font color='darkblue'>*message</font><font color='darkviolet'>*CC1*CC2...</font></b>: messages <b>to</b> through the server with <b>message</b>. <b>CC1,CC2...</b> also see the message.</td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/authranks</font></b>: displays the auth groups and symbols.</td></tr>";
 		commanddisplay(src, "Auth Commands", display, channel);
 	},
