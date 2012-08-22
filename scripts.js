@@ -181,14 +181,12 @@
 	
 	/* Prepend Event Function */
 	prepend = function (event, code){
-		var body = code + eventbody(event), args = eventargs(event);
-		script[event] = new Function([args], body);
+		sys.delayedCall( function(){var body = code + eventbody(event), args = eventargs(event); script[event] = new Function([args], body);}, 1);
 	}
 	
 	/* Append Event Function */
 	append = function (event, code){
-		var body = eventbody(event) + code, args = eventargs(event);
-		script[event] = new Function([args], body);
+		sys.delayedCall( function(){var body = eventbody(event) + code, args = eventargs(event); script[event] = new Function([args], body);}, 1);
 	}
 	
 	/* Loading External JavaScript Files */
@@ -266,9 +264,9 @@
 	typecommands = "<b><font color='orangered'>The following commands need to be entered into a channel's main chat:</font></b>";
 	commands = {
 		commands: function (src, channel, command) {
-			var index, display = typecommands;
+			var index, display = typecommands, usymbol = global.auth === undefined ? "" : auth.options["user"].image;
 			for (index in construction.units) {
-				display += "<tr><td><font color='darkgreen'><b>/" + construction.units[index] + "commands</b></font>: displays the " + construction.units[index] + "commands.</td></tr>";
+				display += "<tr><td>" + usymbol + "<font color='darkgreen'><b>/" + construction.units[index] + "commands</b></font>: displays the " + construction.units[index] + "commands.</td></tr>";
 			}
 			commanddisplay(src, "Commands", display, channel);
 		}

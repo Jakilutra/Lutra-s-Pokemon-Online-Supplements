@@ -82,7 +82,7 @@ auth.commands = {
 			commanderror(src, "Sorry, the echo command did not execute as no valid auth group argument was specified. The following are auth group arguments: " + String(authnames).replace(/,/gi, ", ") + ".<br/> E.G. \"/echo owner*hello\"", channel);
 			return;
 		}
-		sys.sendAll(sys.name(src) + ":");
+		sys.sendAll(sys.name(src) + ":", channelid);
 		var channelid = sys.channelId(command[command.length - 1]);
 		command.splice(0, 2);
 		if (channelid !== undefined) {
