@@ -91,15 +91,13 @@ auth.commands = {
 		auth.echo(authgroup, command, channelid);
 	},
 	pm: function (src, channel, command) {
-		if(command.length <3){
-			commanderror(src, "PM command is used with the following Arguments: TO*MESSAGE*CC1*CC2...",channel);
+		if(!(command[command.length-1].contains(":")){
+			commanderror(src, "PM command is used with the following Arguments: TO*CC1*CC2*CC3:MESSAGE (more CCs can be added)",channel);
 			return;
 		}
-		var sendTo=[command[1]];
-		if(command.length>3){
-			sendTo=sendTo.concat(command.slice(3));
-		}
-		var message = command[2];
+		var message = command[command.length-1].split(":").slice(1).join(":"); // this makes it possible to do /pm Swimming95*Lutra:This is a test if I want to list: 1,2,3
+		var sendTo=command.slice(0,command.length-1);
+		sendTo.push(command[command.length-1].split(":")[0]);
 		//ability to make maxmessagelength here
 		var failure=[]
 		var confirmed=[]
