@@ -156,6 +156,41 @@
 		return str.split(' ').join('');
 	}
 	
+	/* Convert Milliseconds to a Time String Function */	
+	converttime = function (time){
+		if (time > 86400000){
+			return Math.floor(time/86400000) + " Days, " + Math.floor((time%86400000)/3600000) + " Hours, " + Math.floor(((time%86400000)%3600000)/60000) + " Minutes, " + Math.floor((((time%86400000)%3600000)%60000)/1000) + " Seconds";
+		}
+		if (time > 3600000){
+			return Math.floor((time%86400000)/3600000) + " Hours, " + Math.floor(((time%86400000)%3600000)/60000) + " Minutes, " + Math.floor((((time%86400000)%3600000)%60000)/1000) + " Seconds";
+		}
+		if (time > 60000){
+			return Math.floor(((time%86400000)%3600000)/60000) + " Minutes, " + Math.floor((((time%86400000)%3600000)%60000)/1000) + " Seconds";
+		}
+		return Math.floor((((time%86400000)%3600000)%60000)/1000) + " Seconds" ;
+	}
+
+	/* Convert to Seconds Function */
+	converttoseconds = function (unit, time) {
+		return({"minutes": time*60 , "minute": time*60, "hours": time*3600, "hour": time*3600, "days": time*86400,"day": time*86400, "weeks": time*604800, "week": time*604800, "months": time*2592000 , "month": time*2592000, "year": time*31536000 , "years": time*31536000}[unit] || time);
+	}
+
+	/* Plurality of Time Unit Function */
+	timeplurality = function (time, unit) {
+		if (time == 1 && unit[unit.length-1] == "s") {
+			unit = unit.replace(/s$/, "");
+		}
+		else if (time != 1 && unit[unit.length-1] != "s") {
+			unit = unit + "s";
+		}
+		return unit;
+	}
+
+	/* Not a Time Unit Function */
+	nottimeunit = function (unit) {
+		return unit != "seconds" && unit != "second" && unit != "minutes" && unit != "minute" && unit != "hours" && unit != "hour" && unit != "days" && unit != "day" && unit != "weeks" && unit != "week" && unit != "months" && unit != "month" && unit != "years" && unit != "year";
+	}
+	
 	/* Event Body Function */
 		eventbody = function (event) {
 		var body = String(script[event]);

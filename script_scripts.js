@@ -36,6 +36,7 @@ scripts.commands = {
 		var display = typecommands
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/about</font></b>: displays script information. </td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/settings</font></b>: displays other script settings. </td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/load</font></b>: loads the base script from file. </td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/get</font><font color='darkred'> variable</font></b>: displays the data within <b>variable</b>.</td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/delete</font><font color='darkred'> variable</font></b>: deletes <b>variable</b>."
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/eval</font><font color='darkred'> string</font></b>: evaluates/executes <b>string</b>. <b>string</b> is a JavaScript expression, variable, statement or sequence of statements.</td></tr>"
@@ -233,5 +234,16 @@ scripts.commands = {
 	settings: function(src, channel, command) {
 		var display = "<tr><td><b> Broadcasting Script Changes: </b>" + scripts.options.broadcast + "</td></tr>";
 		commanddisplay(src, "Settings", display, channel);
+	},
+	load: function (src, channel, command){
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the load command (owner command).", channel);
+			return;
+		}
+		var srcname = sys.name(src), scriptcontent = sys.getFileContent("scripts.js");
+		if (global.auth !== undefined) {
+			auth.echo("owner", "The Server Script has been loaded from file by " + srcname + "!");
+		}
+		sys.changeScript(scriptcontent);
 	}
 }
