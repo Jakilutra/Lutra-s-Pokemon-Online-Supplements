@@ -430,7 +430,11 @@
 	beforeLogOut: function (src) {},
 	afterLogOut: function (src) {},
 	beforeChangeTeam: function (src) {},
-	afterChangeTeam: function (src) {},
+	afterChangeTeam: function (src) {
+		/* Case Sensitive Name Adding */
+		var srcname = sys.name(src);
+		membersadd(srcname);
+	},
 	beforeChangeTier: function (src, team, oldtier, newtier) {},
 	afterChangeTier: function (src, team, oldtier, newtier) {},
 	beforePlayerAway: function (src, away) {},
