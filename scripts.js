@@ -145,6 +145,51 @@
 			members[srcname.toLowerCase()] = srcname;
 		}
 	}
+	
+	/* Connect Status Function */	
+	connectstatus = function (name){
+		var id = sys.id(name), index,
+			connectstatus = id === undefined ? " <font color='red'><b><small>Offline</small></b></font> " : " <font color='green'><b><small>Online</small></b></font> ",
+			color = id == undefined ? "none" : namecolor(id);
+		if (sys.battling(id)){
+			index = sys.dbAuth(name) + 8;
+		}
+		else if (sys.away(id) === false){
+			index = sys.dbAuth(name);
+		}
+		else {
+			index = sys.dbAuth(name) + 4;
+		}
+		id = id != undefined ? id : "N/A";
+		return authimage(index) + " <b><font color='" + color + "'>" + name + "</b>" + connectstatus + "<b><small>Session ID: " + id + "</small></b> ";
+	}
+
+	/* Server Icon Function */
+	authimage = function(authlevel){
+		return ({
+			11: "<img src='Themes/Classic/client/oBattle.png'>",
+			10: "<img src='Themes/Classic/client/aBattle.png'>",
+			9: "<img src='Themes/Classic/client/mBattle.png'>",
+			8: "<img src='Themes/Classic/client/uBattle.png'>",	
+			7: "<img src='Themes/Classic/client/oAway.png'>",
+			6: "<img src='Themes/Classic/client/aAway.png'>",
+			5: "<img src='Themes/Classic/client/mAway.png'>",
+			4: "<img src='Themes/Classic/client/uAway.png'>",
+			3: "<img src='Themes/Classic/client/oAvailable.png'>",
+			2: "<img src='Themes/Classic/client/aAvailable.png'>",
+			1: "<img src='Themes/Classic/client/mAvailable.png'>",
+			0: "<img src='Themes/Classic/client/uAvailable.png'>"			
+		}[authlevel] || "<img src='Themes/Classic/client/uAway.png'>");	
+	}
+	
+	/* Name Color Function */
+	namecolor = function (src) {
+		if (sys.getColor(src) == '#000000') {
+ 			var clist = ['#5811b1','#399bcd','#0474bb','#f8760d','#a00c9e','#0d762b','#5f4c00','#9a4f6d','#d0990f','#1b1390','#028678','#0324b1'];
+			return clist[src % clist.length]; 
+		}
+		return sys.getColor(src);
+	}
 
 	/* Escape Html Function */
 	escapehtml = function (str) {

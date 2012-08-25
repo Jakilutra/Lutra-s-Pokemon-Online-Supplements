@@ -17,13 +17,13 @@ disconnect.kick = function (src, trgt, reason){
 disconnect.ban = function (srcname, trgtname, type, reason, duration_time, duration_unit) {
 	type = type == 1 ? "by IP address" : "";
 	var lowerSrcName = srcname.toLowerCase(),
-	lowerTrgtName = trgtname.toLowerCase(),
-	startdate = new Date(),
-	duration = duration_time === undefined ? "Indefinite" : converttoseconds(duration_unit, duration_time), 
-	enddate = duration === "Indefinite" ? "Unknown" : String(new Date(Number(startdate) + duration*1000)),
-	reasonline = reason === undefined ? "" : "<br/>Reason: " + reason, 
-	durationline = duration === "Indefinite" ? "": " for " + duration_time + " " + duration_unit,
-	display = trgtname + " has been banned " + type + " from the server by " + srcname + durationline + "!" + reasonline;
+		lowerTrgtName = trgtname.toLowerCase(),
+		startdate = new Date(),
+		duration = duration_time === undefined ? "Indefinite" : converttoseconds(duration_unit, duration_time), 
+		enddate = duration === "Indefinite" ? "Unknown" : String(new Date(Number(startdate) + duration*1000)),
+		reasonline = reason === undefined ? "" : "<br/>Reason: " + reason, 
+		durationline = duration === "Indefinite" ? "": " for " + duration_time + " " + duration_unit,
+		display = trgtname + " has been banned " + type + " from the server by " + srcname + durationline + "!" + reasonline;
 	disconnect.bans[lowerTrgtName] = {};
 	disconnect.bans[lowerTrgtName] = {
 		"banner" : lowerSrcName,

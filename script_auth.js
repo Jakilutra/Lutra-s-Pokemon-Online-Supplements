@@ -40,6 +40,17 @@ auth.groupName=function(name){
 	return {3:"owner",2:"admin",1:"mod",0:"user"}[authLevel]
 }
 
+/* Function that returns a list of auth from a server auth level */
+auth.array = function (value){
+	var autharray = new Array(), index, authdb = sys.dbAuths();
+	for (index in authdb){
+		if(sys.dbAuth(authdb[index]) == value){
+			autharray.push(members[authdb[index]]);
+		}
+	}
+	return autharray;
+}
+
 /* Auth Commands */
 auth.commands = {
 	authcommands: function (src, channel, command) {
@@ -49,7 +60,8 @@ auth.commands = {
 		var display = typecommands 
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/echo</font><font color='darkred'> authgroup</font><font color='darkblue'>*message</font><font color='darkviolet'>*channel</font></b>: displays <b>message</b> with the announcement background of <b>authgroup</b> - in <b>channel</b> if a name of a channel is specified. </td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/pm</font><font color='darkred'> to1*to2...*toN</font><font color='darkblue'>:message</font></b>: messages <b>to1,to2..toN</b> (players from 1 to N) through the server with <b>message</b>.</td></tr>"
-		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/authranks</font></b>: displays the auth groups and symbols.</td></tr>";
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/authranks</font></b>: displays the auth groups and symbols.</td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/auths</font></b>: displays a list of server auth.</td></tr>";
 		commanddisplay(src, "Auth Commands", display, channel);
 	},
 	authranks: function (src, channel, command) {
@@ -138,6 +150,37 @@ auth.commands = {
 		if(failure.length !==0){
 			commanderror(src,"The message failed to send to the following users because they don't exist: "+failure.join()+".  Please check the spelling of all of the names.",channel);
 		}
+	},
+	auths: function (src, channel, command){
+		var owners = auth.array(3), admins = auth.array(2), mods = auth.array(1), authsize = owners.length + admins.length + mods.length, i, j, k;
+		if (authsize === 0){
+			commanderror(src, "Sorry, there is currently no server auth.", channel);
+			return;
+		}
+		var display = "";
+		if (owners.length > 0){
+			display += "<tr><td><big><b><font color='" + auth.options["owner"].majorcolor + "'>" + auth.options["owner"].name + "s:</font></big></b></td></tr>";
+			for (i in owners){
+				display += "<tr><td>" + connectstatus(owners[i]) + "</td></tr>";
+			}
+			display += "<tr><td></td></tr>";
+		}
+		if (admins.length > 0){
+			display += "<tr><td><big><b><font color='" + auth.options["admin"].majorcolor + "'>" + auth.options["admin"].name + "s:</font></big></b></td></tr>";
+			for (i in admins){
+				display += "<tr><td>" + connectstatus(admins[i]) + "</td></tr>";
+			}
+			display += "<tr><td></td></tr>";
+		}
+		if (mods.length > 0){
+			display += "<tr><td><big><b><font color='" + auth.options["mod"].majorcolor + "'>" + auth.options["mod"].name + "s:</font></big></b></td></tr>";
+			for (i in mods){
+				display += "<tr><td>" + connectstatus(mods[i]) + "</td></tr>";
+			}
+			display += "<tr><td></td></tr>";
+		}
+		display += "<tr><td><b>Server Auth Total: </b>" + authsize + "</td></tr>";
+		commanddisplay(src, "Server Auth", display, channel);
 	}
 }
 
