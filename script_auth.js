@@ -104,7 +104,9 @@ auth.giveAuth = function() {
 		}
 	}
 }
-auth.giveAuth();
+if (auth.members !== undefined){
+	auth.giveAuth();
+}
 
 /* Auth Commands */
 auth.commands = {
