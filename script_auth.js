@@ -247,7 +247,7 @@ auth.commands = {
 			commanderror(src, "Sorry, you do not have permission to use the a command (owner command).", channel);
 			return;
 		}
-		var index, globalauth = auth.options, authgroup, name, authnames = [];
+		var index, globalauth = JSON.parse(JSON.stringify(auth.options)), authgroup, name, authnames = [];
 		delete globalauth.server;
 		for (index in globalauth) {
 			if (index.substring(0,4) === "chan" || index.substring(0,5) === "group"){
