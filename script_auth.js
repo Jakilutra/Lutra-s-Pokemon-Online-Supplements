@@ -37,7 +37,7 @@ auth.pm = function (group, text, from, to, date, receiver, channel) {
 /* Finding correct auth group*/
 auth.groupName=function(name){
 	var authLevel=sys.dbAuth(name);
-	return {3:"owner",2:"admin",1:"mod",0:"user"}[authLevel]
+	return {3:"owner",2:"admin",1:"mod",0:"user"}[authLevel];
 }
 
 /* Finding auth level of server authgroup */
@@ -84,8 +84,10 @@ auth.reverse = function(group){
 auth.giveAuth = function() {
 	var serverauth = sys.dbAuths(), writtenauth = {"mod":auth.members.mod.perm, "admin":auth.members.admin.perm, "owner":auth.members.owner.perm}, autharray, i, j,k;
 	for (i in serverauth){
-		if (auth.members[auth.groupName(serverauth[i])].perm.indexOf(serverauth[i]) === -1){
-			auth.members[auth.groupName(serverauth[i])].perm.push(serverauth[i]);
+		if (sys.dbAuth(serverauth[i]) < 4 && sys.dbAuth(serverauth[i]) > -1){
+			if (auth.members[auth.groupName(serverauth[i])].perm.indexOf(serverauth[i]) === -1){
+				auth.members[auth.groupName(serverauth[i])].perm.push(serverauth[i]);
+			}
 		}
 	}
 	sys.writeToFile("script_authmembers.json", JSON.stringify(auth.members));
