@@ -11,7 +11,9 @@
 
 	/* Function to Download JavaScript Files */
 	downloadjs = function (source, filename) {
-		sys.writeToFile("script_" + filename + ".js", resp);
+		if (resp !== ""){
+			sys.writeToFile("script_" + filename + ".js", resp);
+		}
 		if (sys.getFileContent("script_" + filename + ".js") === undefined) {
 			print(filename + " could not be installed.");
 		}
@@ -44,7 +46,9 @@
 	
 	/* Function to Download JSON Files */
 	downloadjson = function (source, filename, object, key) {
-		sys.writeToFile("script_" + filename + ".json", resp);
+		if (resp !== ""){
+			sys.writeToFile("script_" + filename + ".json", resp);
+		}
 		if (sys.getFileContent("script_" + filename + ".json") === undefined) {
 			print(filename + " default settings could not be installed.");
 		}
@@ -280,7 +284,9 @@
 	
 	/* Function to Download Construction File */
 	downloadconstruction = function () {
-		sys.writeToFile("script_construction.json", resp);
+		if (resp !== ""){
+			sys.writeToFile("script_construction.json", resp);
+		}
 		if (sys.getFileContent("script_construction.json") === undefined) {
 			print(filename + " default settings could not be installed.");
 		}

@@ -39,8 +39,10 @@ tiers.download = function (user, key) {
 }
 
 /* Auto-Update Tiers */
-if (tiers.links[tiers.options["autoupdate"]] !== undefined) {
-	tiers.download("~~Server~~", tiers.options["autoupdate"]);
+if (tiers.options !== undefined && tiers.links !== undefined){
+	if (tiers.links[tiers.options["autoupdate"]] !== undefined) {
+		tiers.download("~~Server~~", tiers.options["autoupdate"]);
+	}
 }
 
 /* Auto-Update Tiers Settings */
@@ -58,7 +60,9 @@ tiers.updatejsons = function () {
 		print("The following tiers settings were updated : " + String(tiers.jsonsupdated).replace(/,/gi, ", ") + ".");
 	}
 }
-tiers.updatejsons();
+if (tiers.options !== undefined){
+	tiers.updatejsons();
+}
 
 /* Tiers Commands */
 tiers.commands = {
