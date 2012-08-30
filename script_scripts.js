@@ -19,23 +19,52 @@ scripts.checkversion = function () {
 }
 sys.webCall(construction.source + "script_about.json", "scripts.checkversion();");
 
-/* Script Registered Date */
-if (scripts.options.registered === undefined) {
-	scripts.options.registered = String(new Date());
-	sys.writeToFile("script_options.json", JSON.stringify(scripts.options));
-}
-
 /* Script Load Date */
 scripts.load = new Date();
+
+/* Scripts Announcement Function */
+scripts.echo = function (text, channel) {
+	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 black, stop:0.5 dimgray); color:white;'><tr><td><center><b><big>" + text + "</big></b><small> - Scripts Announcement </small></center></td></tr></table>";
+	if (channel > -1) {
+		sys.sendHtmlAll(display, channel);
+	}
+	else {
+		sys.sendHtmlAll(display);
+	}
+}
+
+/* Auto-Update Scripts Settings */
+scripts.updatejsons = function () {
+	scripts.jsonsupdated = new Array();
+	if (scripts.options.autoupdatesettings === "1") {
+		sys.webCall(construction.source + "script_options.json", "downloadjson('" + construction.source + "', 'options', 'scripts', 'options');");
+		scripts.jsonsupdated.push("options");
+	}
+	if (scripts.jsonsupdated.length !== 0){
+		print("The following scripts settings were updated : " + String(scripts.jsonsupdated).replace(/,/gi, ", ") + ".");
+	}
+}
+if (scripts.options !== undefined){
+	scripts.updatejsons();
+}
 
 /* Scripts Commands */
 scripts.commands = {
 	scriptscommands: function (src, channel, command) {
-		var usymbol = global.auth === undefined ? "" : auth.options["user"].image,
-		osymbol = global.auth === undefined ? "" : auth.options["owner"].image;
+		var osymbol = "", asymbol = "", msymbol = "", usymbol = "";
+		if (global.auth !== undefined){
+			osymbol = auth.options["owner"].image;
+			asymbol = auth.options["admin"].image;
+			msymbol = auth.options["mod"].image;
+			usymbol = auth.options["user"].image;
+		}
 		var display = typecommands
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/asecho</font><font color='darkred'> status</font></b>: turns announcing by scripts echo <b>status</b>. <b>status</b> is either on or off.</td></tr>" 
+		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/secho</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the scripts echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>" 
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/about</font></b>: displays script information. </td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/settings</font></b>: displays other script settings. </td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/ausettings</font><font color='darkred'> value</font></b>: if <b>value</b> is 0 or 1 - auto-updates: no settings or all settings respectively. </td></tr>" 
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/usettings</font></b>: updates the scripts settings according to the auto-update scripts setting. </td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/load</font></b>: loads the base script from file. </td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/get</font><font color='darkred'> variable</font></b>: displays the data within <b>variable</b>.</td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/delete</font><font color='darkred'> variable</font></b>: deletes <b>variable</b>."
@@ -58,7 +87,6 @@ scripts.commands = {
 		var display = "<tr><td></td></tr>" 
 		+ "<tr><td><b>Name:</b> " + scripts.about.script_name + "</td></tr>" 
 		+ "<tr><td><b>Scripts Length:</b> " + numberofscripts + " scripts, " + scriptlines + " lines, " + scriptcharacters + " characters.</td></tr>" 
-		+ "<tr><td><b>Scripts Registered:</b> " + scripts.options.registered + "</td></tr>" 
 		+ "<tr><td><b>Scripts Last Loaded:</b> " + scripts.load + "</td></tr>" 
 		+ "<tr><td><b>Version:</b> " + scripts.about.version_number + " (" + scripts.about.version_name + ") [" + scripts.about.version_date + "]</td></tr>" 
 		+ "<tr><td><b>Version Status:</b> " + scripts.version + "</td></tr>" 
@@ -81,8 +109,11 @@ scripts.commands = {
 		}
 		sys.clearChat();
 		if (scripts.options.broadcast === "on") {
-			if (global.auth !== undefined) {
+			if (global.auth !== undefined && scripts.options.echo === "off") {
 				auth.echo("owner", "The server window has been cleared by " + sys.name(src) + "!", -1);
+			}
+			else {
+				scripts.echo("The server window has been cleared by " + sys.name(src) + "!", -1);
 			}
 			return;
 		}
@@ -98,8 +129,11 @@ scripts.commands = {
 		try { 
 			eval("print(" + command + ")");
 			if (scripts.options.broadcast === "on") {
-				if (global.auth !== undefined) {
+				if (global.auth !== undefined && scripts.options.echo === "off") {
 					auth.echo("owner", sys.name(src) + " has printed the following code on the server window:<br/>" + escapehtml(command), -1);
+				}
+				else {
+					scripts.echo(sys.name(src) + " has printed the following code on the server window:<br/>" + escapehtml(command), -1);
 				}
 				return;
 			}
@@ -118,8 +152,11 @@ scripts.commands = {
 		command = command.join("*");
 		sys.system(command);
 		if (scripts.options.broadcast === "on") {
-			if (global.auth !== undefined) {
+			if (global.auth !== undefined && scripts.options.echo === "off") {
 				auth.echo("owner", sys.name(src) + " has used the following system command:<br/>" + escapehtml(command), -1);
+			}
+			else {
+				scripts.echo(sys.name(src) + " has used the following system command:<br/>" + escapehtml(command), -1);
 			}
 			return;
 		}
@@ -144,8 +181,11 @@ scripts.commands = {
 		var runtime = new Date() - starttime;
 		display += "<tr><td><center><b>Evaluation Runtime:</b> " + runtime + " milliseconds</center></td></tr>";
 		if (scripts.options.broadcast === "on") {
-			if (global.auth !== undefined) {
+			if (global.auth !== undefined && scripts.options.echo === "off") {
 				auth.echo("owner", sys.name(src) + " has evaluated the following code in " + runtime + " milliseconds:<br/>" + escapehtml(command), -1);
+			}
+			else {
+				scripts.echo(sys.name(src) + " has evaluated the following code in " + runtime + " milliseconds:<br/>" + escapehtml(command), -1);
 			}
 			return;
 		}
@@ -171,8 +211,11 @@ scripts.commands = {
 		+ "<tr><td></td></tr>"
 		+ "<tr><td>" + escapehtml(String(globalvariable)).replace(/\n/g, "<br/>").replace(/\t/g, "&nbsp;") + "</td></tr>";
 		if (scripts.options.broadcast === "on") {
-			if (global.auth !== undefined) {
+			if (global.auth !== undefined && scripts.options.echo === "off") {
 				auth.echo("owner", "<u>" + sys.name(src) + " has got the content of " + command[1] + "</u>" + "<p align='left'> Type: " + datatype + "<br/><br/>" + escapehtml(String(globalvariable)).replace(/\n/g, "<br/>").replace(/\t/g, "&nbsp;") + "</p>", -1);
+			}
+			else {
+				scripts.echo("<u>" + sys.name(src) + " has got the content of " + command[1] + "</u>" + "<p align='left'> Type: " + datatype + "<br/><br/>" + escapehtml(String(globalvariable)).replace(/\n/g, "<br/>").replace(/\t/g, "&nbsp;") + "</p>", -1);
 			}
 			return;
 		}
@@ -192,8 +235,11 @@ scripts.commands = {
 		}
 		eval("delete global." + command[1]);
 		if (scripts.options.broadcast === "on"){
-			if (global.auth !== undefined) {
+			if (global.auth !== undefined && scripts.options.echo === "off") {
 				auth.echo("owner", sys.name(src) + " has deleted the variable: " + command[1], -1);
+			}
+			else {
+				scripts.echo(sys.name(src) + " has deleted the variable: " + command[1], -1);
 			}
 			return;
 		}
@@ -216,8 +262,11 @@ scripts.commands = {
 			}
 			scripts.options.broadcast = "on";
 			sys.writeToFile("script_options.json", JSON.stringify(scripts.options));
-			if (global.auth !== undefined) {
+			if (global.auth !== undefined && scripts.options.echo === "off") {
 				auth.echo("owner", "Broadcasting script changes has been turned on by " + srcname + "!", -1);
+			}
+			else {
+				scripts.echo("Broadcasting script changes has been turned on by " + srcname + "!", -1);
 			}
 			return;
 		}
@@ -227,12 +276,17 @@ scripts.commands = {
 		}
 		scripts.options.broadcast = "off";
 		sys.writeToFile("script_options.json", JSON.stringify(scripts.options));
-		if (global.auth !== undefined) {
+		if (global.auth !== undefined && scripts.options.echo === "off") {
 			auth.echo("owner", "Broadcasting script changes has been turned off by " + srcname + "!", -1);
+		}
+		else {
+			scripts.echo("Broadcasting script changes has been turned off by " + srcname + "!", -1);
 		}
 	},
 	settings: function(src, channel, command) {
-		var display = "<tr><td><b> Broadcasting Script Changes: </b>" + scripts.options.broadcast + "</td></tr>";
+		var display = "<tr><td><b> Broadcasting Script Changes: </b>" + scripts.options.broadcast + "</td></tr>"
+		+ "<tr><td><b> Scripts Echo: </b>" + scripts.options.echo + "</td></tr>"
+		+ "<tr><td><b> Auto-Update Settings: </b>" + scripts.options.autoupdatesettings + "</td></tr>";
 		commanddisplay(src, "Settings", display, channel);
 	},
 	load: function (src, channel, command){
@@ -241,9 +295,95 @@ scripts.commands = {
 			return;
 		}
 		var srcname = sys.name(src), scriptcontent = sys.getFileContent("scripts.js");
-		if (global.auth !== undefined) {
+		if (global.auth !== undefined && scripts.options.echo === "off") {
 			auth.echo("owner", "The Server Script has been loaded from file by " + srcname + "!");
 		}
+		else {
+			scripts.echo("The Server Script has been loaded from file by " + srcname + "!");
+		}
 		sys.changeScript(scriptcontent);
+	},
+	secho: function(src, channel, command){
+		if (sys.auth(src) < 1) {
+			commanderror(src, "Sorry, you do not have permission to use the scripts echo command (mod command).", channel);
+			return;
+		}
+		var channelid = sys.channelId(command[command.length - 1]);
+		sys.sendAll(sys.name(src) + ":", channelid);
+		command.splice(0, 1);
+		if (channelid !== undefined) {
+			command.splice(command.length - 1, 1);
+		}
+		command = command.join("*");
+		scripts.echo(command, channelid);
+	},
+	asecho: function(src, channel, command){
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the auto scripts echo command (mod command).", channel);
+			return;
+		}
+		var arg = command[1].toLowerCase(), srcname = sys.name(src);
+		if (arg !== "on" && arg !== "off") {
+			commanderror(src, "Sorry, you are required to specify on or off.", channel);
+			return;
+		}
+		if (arg === "on") {
+			if (scripts.options.echo === "on") {
+				commanderror(src, "Sorry, announcing by scripts echo is already turned on.", channel);
+				return;
+			}
+			scripts.options.echo = "on";
+			sys.writeToFile("script_options.json", JSON.stringify(scripts.options));
+			scripts.echo("Announcing by scripts echo has been turned on by " + srcname + "!", -1);
+			return;
+		}
+		if (scripts.options.echo === "off") {
+			commanderror(src, "Sorry, announcing by scripts echo is already turned off.", channel);
+			return;
+		}
+		scripts.options.echo = "off";
+		sys.writeToFile("script_options.json", JSON.stringify(scripts.options));
+		if (global.auth !== undefined) {
+			auth.echo("owner", "Announcing by scripts echo has been turned off by " + srcname + "!", -1);
+		}
+	},
+	usettings: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the update settings command (owner command).", channel);
+			return;
+		}
+		if (scripts.options.autoupdatesettings === "0"){
+			commanderror(src, "Sorry, you could not update any settings because auto-update settings is set to 0.", channel);
+			return;
+		}
+		scripts.updatejsons();
+		if (global.auth !== undefined && scripts.options.echo === "off") {
+			auth.echo("owner", "The scripts settings have been updated by " + sys.name(src) + "!", -1);
+		}
+		else {
+			scripts.echo("The scripts settings have been updated by " + sys.name(src) + "!", -1);
+		}
+	},
+	ausettings: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the auto-update scripts settings command (owner command).", channel);
+			return;
+		}
+		if (command[1] != "0" && command[1] != "1") {
+			commanderror(src, "Sorry, you must specify either 0 or 1 for the auto-update scripts settings command.", channel);
+			return;
+		}
+		if (command[1] === scripts.options.autoupdatesettings) {
+			commanderror(src, "The scripts auto-update settings is already set to " + command[1] + ".", channel);
+			return;
+		}
+		scripts.options.autoupdatesettings = command[1];
+		sys.writeToFile("script_options.json", JSON.stringify(scripts.options));
+		if (global.auth !== undefined && scripts.options.echo === "off") {
+			auth.echo("owner", "The scripts auto-update settings has been changed to " + command[1] + " by " + sys.name(src) + "!", -1);
+		}
+		else {
+			scripts.echo("The scripts auto-update settings has been changed to " + command[1] + " by " + sys.name(src) + "!", -1)
+		}
 	}
 }

@@ -24,7 +24,9 @@ auth.echo = function (group, text, channel) {
 
 /* Main Chat PM Function */
 auth.pm = function (group, text, from, to, date, receiver, channel) {
-	var display = "<ping/><timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 " + auth.options[group].minorcolor + ", stop:0.5 " + auth.options[group].majorcolor + "); color:" + auth.options[group].textcolor + ";'><tr><th>Personal Message from <i>" + from + "</i> to <i>" + String(to).replace(/,/gi, ", ") + "</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: <small>" + date + "</small></th></tr><tr><td><center><b><big>" + text + "</big></b></center></td></tr></table>";
+	var sentago = new Date() - date;
+	sentago = Math.floor(sentago/1000) === 0 ? " (sent just now) ": " (sent " + converttime(sentago) + " ago) "
+	var display = "<ping/><timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 " + auth.options[group].minorcolor + ", stop:0.5 " + auth.options[group].majorcolor + "); color:" + auth.options[group].textcolor + ";'><tr><th>Personal Message from <i>" + from + "</i> to <i>" + String(to).replace(/,/gi, ", ") + "</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: <small>" + date + sentago + "</small></th></tr><tr><td><center><b><big>" + text + "</big></b></center></td></tr></table>";
 	var index;
 	if (channel > -1) {
 			sys.sendHtmlMessage(sys.id(receiver), display, channel);
@@ -37,12 +39,12 @@ auth.pm = function (group, text, from, to, date, receiver, channel) {
 /* Finding correct auth group*/
 auth.groupName=function(name){
 	var authLevel=sys.dbAuth(name);
-	return {3:"owner",2:"admin",1:"mod",0:"user"}[authLevel];
+	return (["user", "mod", "admin", "owner"][authLevel] || "user");
 }
 
 /* Finding auth level of server authgroup */
 auth.level= function (group) {
-	return {"owner":3,"admin":2,"mod":1, "user":0}[group]
+	return ({"owner":3,"admin":2,"mod":1, "user":0}[group] || 0);
 }
 
 /* Function that returns a list of auth from a server auth level */
@@ -114,6 +116,7 @@ if (auth.members !== undefined){
 auth.commands = {
 	authcommands: function (src, channel, command) {
 		var osymbol = auth.options["owner"].image,
+			asymbol = auth.options["admin"].image,
 			msymbol = auth.options["mod"].image,
 			usymbol = auth.options["user"].image;
 		var display = typecommands
@@ -154,8 +157,8 @@ auth.commands = {
 			commanderror(src, "Sorry, the echo command did not execute as no valid auth group argument was specified. The following are auth group arguments: " + String(authnames).replace(/,/gi, ", ") + ".<br/> E.G. \"/echo owner*hello\"", channel);
 			return;
 		}
-		sys.sendAll(sys.name(src) + ":", channelid);
 		var channelid = sys.channelId(command[command.length - 1]);
+		sys.sendAll(sys.name(src) + ":", channelid);
 		command.splice(0, 2);
 		if (channelid !== undefined) {
 			command.splice(command.length - 1, 1);

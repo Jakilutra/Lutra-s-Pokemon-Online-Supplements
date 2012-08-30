@@ -1,5 +1,6 @@
 {
 	"autoupdate": "PO",
 	"name": "servertiers",
-	"autoupdatesettings": "1"
+	"autoupdatesettings": "1",
+	"echo": "off"
 }

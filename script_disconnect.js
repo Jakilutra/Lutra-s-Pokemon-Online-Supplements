@@ -1,24 +1,31 @@
 /* Loading Disconnect Object and Settings */
 disconnect = {};
 set(construction.source, "bans", "disconnect", "bans");
+set(construction.source, "disconnectoptions", "disconnect", "options");
 
 /* Kick Function */
 disconnect.kick = function (src, trgt, reason){
 	var srcname = sys.name(src), trgtname = sys.name(trgt), 
 	reasonline = reason === undefined ? "" : "<br/>Reason: " + reason,
 	display = trgtname + " has been kicked from the server by " + srcname + "!" + reasonline;
-	if (global.auth !== undefined) {
+	if (global.auth !== undefined && disconnect.options.echo === "off") {
 		auth.echo("mod", display);
+	}
+	else {
+		disconnect.echo(display);		
 	}
 	sys.quickCall(function () {sys.kick(trgt);}, 200);
 }
 
 /* Ban Function */
 disconnect.ban = function (srcname, trgtname, type, reason, duration_time, duration_unit) {
-	type = type == 1 ? "by IP address" : "";
-	var lowerSrcName = srcname.toLowerCase(),
-		lowerTrgtName = trgtname.toLowerCase(),
-		startdate = new Date(),
+	if (type === 0){
+		type = ""
+	}
+	if (type === 1){
+		type = "by IP address"
+	}
+	var lowerSrcName = srcname.toLowerCase(), lowerTrgtName = trgtname.toLowerCase(),startdate = new Date(),
 		duration = duration_time === undefined ? "Indefinite" : converttoseconds(duration_unit, duration_time), 
 		enddate = duration === "Indefinite" ? "Unknown" : String(new Date(Number(startdate) + duration*1000)),
 		reasonline = reason === undefined ? "" : "<br/>Reason: " + reason, 
@@ -33,8 +40,16 @@ disconnect.ban = function (srcname, trgtname, type, reason, duration_time, durat
 		"enddate": enddate
 	}
 	sys.writeToFile("script_bans.json", JSON.stringify(disconnect.bans));
-	if (global.auth !== undefined) {
-		auth.echo("admin", display);
+	if (type !== 2){ // silent ban check
+		if (global.auth !== undefined && disconnect.options.echo === "off") {
+			auth.echo("admin", display);
+		}
+		else {
+			disconnect.echo(display);
+		}
+	}
+	else {
+		commanddisplay(sys.id(srcname), "Silent Ban", "<center><b>" + trgtname + " has been banned from the server " + durationline + "!" + reasonline + "</b></center>");
 	}
 	var trgt = sys.id(trgtname);
 	if (trgt !== undefined){
@@ -45,16 +60,49 @@ disconnect.ban = function (srcname, trgtname, type, reason, duration_time, durat
 	}
 }
 
+/* Disconnect Announcement Function */
+disconnect.echo = function (text, channel) {
+	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 black, stop:0.5 chocolate); color:white;'><tr><td><center><b><big>" + text + "</big></b><small> - Disconnect Announcement </small></center></td></tr></table>";
+	if (channel > -1) {
+		sys.sendHtmlAll(display, channel);
+	}
+	else {
+		sys.sendHtmlAll(display);
+	}
+}
+
+/* Auto-Update Disconnect Settings */
+disconnect.updatejsons = function () {
+	disconnect.jsonsupdated = new Array();
+	if (disconnect.options.autoupdatesettings === "1") {
+		sys.webCall(construction.source + "script_disconnectoptions.json", "downloadjson('" + construction.source + "', 'disconnectoptions', 'disconnect', 'options');");
+		disconnect.jsonsupdated.push("disconnectoptions");
+	}
+	if (disconnect.jsonsupdated.length !== 0){
+		print("The following disconnect settings were updated : " + String(disconnect.jsonsupdated).replace(/,/gi, ", ") + ".");
+	}
+}
+if (disconnect.options !== undefined){
+	disconnect.updatejsons();
+}
+
 /* Disconnect Commands */
 disconnect.commands = {
 	disconnectcommands: function (src, channel, command) {
-		var osymbol = "", asymbol = "", msymbol = "";
+		var osymbol = "", asymbol = "", msymbol = "", usymbol = "";
 		if (global.auth !== undefined){
 			osymbol = auth.options["owner"].image;
 			asymbol = auth.options["admin"].image;
 			msymbol = auth.options["mod"].image;
+			usymbol = auth.options["user"].image;
 		}
 		var display = typecommands
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/adecho</font><font color='darkred'> status</font></b>: turns announcing by disconnect echo <b>status</b>. <b>status</b> is either on or off.</td></tr>" 
+		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/decho</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the disconnect echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/dsettings</font></b>: displays the disconnect settings. </td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/audsettings</font><font color='darkred'> value</font></b>: if <b>value</b> is 0 or 1 - auto-updates: no settings or all settings respectively. </td></tr>" 
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/udsettings</font></b>: updates the disconnect settings according to the auto-update disconnect setting. </td></tr>" 
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/silentban</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/silentban</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: silent bans <b>player</b> indefinitely or for <b>time unit</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/ban</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/ban</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: bans <b>player</b> indefinitely or for <b>time unit</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/unban</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b>: unbans <b>player</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/bans</font></b>: displays a table of server bans.</td></tr>"
@@ -176,8 +224,11 @@ disconnect.commands = {
 		}
 		var reasonline = reason === undefined ? "" : "<br/>Reason: " + reason, 
 		display = members[trgtname] + " has been unbanned from the server by " + srcname + "!" + reasonline;
-		if (global.auth !== undefined) {
+		if (global.auth !== undefined && disconnect.options.echo === "off") {
 			auth.echo("admin", display);
+		}
+		else {
+			disconnect.echo(display);
 		}
 	},
 	bans: function (src, channel, command){
@@ -234,8 +285,131 @@ disconnect.commands = {
 			sys.unban(banlist[index]);
 		}
 		var display = "The server ban list has been cleared by " + sys.name(src) + ".";
-		if (global.auth !== undefined) {
+		if (global.auth !== undefined && disconnect.options.echo === "off") {
 			auth.echo("admin", display);
+		}
+		else {
+			disconnect.echo(display);
+		}
+	},
+	decho: function(src, channel, command){
+		if (sys.auth(src) < 1) {
+			commanderror(src, "Sorry, you do not have permission to use the disconnect echo command (mod command).", channel);
+			return;
+		}
+		var channelid = sys.channelId(command[command.length - 1]);
+		sys.sendAll(sys.name(src) + ":", channelid);
+		command.splice(0, 1);
+		if (channelid !== undefined) {
+			command.splice(command.length - 1, 1);
+		}
+		command = command.join("*");
+		disconnect.echo(command, channelid);
+	},
+	adecho: function(src, channel, command){
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the auto disconnect echo command (mod command).", channel);
+			return;
+		}
+		var arg = command[1].toLowerCase(), srcname = sys.name(src);
+		if (arg !== "on" && arg !== "off") {
+			commanderror(src, "Sorry, you are required to specify on or off.", channel);
+			return;
+		}
+		if (arg === "on") {
+			if (disconnect.options.echo === "on") {
+				commanderror(src, "Sorry, announcing by disconnect echo is already turned on.", channel);
+				return;
+			}
+			disconnect.options.echo = "on";
+			sys.writeToFile("script_disconnectoptions.json", JSON.stringify(disconnect.options));
+			disconnect.echo("Announcing by disconnect echo has been turned on by " + srcname + "!", -1);
+			return;
+		}
+		if (disconnect.options.echo === "off") {
+			commanderror(src, "Sorry, announcing by disconnect echo is already turned off.", channel);
+			return;
+		}
+		disconnect.options.echo = "off";
+		sys.writeToFile("script_disconnectoptions.json", JSON.stringify(disconnect.options));
+		if (global.auth !== undefined) {
+			auth.echo("owner", "Announcing by disconnect echo has been turned off by " + srcname + "!", -1);
+		}
+	},
+	dsettings: function(src, channel, command) {
+		var display = "<tr><td><b> Disconnect Echo: </b>" + disconnect.options.echo + "</td></tr>"
+		+ "<tr><td><b> Auto-Update Settings: </b>" + disconnect.options.autoupdatesettings + "</td></tr>";
+		commanddisplay(src, "Disconnect Settings", display, channel);
+	},
+	silentban: function (src, channel, command){
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the silent ban command (owner command).", channel);
+			return;
+		}
+		var trgtname = command[1].toLowerCase();
+		if (members[trgtname] === undefined){
+			commanderror(src, "Sorry, " + command[1] + " could not be found in the member database.", channel);
+			return;
+		}
+		if (disconnect.bans[trgtname] !== undefined || sys.banList().indexOf(trgtname) !== -1){
+			commanderror(src, "Sorry, " + members[trgtname] + " is undergoing a current ban.", channel);
+			return;
+		}
+		var reason;
+		if (command.length > 3){
+			var time = parseInt(command[2]), timeunit = command[3].toLowerCase();
+			if (!nottimeunit(timeunit) && !isNaN(time)){
+				if (command.length > 4){
+					command.splice(0,4);
+					reason = command.join("*");
+				}
+				disconnect.ban(sys.name(src), members[trgtname], 2, reason, time, timeunit);
+				return;
+			}
+		}
+		if (command.length > 2){
+			command.splice(0,2);
+			reason = command.join("*");
+		}
+		disconnect.ban(sys.name(src), members[trgtname], 2, reason);
+	},
+	udsettings: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the update disconnect settings command (owner command).", channel);
+			return;
+		}
+		if (disconnect.options.autoupdatesettings === "0"){
+			commanderror(src, "Sorry, you could not update any settings because auto-update settings is set to 0.", channel);
+			return;
+		}
+		disconnect.updatejsons();
+		if (global.auth !== undefined && disconnect.options.echo === "off") {
+			auth.echo("owner", "The disconnect settings have been updated by " + sys.name(src) + "!", -1);
+		}
+		else {
+			disconnect.echo("The disconnect settings have been updated by " + sys.name(src) + "!", -1);
+		}
+	},
+	audsettings: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the auto-update disconnect settings command (owner command).", channel);
+			return;
+		}
+		if (command[1] != "0" && command[1] != "1") {
+			commanderror(src, "Sorry, you must specify either 0 or 1 for the auto-update disconnect settings command.", channel);
+			return;
+		}
+		if (command[1] === disconnect.options.autoupdatesettings) {
+			commanderror(src, "The disconnect auto-update settings is already set to " + command[1] + ".", channel);
+			return;
+		}
+		disconnect.options.autoupdatesettings = command[1];
+		sys.writeToFile("script_disconnectoptions.json", JSON.stringify(disconnect.options));
+		if (global.auth !== undefined && disconnect.options.echo === "off") {
+			auth.echo("owner", "The disconnect auto-update settings has been changed to " + command[1] + " by " + sys.name(src) + "!", -1);
+		}
+		else {
+			disconnect.echo("The disconnect auto-update settings has been changed to " + command[1] + " by " + sys.name(src) + "!", -1)
 		}
 	}
 }
