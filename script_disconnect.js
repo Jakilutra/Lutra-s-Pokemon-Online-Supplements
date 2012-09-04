@@ -33,12 +33,14 @@ disconnect.ban = function (srcname, trgtname, type, reason, duration_time, durat
 		display = trgtname + " has been banned " + type + " from the server by " + srcname + durationline + "!" + reasonline;
 	disconnect.bans[lowerTrgtName] = {};
 	disconnect.bans[lowerTrgtName] = {
+		"ip" : sys.dbIp(trgtname),
 		"banner" : lowerSrcName,
 		"reason" : reason,
 		"startdate" : String(startdate),
 		"duration" : duration,
 		"enddate": enddate
 	}
+	disconnect.bannedips[sys.dbIp(trgtname)] = true;
 	sys.writeToFile("script_bans.json", JSON.stringify(disconnect.bans));
 	if (type !== 2){ // silent ban check
 		if (global.auth !== undefined && disconnect.options.echo === "off") {
@@ -59,6 +61,16 @@ disconnect.ban = function (srcname, trgtname, type, reason, duration_time, durat
 		sys.quickCall(function () {sys.ban(trgtname);}, 400);
 	}
 }
+
+/* Banned Ips Object Load */
+disconnect.bannedipsload = function(){
+	disconnect.bannedips = new Object();
+	var index;
+	for (index in disconnect.bans){
+		disconnect.bannedips[disconnect.bans[index].ip] = true;
+	}
+}
+disconnect.bannedipsload();
 
 /* Disconnect Announcement Function */
 disconnect.echo = function (text, channel) {
@@ -210,10 +222,11 @@ disconnect.commands = {
 			delete disconnect.bans[trgtname];
 			sys.writeToFile("script_bans.json", JSON.stringify(disconnect.bans));
 		}
-		var index;
-		for (index in disconnect.bans){
-			if (sys.dbIp(index) == sys.dbIp(trgtname)){
-				delete disconnect.bans[trgtname];
+		delete disconnect.bannedips[sys.dbIp(trgtname)];
+		var i;
+		for (i in disconnect.bans){
+			if (disconnect.bans[i].ip === sys.dbIp(trgtname)){
+				delete disconnect.bans[i];
 				sys.writeToFile("script_bans.json", JSON.stringify(disconnect.bans));
 			}
 		}
@@ -261,7 +274,7 @@ disconnect.commands = {
 				duration = "Indefinite";
 				timeleft = "Unknown";
 			}
-			display += "<tr><td>" + members[index] + "</td><td>" + sys.dbIp(index) + "</td><td>" + members[bans[index].banner] + "</td><td>" + bans[index].reason + "</td><td><small>" + bans[index].startdate + "</small></td><td>" + duration + "</td><td><small>" + bans[index].enddate + "</small></td><td>" + timeleft +  "</td></tr>";
+			display += "<tr><td>" + members[index] + "</td><td>" + bans[index].ip + "</td><td>" + members[bans[index].banner] + "</td><td>" + bans[index].reason + "</td><td><small>" + bans[index].startdate + "</small></td><td>" + duration + "</td><td><small>" + bans[index].enddate + "</small></td><td>" + timeleft +  "</td></tr>";
 		}
 		if (bannedplayers === 0 && banlist.length === 0){
 			commanderror(src, "Sorry, the Ban List is currently empty.", channel);
@@ -308,7 +321,7 @@ disconnect.commands = {
 	},
 	adecho: function(src, channel, command){
 		if (sys.auth(src) < 3) {
-			commanderror(src, "Sorry, you do not have permission to use the auto disconnect echo command (mod command).", channel);
+			commanderror(src, "Sorry, you do not have permission to use the auto disconnect echo command (owner command).", channel);
 			return;
 		}
 		var arg = command[1].toLowerCase(), srcname = sys.name(src);
@@ -418,17 +431,22 @@ disconnect.commands = {
 append("beforePlayerKick", "sys.stopEvent(); disconnect.kick(src,trgt);");
 
 /* Ban Event */
-append("beforePlayerBan", "sys.stopEvent(); var srcname = sys.name(src), trgtname = sys.name(trgt); disconnect.ban(srcname, trgtname);");
+append("beforePlayerBan", "sys.stopEvent(); var srcname = sys.name(src), trgtname = sys.name(trgt); disconnect.ban(srcname, trgtname, 0);");
 
 /* Ban Checks */
 var timed_ban_check = "\u000A"
-+ "\t\tvar lowerSrcName = sys.name(src).toLowerCase(), current_date = new Date();\u000A"
-+ "\t\tif(disconnect.bans[lowerSrcName] !== undefined){\u000A"
-+ "\t\t\tif (Number(new Date(disconnect.bans[lowerSrcName].enddate)) < Number(current_date) || disconnect.bans[lowerSrcName].enddate === 'Unknown'){\u000A"
-+ "\t\t\t\tdelete disconnect.bans[lowerSrcName];\u000A"
-+ "\t\t\t\tsys.writeToFile('script_bans.json',JSON.stringify(disconnect.bans));\u000A"
-+ "\t\t\t\treturn;\u000A"
++ "\t\tvar lowerSrcName = sys.name(src).toLowerCase(), srcip = sys.ip(src), current_date = new Date(), index;\u000A"
++ "\t\tif(disconnect.bannedips[srcip] || disconnect.bans[lowerSrcName] !== undefined){\u000A"
++ "\t\t\tfor (index in disconnect.bans){\u000A"
++ "\t\t\t\tif (disconnect.bans[index].ip === srcip || index === lowerSrcName){\u000A"	
++ "\t\t\t\t\tif (Number(new Date(disconnect.bans[index].enddate)) < Number(current_date) || disconnect.bans[index].enddate === 'Unknown'){\u000A"
++ "\t\t\t\t\t\tdelete disconnect.bannedips[srcip];\u000A"
++ "\t\t\t\t\t\tdelete disconnect.bans[index];\u000A"
++ "\t\t\t\t\t\tcontinue;\u000A"
++ "\t\t\t\t\t}\u000A"
++ "\t\t\t\t\tsys.stopEvent();\u000A"
++ "\t\t\t\t}\u000A"
 + "\t\t\t}\u000A"
-+ "\t\t\tsys.stopEvent();\u000A"
-+ "\t\t}\u000A";
++ "\t\t\tsys.writeToFile('script_bans.json',JSON.stringify(disconnect.bans));\u000A"
++ "\t\t}";
 prepend("beforeLogIn", timed_ban_check);

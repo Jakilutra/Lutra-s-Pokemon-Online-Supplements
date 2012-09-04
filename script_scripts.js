@@ -319,7 +319,7 @@ scripts.commands = {
 	},
 	asecho: function(src, channel, command){
 		if (sys.auth(src) < 3) {
-			commanderror(src, "Sorry, you do not have permission to use the auto scripts echo command (mod command).", channel);
+			commanderror(src, "Sorry, you do not have permission to use the auto scripts echo command (owner command).", channel);
 			return;
 		}
 		var arg = command[1].toLowerCase(), srcname = sys.name(src);

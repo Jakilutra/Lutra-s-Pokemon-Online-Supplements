@@ -207,13 +207,13 @@
 	
 	/* Convert Milliseconds to a Time String Function */	
 	converttime = function (time){
-		if (time > 86400000){
+		if (time >= 86400000){
 			return Math.floor(time/86400000) + " Days, " + Math.floor((time%86400000)/3600000) + " Hours, " + Math.floor(((time%86400000)%3600000)/60000) + " Minutes, " + Math.floor((((time%86400000)%3600000)%60000)/1000) + " Seconds";
 		}
-		if (time > 3600000){
+		if (time >= 3600000){
 			return Math.floor((time%86400000)/3600000) + " Hours, " + Math.floor(((time%86400000)%3600000)/60000) + " Minutes, " + Math.floor((((time%86400000)%3600000)%60000)/1000) + " Seconds";
 		}
-		if (time > 60000){
+		if (time >= 60000){
 			return Math.floor(((time%86400000)%3600000)/60000) + " Minutes, " + Math.floor((((time%86400000)%3600000)%60000)/1000) + " Seconds";
 		}
 		return Math.floor((((time%86400000)%3600000)%60000)/1000) + " Seconds" ;

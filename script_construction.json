@@ -1,5 +1,5 @@
 {
-	"units": ["auth", "tiers", "scripts", "disconnect"],
+	"units": ["auth", "tiers", "scripts", "disconnect", "silence"],
 	"source": "http://pokemonperfect.com/",
 	"auto_update": "on"
 }

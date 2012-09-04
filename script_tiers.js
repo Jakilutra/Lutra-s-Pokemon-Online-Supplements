@@ -383,7 +383,7 @@ tiers.commands = {
 	},
 	atecho: function(src, channel, command){
 		if (sys.auth(src) < 3) {
-			commanderror(src, "Sorry, you do not have permission to use the auto tiers echo command (mod command).", channel);
+			commanderror(src, "Sorry, you do not have permission to use the auto tiers echo command (owner command).", channel);
 			return;
 		}
 		var arg = command[1].toLowerCase(), srcname = sys.name(src);
