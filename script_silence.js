@@ -48,7 +48,7 @@ silence.mute = function (srcname, trgtname, type, reason, duration_time, duratio
 		enddate = duration === "Indefinite" ? "Unknown" : String(new Date(Number(startdate) + duration*1000)),
 		reasonline = reason === undefined ? "" : "<br/>Reason: " + reason, 
 		durationline = duration === "Indefinite" ? "": " for " + duration_time + " " + duration_unit,
-		display = trgtname + " has been muted " + type + " from the server by " + srcname + durationline + "!" + reasonline;
+		display = trgtname + " has been muted " + type + " by " + srcname + durationline + "!" + reasonline;
 	silence.mutes[lowerTrgtName] = {};
 	silence.mutes[lowerTrgtName] = {
 		"ip" : sys.dbIp(trgtname),
@@ -69,7 +69,7 @@ silence.mute = function (srcname, trgtname, type, reason, duration_time, duratio
 		}
 	}
 	else {
-		commanddisplay(sys.id(srcname), "Silent Mute", "<center><b>" + trgtname + " has been muted from the server " + durationline + "!" + reasonline + "</b></center>");
+		commanddisplay(sys.id(srcname), "Silent Mute", "<center><b>" + trgtname + " has been muted " + durationline + "!" + reasonline + "</b></center>");
 	}
 }
 
@@ -212,7 +212,7 @@ silence.commands = {
 			reason = command.join("*");
 		}
 		var reasonline = reason === undefined ? "" : "<br/>Reason: " + reason, 
-		display = members[trgtname] + " has been unmuted from the server by " + srcname + "!" + reasonline;
+		display = members[trgtname] + " has been unmuted by " + srcname + "!" + reasonline;
 		if (global.auth !== undefined && silence.options.echo === "off") {
 			auth.echo("mod", display);
 		}
