@@ -1,12 +1,12 @@
 {
     "script_name": "Lutra's Server Script",
-    "version_name": "Aipom learns Fury Swipes!",
-    "version_number": "A.18",
-    "version_date": "4th September 2012",
+    "version_name": "Aipom learns Fury Swipes! Special!",
+    "version_number": "A.18S",
+    "version_date": "6th September 2012",
     "script_repo_link": "https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Supplements",
     "script_info_link": "https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Supplements/wiki/PO-Server-Scripts",
     "major_contributors": ["Lutra"],
     "minor_contributors": ["Intel_iX", "TheUnknownOne", "Swimming95"],
     "specialthanks": ["coyotte508", "Lamperi", "Mystra", "NeO", "Juno", "nesan", "kupo", "SkarmPiss", "GaryTheGengar", "raygun"],
-    "latest": "Fixed timed bans so they ban the IP also. Added /mute, /unmute, /mutes, /clearmutes, /silence, /supersilence, /megasilence, /unsilence, /silencesettings, /silentmute, /silecho, /asilecho, /ausilencesettings, /usilencesettings."
+    "latest": "Added /me, /ghtml, /imp, /reverse, /mecho, /amecho, /msettings, /aumsettings, /umsettings."
 }

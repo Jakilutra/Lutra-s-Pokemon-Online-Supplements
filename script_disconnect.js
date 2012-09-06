@@ -110,17 +110,17 @@ disconnect.commands = {
 		}
 		var display = typecommands
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/adecho</font><font color='darkred'> status</font></b>: turns announcing by disconnect echo <b>status</b>. <b>status</b> is either on or off.</td></tr>" 
-		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/decho</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the disconnect echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>"
-		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/dsettings</font></b>: displays the disconnect settings. </td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/audsettings</font><font color='darkred'> value</font></b>: if <b>value</b> is 0 or 1 - auto-updates: no settings or all settings respectively. </td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/udsettings</font></b>: updates the disconnect settings according to the auto-update disconnect setting. </td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/silentban</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/silentban</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: silent bans <b>player</b> indefinitely or for <b>time unit</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/silentkick</font><font color='darkred'> player</font></b>: silent kicks <b>player</b> from the server.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/ban</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/ban</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: bans <b>player</b> indefinitely or for <b>time unit</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/unban</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b>: unbans <b>player</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/bans</font></b>: displays a table of server bans.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/clearbans</font></b>: clears all server bans.</td></tr>"
-		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/silentkick</font><font color='darkred'> player</font></b>: silent kicks <b>player</b> from the server.</td></tr>"
-		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/kick</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b>: kicks <b>player</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>";
+		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/kick</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b>: kicks <b>player</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
+		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/decho</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the disconnect echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/dsettings</font></b>: displays the disconnect settings. </td></tr>";
 		commanddisplay(src, "Disconnect Commands", display, channel);
 	},
 	kick: function (src, channel, command) {
@@ -313,7 +313,7 @@ disconnect.commands = {
 		var channelid = sys.channelId(command[command.length - 1]);
 		sys.sendAll(sys.name(src) + ":", channelid);
 		command.splice(0, 1);
-		if (channelid !== undefined) {
+		if (channelid !== undefined && command.length > 1) {
 			command.splice(command.length - 1, 1);
 		}
 		command = command.join("*");

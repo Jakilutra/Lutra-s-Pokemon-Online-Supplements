@@ -60,9 +60,6 @@ scripts.commands = {
 		}
 		var display = typecommands
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/asecho</font><font color='darkred'> status</font></b>: turns announcing by scripts echo <b>status</b>. <b>status</b> is either on or off.</td></tr>" 
-		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/secho</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the scripts echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>" 
-		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/about</font></b>: displays script information. </td></tr>"
-		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/settings</font></b>: displays other script settings. </td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/ausettings</font><font color='darkred'> value</font></b>: if <b>value</b> is 0 or 1 - auto-updates: no settings or all settings respectively. </td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/usettings</font></b>: updates the scripts settings according to the auto-update scripts setting. </td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/load</font></b>: loads the base script from file. </td></tr>"
@@ -73,6 +70,9 @@ scripts.commands = {
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/print</font><font color='darkred'> data</font></b>: prints <b>data</b> on the server window. <b>data</b> is a global variable, object, string, number or boolean.</td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/clear</font></b>: clears the server window text. </td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/broadcast</font><font color='darkred'> status</font></b>: turns the broadcasting of get, delete, eval, system, print and clear commands <b>status</b>. <b>status</b> is either on or off. </td></tr>"
+		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/secho</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the scripts echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>" 
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/about</font></b>: displays script information. </td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/settings</font></b>: displays other script settings. </td></tr>";
 		commanddisplay(src, "Scripts Commands", display, channel);
 	},
 	about: function (src, channel, command) {
@@ -311,7 +311,7 @@ scripts.commands = {
 		var channelid = sys.channelId(command[command.length - 1]);
 		sys.sendAll(sys.name(src) + ":", channelid);
 		command.splice(0, 1);
-		if (channelid !== undefined) {
+		if (channelid !== undefined && command.length > 1) {
 			command.splice(command.length - 1, 1);
 		}
 		command = command.join("*");

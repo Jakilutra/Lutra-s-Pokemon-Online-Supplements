@@ -121,19 +121,19 @@ silence.commands = {
 		}
 		var display = typecommands
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/asilecho</font><font color='darkred'> status</font></b>: turns announcing by silence echo <b>status</b>. <b>status</b> is either on or off.</td></tr>" 
-		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/silecho</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the silence echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>"
-		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/silencesettings</font></b>: displays the silence settings. </td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/ausilencesettings</font><font color='darkred'> value</font></b>: if <b>value</b> is 0 or 1 - auto-updates: no settings or all settings respectively. </td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/usilencesettings</font></b>: updates the silence settings according to the auto-update silence setting. </td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/megasilence</font><font color='darkred'> reason</font></b> or <b><font color='darkgreen'>/megasilence</font><font color='darkred'> time</font><font color='darkblue'>*unit</font><font color='darkviolet'>*reason</font></b>: megasilences the server indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/silentmute</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/silentmute</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: silent mutes <b>player</b> indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/supersilence</font><font color='darkred'> reason</font></b> or <b><font color='darkgreen'>/supersilence</font><font color='darkred'> time</font><font color='darkblue'>*unit</font><font color='darkviolet'>*reason</font></b>: supersilences the server indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/silence</font><font color='darkred'> reason</font></b> or <b><font color='darkgreen'>/silence</font><font color='darkred'> time</font><font color='darkblue'>*unit</font><font color='darkviolet'>*reason</font></b>: silences the server indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/unsilence</font><font color='darkred'> reason</font></b>: unsilences the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
-		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/silentmute</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/silentmute</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: silent mutes <b>player</b> indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/mute</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/mute</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: mutes <b>player</b> indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/unmute</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b>: unmutes <b>player</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/mutes</font></b>: displays a table of server mutes.</td></tr>"
-		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/clearmutes</font></b>: clears all server mutes.</td></tr>";
+		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/clearmutes</font></b>: clears all server mutes.</td></tr>"
+		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/silecho</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the silence echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/silencesettings</font></b>: displays the silence settings. </td></tr>";
 		commanddisplay(src, "Silence Commands", display, channel);
 	},
 	mute: function (src, channel, command){
@@ -460,7 +460,7 @@ silence.commands = {
 		var channelid = sys.channelId(command[command.length - 1]);
 		sys.sendAll(sys.name(src) + ":", channelid);
 		command.splice(0, 1);
-		if (channelid !== undefined) {
+		if (channelid !== undefined && command.length > 1) {
 			command.splice(command.length - 1, 1);
 		}
 		command = command.join("*");
@@ -546,11 +546,21 @@ var timed_silence_check = "\u000A"
 + "\t\t\t\tsys.writeToFile('script_silenceoptions.json',JSON.stringify(silence.options));\u000A"
 + "\t\t\t}\u000A"
 + "\t\t\telse {\u000A"
-+ "\t\t\t\tsys.stopEvent();\u000A"
 + "\t\t\t\tcommanderror(src, 'Sorry, your auth group is currently silenced.', channel);\u000A"
++ "\t\t\t\tsys.stopEvent();\u000A"
 + "\t\t\t}\u000A"
 + "\t\t}";
 append("beforeChatMessage", timed_silence_check);
+prependcommand("auth", "echo", timed_silence_check.replace("sys.stopEvent()", "return"));
+prependcommand("tiers", "techo", timed_silence_check.replace("sys.stopEvent()", "return"));
+prependcommand("scripts", "secho", timed_silence_check.replace("sys.stopEvent()", "return"));
+prependcommand("disconnect", "decho", timed_silence_check.replace("sys.stopEvent()", "return"));
+prependcommand("silence", "silecho", timed_silence_check.replace("sys.stopEvent()", "return"));
+prependcommand("message", "mecho", timed_silence_check.replace("sys.stopEvent()", "return"));
+prependcommand("message", "ghtml", timed_silence_check.replace("sys.stopEvent()", "return"));
+prependcommand("message", "me", timed_silence_check.replace("sys.stopEvent()", "return"));
+prependcommand("message", "imp", timed_silence_check.replace("sys.stopEvent()", "return"));
+prependcommand("message", "reverse", timed_silence_check.replace("sys.stopEvent()", "return"));
 
 /* Mute Checks */
 var timed_mute_check = "\u000A"
@@ -563,10 +573,20 @@ var timed_mute_check = "\u000A"
 + "\t\t\t\t\t\tdelete silence.mutes[index];\u000A"
 + "\t\t\t\t\t\tcontinue;\u000A"
 + "\t\t\t\t\t}\u000A"
-+ "\t\t\t\t\tsys.stopEvent();\u000A"
 + "\t\t\t\t\tcommanderror(src, 'Sorry, you are muted.', channel);\u000A"
++ "\t\t\t\t\tsys.stopEvent();\u000A"
 + "\t\t\t\t}\u000A"
 + "\t\t\t}\u000A"
 + "\t\t\tsys.writeToFile('script_mutes.json',JSON.stringify(silence.mutes));\u000A"
 + "\t\t}";
 append("beforeChatMessage", timed_mute_check);
+prependcommand("auth", "echo", timed_mute_check.replace("sys.stopEvent()", "return"));
+prependcommand("tiers", "techo", timed_mute_check.replace("sys.stopEvent()", "return"));
+prependcommand("scripts", "secho", timed_mute_check.replace("sys.stopEvent()", "return"));
+prependcommand("disconnect", "decho", timed_mute_check.replace("sys.stopEvent()", "return"));
+prependcommand("silence", "silecho", timed_mute_check.replace("sys.stopEvent()", "return"));
+prependcommand("message", "mecho", timed_mute_check.replace("sys.stopEvent()", "return"));
+prependcommand("message", "ghtml", timed_mute_check.replace("sys.stopEvent()", "return"));
+prependcommand("message", "me", timed_mute_check.replace("sys.stopEvent()", "return"));
+prependcommand("message", "imp", timed_mute_check.replace("sys.stopEvent()", "return"));
+prependcommand("message", "reverse", timed_mute_check.replace("sys.stopEvent()", "return"));

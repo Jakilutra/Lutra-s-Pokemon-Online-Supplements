@@ -240,9 +240,9 @@
 		return unit != "seconds" && unit != "second" && unit != "minutes" && unit != "minute" && unit != "hours" && unit != "hour" && unit != "days" && unit != "day" && unit != "weeks" && unit != "week" && unit != "months" && unit != "month" && unit != "years" && unit != "year";
 	}
 	
-	/* Event Body Function */
-		eventbody = function (event) {
-		var body = String(script[event]);
+	/* Return Function Body Function */
+		functbody = function (funct) {
+		var body = String(funct);
 		body = body.split("{");
 		body.splice(0, 1);
 		body = body.join("{");
@@ -252,9 +252,9 @@
 		return body;
 	}
 	
-	/* Event Arguments Function */
-	eventargs = function (event) {
-		var args = String(script[event]);
+	/* Return Function Arguments Function */
+	functargs = function (funct) {
+		var args = String(funct);
 		args = args.split("(");
 		args.splice(0,1);
 		args = args.join("(");
@@ -265,12 +265,26 @@
 	
 	/* Prepend Event Function */
 	prepend = function (event, code){
-		sys.delayedCall( function(){var body = code + eventbody(event), args = eventargs(event); script[event] = new Function([args], body);}, 1);
+		sys.delayedCall( function(){var body = code + functbody(script[event]), args = functargs(script[event]); script[event] = new Function([args], body);}, 1);
 	}
 	
 	/* Append Event Function */
 	append = function (event, code){
-		sys.delayedCall( function(){var body = eventbody(event) + code, args = eventargs(event); script[event] = new Function([args], body);}, 1);
+		sys.delayedCall( function(){var body = functbody(script[event]) + code, args = functargs(script[event]); script[event] = new Function([args], body);}, 1);
+	}
+	
+	/* Prepend Command Function */
+	prependcommand = function (object, command, code){
+		if (global[object] !== undefined){
+			sys.delayedCall( function(){var body = code + functbody(global[object].commands[command]), args = functargs(global[object].commands[command]); global[object].commands[command] = new Function([args], body);}, 1);
+		}
+	}
+	
+	/* Append Command Function */
+	appendcommand = function (object, command, code){
+		if (global[object] !== undefined){
+			sys.delayedCall( function(){var body = functbody(global[object].commands[command]) + code, args = functargs(global[object].commands[command]); global[object].commands[command] = new Function([args], body);}, 1);
+		}
 	}
 	
 	/* Loading External JavaScript Files */
@@ -416,6 +430,7 @@
 			if (!validcommand && !commandused) {
 				commanderror(src, "The server does not recognise <b>\"" + escapehtml(message) + "\"</b> as a valid command.", channel);
 			}
+			return;
 		}
 	},
 	afterChatMessage: function (src, message, channel) {},

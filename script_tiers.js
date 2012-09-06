@@ -93,10 +93,8 @@ tiers.commands = {
 			msymbol = auth.options["mod"].image;
 			usymbol = auth.options["user"].image;
 		}
-		var display = typecommands
+		var display = typecommands 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/atecho</font><font color='darkred'> status</font></b>: turns announcing by tiers echo <b>status</b>. <b>status</b> is either on or off.</td></tr>" 
-		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/techo</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the tiers echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>" 
-		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/tsettings</font></b>: displays the tiers settings. </td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/autsettings</font><font color='darkred'> value</font></b>: if <b>value</b> is 0, 1, 2 or 3 - auto-updates: no settings, all settings, only tiersoptions or only tierslinks respectively. </td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/utsettings</font></b>: updates the tiers settings according to the auto-update tiers setting. </td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/nametiers</font><font color='darkred'> name</font></b>: set the filename of <b>name</b> for importing and exporting the tiers. </td></tr>" 
@@ -109,7 +107,9 @@ tiers.commands = {
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/autiers</font><font color='darkred'> key</font></b>: set <b>key</b>'s tiers as the server's tiers to auto-update. If <b>key</b> is off, turns auto-updating tiers off. </td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/updatetiers</font></b>: updates the server's tiers. </td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/downloadtiers</font><font color='darkred'> URL</font></b>: installs tiers from <b>URL</b>. </td></tr>" 
-		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/installtiers</font><font color='darkred'> key</font></b>: installs tiers from the URL address of <b>key</b>. </td></tr>";
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/installtiers</font><font color='darkred'> key</font></b>: installs tiers from the URL address of <b>key</b>. </td></tr>"
+		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/techo</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the tiers echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>" 
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/tsettings</font></b>: displays the tiers settings. </td></tr>";
 		commanddisplay(src, "Tiers Commands", display, channel);
 	},
 	installtiers: function (src, channel, command) {
@@ -375,7 +375,7 @@ tiers.commands = {
 		var channelid = sys.channelId(command[command.length - 1]);
 		sys.sendAll(sys.name(src) + ":", channelid);
 		command.splice(0, 1);
-		if (channelid !== undefined) {
+		if (channelid !== undefined && command.length > 1) {
 			command.splice(command.length - 1, 1);
 		}
 		command = command.join("*");
