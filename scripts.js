@@ -433,7 +433,7 @@
 		/* Command Execution */
 		if (message[0] === "/" && /\w/g.test(message)) {
 			sys.stopEvent();
-			commanddisplay(src, "Command Message", message, channel);
+			commanddisplay(src, "Command Message", "<tr><td>" + message + "</td></tr>", channel);
 			var command = message.substr(1, message.length).split(' '), index;
 			commandused = false;
 			commandtry("global", src, channel, command);
