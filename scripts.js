@@ -8,6 +8,7 @@
 	loadedscripts = [];
 	installedjsons = [];
 	loadedjsons = [];
+	updatedjsons = [];
 
 	/* Function to Download JavaScript Files */
 	downloadjs = function (source, filename) {
@@ -207,21 +208,30 @@
 	
 	/* Convert Milliseconds to a Time String Function */	
 	converttime = function (time){
+		if (Math.floor(time/1000) > 86400 && Math.floor(time/1000) % 86400 !== 0){
+			return Math.floor(time/86400000) + " " + timeplurality(Math.floor(time/86400000), "Days") + ", " + Math.floor((time%86400000)/3600000) + " " + timeplurality(Math.floor((time%86400000)/3600000), "Hours") + ", " + Math.floor(((time%86400000)%3600000)/60000) + " " + timeplurality(Math.floor(((time%86400000)%3600000)/60000), "Minutes") + ", " + Math.floor((((time%86400000)%3600000)%60000)/1000) + " " + timeplurality(Math.floor((((time%86400000)%3600000)%60000)/1000), "Seconds");
+		}
 		if (time >= 86400000){
-			return Math.floor(time/86400000) + " Days, " + Math.floor((time%86400000)/3600000) + " Hours, " + Math.floor(((time%86400000)%3600000)/60000) + " Minutes, " + Math.floor((((time%86400000)%3600000)%60000)/1000) + " Seconds";
+			return Math.floor(time/86400000) + " " + timeplurality (Math.floor(time/86400000),"Days");
+		}
+		if (Math.floor(time/1000) > 3600 && Math.floor(time/1000) % 3600 !== 0){
+			return Math.floor((time%86400000)/3600000) + " " + timeplurality(Math.floor((time%86400000)/3600000), "Hours") + ", " + Math.floor(((time%86400000)%3600000)/60000) + " " + timeplurality(Math.floor(((time%86400000)%3600000)/60000), "Minutes") + ", " + Math.floor((((time%86400000)%3600000)%60000)/1000) + " " + timeplurality(Math.floor((((time%86400000)%3600000)%60000)/1000), "Seconds");
 		}
 		if (time >= 3600000){
-			return Math.floor((time%86400000)/3600000) + " Hours, " + Math.floor(((time%86400000)%3600000)/60000) + " Minutes, " + Math.floor((((time%86400000)%3600000)%60000)/1000) + " Seconds";
+			return Math.floor(time/3600000) + " " + timeplurality(Math.floor(time/3600000),"Hours");
+		}
+		if (Math.floor(time/1000) > 60 && Math.floor(time/1000) % 60 !== 0){
+			return Math.floor(((time%86400000)%3600000)/60000) + " " + timeplurality(Math.floor(((time%86400000)%3600000)/60000), "Minutes") + ", " + Math.floor((((time%86400000)%3600000)%60000)/1000) + " " + timeplurality(Math.floor((((time%86400000)%3600000)%60000)/1000), "Seconds");
 		}
 		if (time >= 60000){
-			return Math.floor(((time%86400000)%3600000)/60000) + " Minutes, " + Math.floor((((time%86400000)%3600000)%60000)/1000) + " Seconds";
+			return Math.floor(time/60000) + " " + timeplurality(Math.floor(time/60000),"Minutes");
 		}
-		return Math.floor((((time%86400000)%3600000)%60000)/1000) + " Seconds" ;
+		return Math.floor((((time%86400000)%3600000)%60000)/1000) + " " + timeplurality(Math.floor((((time%86400000)%3600000)%60000)/1000) ,"Seconds");
 	}
 
 	/* Convert to Seconds Function */
 	converttoseconds = function (unit, time) {
-		return({"minutes": time*60 , "minute": time*60, "hours": time*3600, "hour": time*3600, "days": time*86400,"day": time*86400, "weeks": time*604800, "week": time*604800, "months": time*2592000 , "month": time*2592000, "year": time*31536000 , "years": time*31536000}[unit] || time);
+		return({"minutes": time*60 , "minute": time*60, "mins": time*60, "min": time*60, "hours": time*3600, "hour": time*3600, "days": time*86400,"day": time*86400, "weeks": time*604800, "week": time*604800, "months": time*2592000 , "month": time*2592000, "year": time*31536000 , "years": time*31536000}[unit] || time);
 	}
 
 	/* Plurality of Time Unit Function */
@@ -237,7 +247,7 @@
 
 	/* Not a Time Unit Function */
 	nottimeunit = function (unit) {
-		return unit != "seconds" && unit != "second" && unit != "minutes" && unit != "minute" && unit != "hours" && unit != "hour" && unit != "days" && unit != "day" && unit != "weeks" && unit != "week" && unit != "months" && unit != "month" && unit != "years" && unit != "year";
+		return unit != "seconds" && unit != "second" && unit != "secs" & unit != "sec" && unit != "minutes" && unit != "minute" && unit != "mins" && unit != "min" && unit != "hours" && unit != "hour" && unit != "days" && unit != "day" && unit != "weeks" && unit != "week" && unit != "months" && unit != "month" && unit != "years" && unit != "year";
 	}
 	
 	/* Return Function Body Function */
@@ -379,15 +389,18 @@
 		}
 	}
 	
+	/* Installed/Loaded Messages Function */
+	install_load = function (array, message){
+		nonecheck(array);
+		print (message + String(array).replace(/,/gi, ", ") + ".");
+	}
+	
 	/* Installed/Loaded Messages */
-	nonecheck(installedscripts);
-	nonecheck(loadedscripts);
-	nonecheck(installedjsons);
-	nonecheck(loadedjsons);
-	print("The following scripts were installed: " + String(installedscripts).replace(/,/gi, ", ") + ".");
-	print("The following scripts were loaded: " + String(loadedscripts).replace(/,/gi, ", ") + ".");
-	print("The following default settings were installed: " + String(installedjsons).replace(/,/gi, ", ") + ".");
-	print("The following settings were loaded: " + String(loadedjsons).replace(/,/gi, ", ") + ".");
+	install_load(installedscripts, "The following scripts were installed: ");
+	install_load(loadedscripts, "The following scripts were loaded: ");
+	install_load(installedjsons, "The following default settings were installed: ");
+	install_load(loadedjsons, "The following settings were loaded: ");
+	install_load(updatedjsons, "The following settings were updated: ");
 
 	/* Script Reload Message */
 	if (global.auth !== undefined) {
@@ -418,10 +431,10 @@
 	beforeChatMessage: function (src, message, channel) {
 
 		/* Command Execution */
-		if (message[0] == "/" && message.length > 1) {
+		if (message[0] === "/" && /\w/g.test(message)) {
 			sys.stopEvent();
-			var command = message.substr(1, message.length).split(' '),
-				index;
+			commanddisplay(src, "Command Message", message, channel);
+			var command = message.substr(1, message.length).split(' '), index;
 			commandused = false;
 			commandtry("global", src, channel, command);
 			for (index in construction.units) {
@@ -441,7 +454,7 @@
 		membersadd(srcname);
 		
 		/* LogIn Notifications */
-		var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 mediumorchid stop:0.5 papayawhip); color: black;'><tr><td><center><b><big>Type: <font color='darkgreen'>/Commands</font> into a channel's main chat to view a list of commands.</big></b></center></td></tr></table>";
+		var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 mediumorchid stop:0.5 papayawhip); color: black;'><tr><th><small>Note: All messages sent with this background or labelled with \"Personal Message\" will be messages sent to you directly.</small></th></tr><tr><td><center><b><big>Type: <font color='darkgreen'>/Commands</font> into a channel's main chat to view a list of commands.</big></b></center></td></tr></table>";
 		sys.sendHtmlMessage(src, display);
 	},
 	beforeChannelJoin: function (src, channel) {},

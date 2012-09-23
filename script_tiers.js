@@ -55,17 +55,13 @@ if (tiers.options !== undefined && tiers.links !== undefined){
 
 /* Auto-Update Tiers Settings */
 tiers.updatejsons = function () {
-	tiers.jsonsupdated = new Array();
 	if (tiers.options.autoupdatesettings === "1" || tiers.options.autoupdatesettings === "2") {
 		sys.webCall(construction.source + "script_tiersoptions.json", "downloadjson('" + construction.source + "', 'tiersoptions', 'tiers', 'options');");
-		tiers.jsonsupdated.push("tiersoptions");
+		updatedjsons.push("tiersoptions");
 	}
 	if (tiers.options.autoupdatesettings === "1" || tiers.options.autoupdatesettings === "3") {
 		sys.webCall(construction.source + "script_tierslinks.json", "downloadjson('" + construction.source + "', 'tierslinks', 'tiers', 'links');");
-		tiers.jsonsupdated.push("tierslinks");
-	}
-	if (tiers.jsonsupdated.length !== 0){
-		print("The following tiers settings were updated : " + String(tiers.jsonsupdated).replace(/,/gi, ", ") + ".");
+		updatedjsons.push("tierslinks");
 	}
 }
 if (tiers.options !== undefined){
@@ -74,7 +70,7 @@ if (tiers.options !== undefined){
 
 /* Tiers Announcement Function */
 tiers.echo = function (text, channel) {
-	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 black, stop:0.5 mediumblue); color:white;'><tr><td><center><b><big>" + text + "</big></b><small> - Tiers Announcement </small></center></td></tr></table>";
+	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 royalblue, stop:0.5 dodgerblue); color:white;'><tr><td><center><b><big>" + text + "</big></b><small> - Tiers Announcement </small></center></td></tr></table>";
 	if (channel > -1) {
 		sys.sendHtmlAll(display, channel);
 	}

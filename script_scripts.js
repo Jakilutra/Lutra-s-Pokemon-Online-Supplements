@@ -24,7 +24,7 @@ scripts.load = new Date();
 
 /* Scripts Announcement Function */
 scripts.echo = function (text, channel) {
-	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 black, stop:0.5 dimgray); color:white;'><tr><td><center><b><big>" + text + "</big></b><small> - Scripts Announcement </small></center></td></tr></table>";
+	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 dimgray, stop:0.5 darkslategray); color:white;'><tr><td><center><b><big>" + text + "</big></b><small> - Scripts Announcement </small></center></td></tr></table>";
 	if (channel > -1) {
 		sys.sendHtmlAll(display, channel);
 	}
@@ -35,13 +35,9 @@ scripts.echo = function (text, channel) {
 
 /* Auto-Update Scripts Settings */
 scripts.updatejsons = function () {
-	scripts.jsonsupdated = new Array();
 	if (scripts.options.autoupdatesettings === "1") {
 		sys.webCall(construction.source + "script_options.json", "downloadjson('" + construction.source + "', 'options', 'scripts', 'options');");
-		scripts.jsonsupdated.push("options");
-	}
-	if (scripts.jsonsupdated.length !== 0){
-		print("The following scripts settings were updated : " + String(scripts.jsonsupdated).replace(/,/gi, ", ") + ".");
+		updatedjsons.push("options");
 	}
 }
 if (scripts.options !== undefined){

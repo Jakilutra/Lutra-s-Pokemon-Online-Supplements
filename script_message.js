@@ -2,23 +2,23 @@
 message = {};
 set(construction.source, "messageoptions", "message", "options");
 
-/* Creating PMs Object */
+/* Creating IMs Object */
 
-/* pm object will contain purely a name and an array of from,recipients,messages to that name.
-Upon login, a person's pms will be shown and thus deleted from this object*/
-if (message.pms === undefined){
-	message.pms = {};
+/* im object will contain purely a name and an array of from,recipients,messages to that name.
+Upon login, a person's ims will be shown and thus deleted from this object*/
+if (message.ims === undefined){
+	message.ims = {};
 }
 
-/* Main Chat PM Function */
-message.pm = function (group, text, from, to, date, receiver, channel) {
+/* Main Chat IM Function */
+message.im = function (group, text, from, to, date, receiver, channel) {
 	var sentago = new Date() - date, display;
 	sentago = Math.floor(sentago/1000) === 0 ? " (sent just now) ": " (sent " + converttime(sentago) + " ago) "
 	if (group === null){
-		display = "<ping/><timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 floralwhite, stop:0.5 ivory); color:black;'><tr><th>Personal Message from <i>" + from + "</i> to <i>" + String(to).replace(/,/gi, ", ") + "</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: <small>" + date + sentago + "</small></th></tr><tr><td><center><b><big>" + text + "</big></b></center></td></tr></table>";
+		display = "<ping/><timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 whitesmoke, stop:0.5 silver); color:black;'><tr><th>Instant Personal Message from <i>" + from + "</i> to <i>" + String(to).replace(/,/gi, ", ") + "</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: <small>" + date + sentago + "</small></th></tr><tr><td><center><b><big>" + text + "</big></b></center></td></tr></table>";
 	}
 	else {
-		display = "<ping/><timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 " + auth.options[group].minorcolor + ", stop:0.5 " + auth.options[group].majorcolor + "); color:" + auth.options[group].textcolor + ";'><tr><th>Personal Message from <i>" + from + "</i> to <i>" + String(to).replace(/,/gi, ", ") + "</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: <small>" + date + sentago + "</small></th></tr><tr><td><center><b><big>" + text + "</big></b></center></td></tr></table>";
+		display = "<ping/><timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 " + auth.options[group].minorcolor + ", stop:0.5 " + auth.options[group].majorcolor + "); color:" + auth.options[group].textcolor + ";'><tr><th>Instant Personal Message from <i>" + from + "</i> to <i>" + String(to).replace(/,/gi, ", ") + "</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: <small>" + date + sentago + "</small></th></tr><tr><td><center><b><big>" + text + "</big></b></center></td></tr></table>";
 	}
 	if (channel > -1) {
 			sys.sendHtmlMessage(sys.id(receiver), display, channel);
@@ -30,7 +30,7 @@ message.pm = function (group, text, from, to, date, receiver, channel) {
 
 /* Message Announcement Function */
 message.echo = function (text, channel) {
-	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 floralwhite, stop:0.5 ivory); color:black;'><tr><td><center><b><big>" + text + "</big></b><small> - Message Announcement </small></center></td></tr></table>";
+	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 whitesmoke, stop:0.5 silver); color:black;'><tr><td><center><b><big>" + text + "</big></b><small> - Message Announcement </small></center></td></tr></table>";
 	if (channel > -1) {
 		sys.sendHtmlAll(display, channel);
 	}
@@ -41,13 +41,9 @@ message.echo = function (text, channel) {
 
 /* Auto-Update Message Settings */
 message.updatejsons = function () {
-	message.jsonsupdated = new Array();
 	if (message.options.autoupdatesettings === "1") {
 		sys.webCall(construction.source + "script_messageoptions.json", "downloadjson('" + construction.source + "', 'messageoptions', 'message', 'options');");
-		message.jsonsupdated.push("messageoptions");
-	}
-	if (message.jsonsupdated.length !== 0){
-		print("The following message settings were updated : " + String(message.jsonsupdated).replace(/,/gi, ", ") + ".");
+		updatedjsons.push("messageoptions");
 	}
 }
 if (message.options !== undefined){
@@ -57,7 +53,7 @@ if (message.options !== undefined){
 /* Message Commands */
 message.commands = {
 	messagecommands: function (src, channel, command) {
-		var osymbol = "", asymbol = "", msymbol = "", usymbol = "", srcname = sys.name(src), color = namecolor(src);
+		var osymbol = "", asymbol = "", msymbol = "", usymbol = "", cusymbol = "", srcname = sys.name(src), color = namecolor(src);
 		if (global.auth !== undefined){
 			osymbol = auth.options["owner"].image;
 			asymbol = auth.options["admin"].image;
@@ -72,65 +68,61 @@ message.commands = {
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/mecho</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the message echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/ghtml</font><font color='darkred'> message</font></b>: sends an html message into the main chat - in <b>channel</b> if a name of a channel is specified. <b>message</b> is any text.</td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/msettings</font></b>: displays the message settings. </td></tr>"
-		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/pm</font><font color='darkred'> to1*to2...*toN</font><font color='darkblue'>:message</font></b>: messages <b>to1,to2..toN</b> (players from 1 to N) through the server with <b>message</b>.</td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/im</font><font color='darkred'> to1*to2...*toN</font><font color='darkblue'>:message</font></b>: messages <b>to1,to2..toN</b> (players from 1 to N) through the server with <b>message</b>.</td></tr>"
 		+ "<tr><td>" + cusymbol + "<b><font color='darkgreen'>/me</font><font color='darkred'> message</font></b>: sends <font color='" +  color + "'><b><i>*** " + srcname +  " message</i></b></font> into the main chat of the channel you use this in. <b>message</b> is any text.</td></tr>"
-		+ "<tr><td>" + cusymbol + "<b><font color='darkgreen'>/imp</font><font color='darkred'> name</font><font color='darkblue'>*message</font></b>: sends <b><font color='" +  color + "'>name:</font> message <small><i>impersonation by " + srcname + "</i></small></b> into the main chat of the channel you use this in. <b>name</b> is any text with at most 20 characters. <b>message</b> is any text.</td></tr>"
+		+ "<tr><td>" + cusymbol + "<b><font color='darkgreen'>/imp</font><font color='darkred'> name</font><font color='darkblue'>:message</font></b>: sends <b><font color='" +  color + "'>name:</font> message <small><i>impersonation by " + srcname + "</i></small></b> into the main chat of the channel you use this in. <b>name</b> is any text with at most 20 characters. <b>message</b> is any text.</td></tr>"
 		+ "<tr><td>" + cusymbol + "<b><font color='darkgreen'>/reverse</font><font color='darkred'> message</font></b>: sends <b>message</b> in reverse into the main chat of the channel you use this in.</td></tr>";
 		commanddisplay(src, "Message Commands", display, channel);
 	},
 	me: function (src, channel, command) {
-		var color = namecolor(src), display;
-		command.splice(0,1);
-		display = command.join("*");
-		sys.sendHtmlAll("<font color =" + color + "><timestamp /><b><i>*** " + sys.name(src) + "</i></b></font> " + escapehtml(display).fontcolor(color).italics(), channel);
+		var color = namecolor(src), message = command.slice(1).join("*");
+		message = message === "undefined" ? "": message;
+		sys.sendHtmlAll("<font color =" + color + "><timestamp /><b><i>*** " + sys.name(src) + "</i></b></font> " + escapehtml(message).fontcolor(color).italics(), channel);
 	},
 	ghtml: function (src, channel, command) {
 		if (sys.auth(src) < 1){
 			commanderror(src, "Sorry, you do not have permission to use the global html command (mod command).", channel);
 			return;
 		}
-		var color = namecolor(src), display;
-		var channelid = sys.channelId(command[command.length - 1]);
-		sys.sendAll(sys.name(src) + ":", channelid);
-		command.splice(0, 1);
-		if (channelid !== undefined && command.length > 1) {
-			command.splice(command.length - 1, 1);
+		var color = namecolor(src), display = command.slice(1).join("*"), channelid = sys.channelId(command[command.length - 1]);
+		if (channelid !== undefined && command.length > 2) {
+			display = command.slice(1, command.length-1).join("*");
 		}
-		display = command.join("*");
+		display = display === "undefined" ? "": display;
 		if (channelid > -1) {
+			sys.sendAll(sys.name(src) + ":", channelid);
 			sys.sendHtmlAll(display, channelid);
 		}
 		else {
+			sys.sendAll(sys.name(src) + ":");
 			sys.sendHtmlAll(display);
 		}
 	},
 	imp: function(src, channel, command){
-		if (command[1].length > 20){
+		command = command.slice(1).join("*").split(":");
+		var name = command[0], message = command[1], color = namecolor(src), srcname = sys.name(src);
+		if (name.length > 20){
 			commanderror(src, "Sorry, you must specify a name with at most 20 characters.", channel);
 			return;
 		}
-		var name = command[1], color = namecolor(src), srcname = sys.name(src);
-		command.splice(0,2);
-		command = command.join("*");
-		sys.sendHtmlAll("<font color =" + color + "><timestamp /><b>" + escapehtml(name) + ": </b></font> " + escapehtml(command) + " <b><i><small> Impersonation by " + srcname + "</small></i></b>" , channel);
+		sys.sendHtmlAll("<font color =" + color + "><timestamp /><b>" + escapehtml(name) + ": </b></font> " + escapehtml(message) + " <b><i><small> Impersonation by " + srcname + "</small></i></b>" , channel);
 	},
 	reverse: function(src, channel, command){
-		var srcname = sys.name(src);
-		command.splice(0,1);
-		command = command.join("*");
-		command = command.split("");
-		command = command.reverse();
-		command = command.join("");
-		sys.sendAll(srcname + ": " + command, channel);
-	},
-	pm: function (src, channel, command) {
-		if(command[command.length-1].indexOf(":") === -1){
-			commanderror(src, "PM command is used with the following Arguments: to1*to2...*toN:MESSAGE, e.g. \"/pm Lutra:hi\" or \"/pm Lutra*Swimming95:hi\"",channel);
+		var srcname = sys.name(src), message = command.slice(1).join("*").split("").reverse().join("");
+		if (message === "denifednu"){
+			commanderror(src, "Sorry, you must specify some text to reverse. e.g. /reverse abc",channel);
 			return;
 		}
-		var message = command[command.length-1].split(":").slice(1).join(":"); // this makes it possible to do /pm Swimming95*Lutra:This is a test if I want to list: 1,2,3
-		var sendTo=command.slice(1,command.length-1);
-		sendTo.push(command[command.length-1].split(":")[0]);
+		sys.sendAll(srcname + ": " + message, channel);
+	},
+	im: function (src, channel, command) {
+		var commandstring = command.slice(1).join("*");
+		if(commandstring.indexOf(":") === -1){
+			commanderror(src, "The IM command is used with the following Arguments: to1*to2...*toN:MESSAGE, e.g. \"/im Lutra:hi\" or \"/im Lutra*Swimming95:hi\"",channel);
+			return;
+		}
+		var message = commandstring.split(":").slice(1).join(":"); // this makes it possible to do /im Swimming95*Lutra:This is a test if I want to list: 1,2,3
+		var sendTo=commandstring.split(":")[0].split("*");
 		//ability to make maxmessagelength here
 		var failure=[], success = [];
 		for(var i=0;i<sendTo.length;i++){
@@ -145,9 +137,9 @@ message.commands = {
 		for(var j=0;j<success.length;j++){
 			//user is offline
 			if(sys.id(success[j])=== undefined || !sys.isInChannel(sys.id(success[j]), channel)){
-				if(global.message.pms[success[j].toLowerCase()]!== undefined){
+				if(global.message.ims[success[j].toLowerCase()]!== undefined){
 					//potentially check for max mailbox size
-					global.message.pms[success[j].toLowerCase()].push({
+					global.message.ims[success[j].toLowerCase()].push({
 						"from":sys.name(src),
 						"message":message,
 						"recipients":success,
@@ -155,7 +147,7 @@ message.commands = {
 					})
 				}
 				else{
-					global.message.pms[success[j].toLowerCase()]=[{
+					global.message.ims[success[j].toLowerCase()]=[{
 						"from":sys.name(src),
 						"message":message,
 						"recipients":success,
@@ -166,18 +158,18 @@ message.commands = {
 			//user is online
 			else{
 				if (global.auth !== undefined){
-					global.message.pm(auth.groupName(sys.name(src)), message, sys.name(src), success, new Date(),success[j], channel);
+					global.message.im(auth.groupName(sys.name(src)), message, sys.name(src), success, new Date(),success[j], channel);
 				}
 				else {
-					global.message.pm(null, message, sys.name(src), success, new Date(),success[j], channel);
+					global.message.im(null, message, sys.name(src), success, new Date(),success[j], channel);
 				}
 			}
 		}
 		if (global.auth !== undefined){
-			global.message.pm(auth.groupName(sys.name(src)),message,sys.name(src),success, new Date(), sys.name(src), channel);
+			global.message.im(auth.groupName(sys.name(src)),message,sys.name(src),success, new Date(), sys.name(src), channel);
 		}
 		else {
-			global.message.pm(null,message,sys.name(src),success, new Date(), sys.name(src), channel);
+			global.message.im(null,message,sys.name(src),success, new Date(), sys.name(src), channel);
 		}
 		if(failure.length !==0){
 			commanderror(src,"The message failed to send to the following users because they don't exist: "+failure.join()+".  Please check the spelling of all of the names.",channel);
@@ -273,18 +265,18 @@ message.commands = {
 	}
 }
 
-/*After a user logs in, will send all of their stored pms.  Then deletes them from storage*/
-var event_code = "/*After a user logs in, will send all of their stored pms.  Then deletes them from storage*/"
+/*After a user logs in, will send all of their stored ims.  Then deletes them from storage*/
+var event_code = "/*After a user logs in, will send all of their stored ims.  Then deletes them from storage*/"
 + "\t\tvar lowerName=sys.name(src).toLowerCase();\u000A"
-+ "\t\tif(message.pms[lowerName]!=undefined){\u000A"
-+ "\t\t\tfor(var i=0;i<message.pms[lowerName].length;i++){\u000A"
++ "\t\tif(message.ims[lowerName]!=undefined){\u000A"
++ "\t\t\tfor(var i=0;i<message.ims[lowerName].length;i++){\u000A"
 + "\t\t\t\tif(global.auth !== undefined){\u000A"
-+ "\t\t\t\t\tmessage.pm(auth.groupName(message.pms[lowerName][i]['from']),message.pms[lowerName][i]['message'],message.pms[lowerName][i]['from'],message.pms[lowerName][i]['recipients'], message.pms[lowerName][i]['date'], sys.name(src));\u000A"
++ "\t\t\t\t\tmessage.im(auth.groupName(message.ims[lowerName][i]['from']),message.ims[lowerName][i]['message'],message.ims[lowerName][i]['from'],message.ims[lowerName][i]['recipients'], message.ims[lowerName][i]['date'], sys.name(src));\u000A"
 + "\t\t\t\t}\u000A"
 + "\t\t\t\telse{\u000A"
-+ "\t\t\t\t\tmessage.pm(null,message.pms[lowerName][i]['message'],message.pms[lowerName][i]['from'],message.pms[lowerName][i]['recipients'], message.pms[lowerName][i]['date'], sys.name(src));\u000A"
++ "\t\t\t\t\tmessage.im(null,message.ims[lowerName][i]['message'],message.ims[lowerName][i]['from'],message.ims[lowerName][i]['recipients'], message.ims[lowerName][i]['date'], sys.name(src));\u000A"
 + "\t\t\t\t}\u000A"
 + "\t\t\t}\u000A"
-+ "\t\t\tdelete message.pms[lowerName];\u000A"
++ "\t\t\tdelete message.ims[lowerName];\u000A"
 + "\t\t}\u000A";
 append("afterLogIn", event_code);

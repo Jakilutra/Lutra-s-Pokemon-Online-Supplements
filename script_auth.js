@@ -98,7 +98,7 @@ auth.commands = {
 			msymbol = auth.options["mod"].image,
 			usymbol = auth.options["user"].image;
 		var display = typecommands
-		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/a</font><font color='darkred'> authgroup</font><font color='darkblue'>*name</font></b>: puts <b>name</b> into <b>authgroup</b> (auths them globally with permanent auth).</td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/auth</font><font color='darkred'> authgroup</font><font color='darkblue'>*name</font></b>: puts <b>name</b> into <b>authgroup</b> (auths them globally with permanent auth).</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/echo</font><font color='darkred'> authgroup</font><font color='darkblue'>*message</font><font color='darkviolet'>*channel</font></b>: displays <b>message</b> with the announcement background of <b>authgroup</b> - in <b>channel</b> if a name of a channel is specified. </td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/authranks</font></b>: displays the auth groups and symbols.</td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/auths</font></b>: displays a list of server auth.</td></tr>";
@@ -174,9 +174,9 @@ auth.commands = {
 		display += "<tr><td><b>Server Auth Total: </b>" + authsize + "</td></tr>";
 		commanddisplay(src, "Server Auth", display, channel);
 	},
-	a: function (src, channel, command){
+	auth: function (src, channel, command){
 		if (sys.auth(src) < 3) {
-			commanderror(src, "Sorry, you do not have permission to use the a command (owner command).", channel);
+			commanderror(src, "Sorry, you do not have permission to use the auth command (owner command).", channel);
 			return;
 		}
 		var index, globalauth = JSON.parse(JSON.stringify(auth.options)), authgroup, name, authnames = [];
@@ -194,15 +194,15 @@ auth.commands = {
 			}
 		}
 		if (command[1] === "undefined") {
-			commanderror(src, "Sorry, the a command did not execute as no auth group argument was specified. The following are auth group arguments: " + String(authnames).replace(/,/gi, ", ") + ".<br/> E.G. \"/a owner*Lutra\"", channel);
+			commanderror(src, "Sorry, the a command did not execute as no auth group argument was specified. The following are auth group arguments: " + String(authnames).replace(/,/gi, ", ") + ".<br/> E.G. \"/" + command[0] + " owner*Lutra\"", channel);
 			return;
 		}
 		if (authgroup === undefined) {
-			commanderror(src, "Sorry, the a command did not execute as no valid auth group argument was specified. The following are auth group arguments: " + String(authnames).replace(/,/gi, ", ") + ".<br/> E.G. \"/a owner*Lutra\"", channel);
+			commanderror(src, "Sorry, the a command did not execute as no valid auth group argument was specified. The following are auth group arguments: " + String(authnames).replace(/,/gi, ", ") + ".<br/> E.G. \"/" + command[0] + " owner*Lutra\"", channel);
 			return;
 		}
 		if (command[2] === undefined) {
-			commanderror(src, "Sorry, the a command did not execute as no name argument was specified.<br/> E.G. \"/a owner*Lutra\"", channel);
+			commanderror(src, "Sorry, the a command did not execute as no name argument was specified.<br/> E.G. \"/" + command[0] + " owner*Lutra\"", channel);
 			return;
 		}
 		var pname = command[2].toLowerCase();

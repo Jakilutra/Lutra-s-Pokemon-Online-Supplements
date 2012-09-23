@@ -29,7 +29,7 @@ disconnect.ban = function (srcname, trgtname, type, reason, duration_time, durat
 		duration = duration_time === undefined ? "Indefinite" : converttoseconds(duration_unit, duration_time), 
 		enddate = duration === "Indefinite" ? "Unknown" : String(new Date(Number(startdate) + duration*1000)),
 		reasonline = reason === undefined ? "" : "<br/>Reason: " + reason, 
-		durationline = duration === "Indefinite" ? "": " for " + duration_time + " " + duration_unit,
+		durationline = duration === "Indefinite" ? "": " for " + duration_time + " " + timeplurality(duration_time,duration_unit),
 		display = trgtname + " has been banned " + type + " from the server by " + srcname + durationline + "!" + reasonline;
 	disconnect.bans[lowerTrgtName] = {};
 	disconnect.bans[lowerTrgtName] = {
@@ -74,7 +74,7 @@ disconnect.bannedipsload();
 
 /* Disconnect Announcement Function */
 disconnect.echo = function (text, channel) {
-	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 black, stop:0.5 chocolate); color:white;'><tr><td><center><b><big>" + text + "</big></b><small> - Disconnect Announcement </small></center></td></tr></table>";
+	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 saddlebrown, stop:0.5 chocolate); color:white;'><tr><td><center><b><big>" + text + "</big></b><small> - Disconnect Announcement </small></center></td></tr></table>";
 	if (channel > -1) {
 		sys.sendHtmlAll(display, channel);
 	}
@@ -85,13 +85,9 @@ disconnect.echo = function (text, channel) {
 
 /* Auto-Update Disconnect Settings */
 disconnect.updatejsons = function () {
-	disconnect.jsonsupdated = new Array();
 	if (disconnect.options.autoupdatesettings === "1") {
 		sys.webCall(construction.source + "script_disconnectoptions.json", "downloadjson('" + construction.source + "', 'disconnectoptions', 'disconnect', 'options');");
-		disconnect.jsonsupdated.push("disconnectoptions");
-	}
-	if (disconnect.jsonsupdated.length !== 0){
-		print("The following disconnect settings were updated : " + String(disconnect.jsonsupdated).replace(/,/gi, ", ") + ".");
+		updatedjsons.push("disconnectoptions");
 	}
 }
 if (disconnect.options !== undefined){

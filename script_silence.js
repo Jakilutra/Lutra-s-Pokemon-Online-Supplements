@@ -10,7 +10,7 @@ silence.silence = function (srcname, level, type, reason, duration_time, duratio
 		duration = duration_time === undefined ? "Indefinite" : converttoseconds(duration_unit, duration_time), 
 		enddate = duration === "Indefinite" ? "Unknown" : String(new Date(Number(startdate) + duration*1000)),
 		reasonline = reason === "undefined" || reason === undefined ? "" : "<br/>Reason: " + reason, 
-		durationline = duration === "Indefinite" ? "": " for " + duration_time + " " + duration_unit,
+		durationline = duration === "Indefinite" ? "": " for " + duration_time + " " + timeplurality(duration_time,duration_unit),
 		display = "The server has been " + sortofsilence + "d by " + srcname + durationline + "!" + reasonline;
 	silence.options.silence = {};
 	silence.options.silence = {
@@ -47,7 +47,7 @@ silence.mute = function (srcname, trgtname, type, reason, duration_time, duratio
 		duration = duration_time === undefined ? "Indefinite" : converttoseconds(duration_unit, duration_time), 
 		enddate = duration === "Indefinite" ? "Unknown" : String(new Date(Number(startdate) + duration*1000)),
 		reasonline = reason === undefined ? "" : "<br/>Reason: " + reason, 
-		durationline = duration === "Indefinite" ? "": " for " + duration_time + " " + duration_unit,
+		durationline = duration === "Indefinite" ? "": " for " + duration_time + " " + timeplurality(duration_time,duration_unit),
 		display = trgtname + " has been muted " + type + " by " + srcname + durationline + "!" + reasonline;
 	silence.mutes[lowerTrgtName] = {};
 	silence.mutes[lowerTrgtName] = {
@@ -85,7 +85,7 @@ silence.mutedipsload();
 
 /* Silence Announcement Function */
 silence.echo = function (text, channel) {
-	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 black, stop:0.5 thistle); color:black;'><tr><td><center><b><big>" + text + "</big></b><small> - Silence Announcement </small></center></td></tr></table>";
+	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 steelblue, stop:0.5 navy); color:white;'><tr><td><center><b><big>" + text + "</big></b><small> - Silence Announcement </small></center></td></tr></table>";
 	if (channel > -1) {
 		sys.sendHtmlAll(display, channel);
 	}
@@ -96,13 +96,9 @@ silence.echo = function (text, channel) {
 
 /* Auto-Update Silence Settings */
 silence.updatejsons = function () {
-	silence.jsonsupdated = new Array();
 	if (silence.options.autoupdatesettings === "1") {
 		sys.webCall(construction.source + "script_silenceoptions.json", "downloadjson('" + construction.source + "', 'silenceoptions', 'silence', 'options');");
-		silence.jsonsupdated.push("silenceoptions");
-	}
-	if (silence.jsonsupdated.length !== 0){
-		print("The following silence settings were updated : " + String(silence.jsonsupdated).replace(/,/gi, ", ") + ".");
+		updatedjsons.push("silenceoptions");
 	}
 }
 if (silence.options !== undefined){
