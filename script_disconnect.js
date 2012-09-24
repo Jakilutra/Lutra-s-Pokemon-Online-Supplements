@@ -167,6 +167,12 @@ disconnect.commands = {
 			commanderror(src, "Sorry, " + command[1] + " could not be found in the member database.", channel);
 			return;
 		}
+		if (disconnect.bans[trgtname] !== undefined){
+			if (Number(new Date(disconnect.bans[trgtname].enddate)) < Number(new Date())) {
+				delete disconnect.bans[trgtname];
+				sys.writeToFile('script_bans.json', JSON.stringify(disconnect.bans));
+			}
+		}
 		if (disconnect.bans[trgtname] !== undefined || sys.banList().indexOf(trgtname) !== -1){
 			commanderror(src, "Sorry, " + members[trgtname] + " is undergoing a current ban.", channel);
 			return;
@@ -206,6 +212,12 @@ disconnect.commands = {
 		if (members[trgtname] === undefined){
 			commanderror(src, "Sorry, " + command[1] + " could not be found in the member database.", channel);
 			return;
+		}
+		if (disconnect.bans[trgtname] !== undefined){
+			if (Number(new Date(disconnect.bans[trgtname].enddate)) < Number(new Date())) {
+				delete disconnect.bans[trgtname];
+				sys.writeToFile('script_bans.json', JSON.stringify(disconnect.bans));
+			}
 		}
 		if (disconnect.bans[trgtname] === undefined && banlist.indexOf(trgtname) === -1){
 			commanderror(src, "Sorry, " + members[trgtname] + " is not currently banned.", channel);
@@ -359,6 +371,12 @@ disconnect.commands = {
 		if (members[trgtname] === undefined){
 			commanderror(src, "Sorry, " + command[1] + " could not be found in the member database.", channel);
 			return;
+		}
+		if (disconnect.bans[trgtname] !== undefined){
+			if (Number(new Date(disconnect.bans[trgtname].enddate)) < Number(new Date())) {
+				delete disconnect.bans[trgtname];
+				sys.writeToFile('script_bans.json', JSON.stringify(disconnect.bans));
+			}
 		}
 		if (disconnect.bans[trgtname] !== undefined || sys.banList().indexOf(trgtname) !== -1){
 			commanderror(src, "Sorry, " + members[trgtname] + " is undergoing a current ban.", channel);

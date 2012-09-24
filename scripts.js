@@ -433,7 +433,7 @@
 		/* Command Execution */
 		if (message[0] === "/" && /\w/g.test(message)) {
 			sys.stopEvent();
-			commanddisplay(src, "Command Message", "<tr><td>" + message + "</td></tr>", channel);
+			sys.sendHtmlMessage(src, "<font color='silver'><b>command: " + escapehtml(message) + "</b></font>", channel);
 			var command = message.substr(1, message.length).split(' '), index;
 			commandused = false;
 			commandtry("global", src, channel, command);
@@ -454,7 +454,7 @@
 		membersadd(srcname);
 		
 		/* LogIn Notifications */
-		var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 mediumorchid stop:0.5 papayawhip); color: black;'><tr><th><small>Note: All messages sent with this background or labelled with \"Personal Message\" will be messages sent to you directly.</small></th></tr><tr><td><center><b><big>Type: <font color='darkgreen'>/Commands</font> into a channel's main chat to view a list of commands.</big></b></center></td></tr></table>";
+		var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 mediumorchid stop:0.5 papayawhip); color: black;'><tr><th><font color='black'><small>Note: All messages sent with this background, silver coloured or labelled with \"Personal Message\" will be messages sent to you directly.</small></font></th></tr><tr><td><center><b><big>Type: <font color='darkgreen'>/Commands</font> into a channel's main chat to view a list of commands.</big></b></center></td></tr></table>";
 		sys.sendHtmlMessage(src, display);
 	},
 	beforeChannelJoin: function (src, channel) {},

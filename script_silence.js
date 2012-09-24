@@ -1,6 +1,7 @@
 /* Loading Silence Object and Settings */
 silence = {};
 set(construction.source, "mutes", "silence", "mutes");
+set(construction.source, "silences", "silence", "silences");
 set(construction.source, "silenceoptions", "silence", "options");
 
 /* Silence Function */
@@ -12,8 +13,8 @@ silence.silence = function (srcname, level, type, reason, duration_time, duratio
 		reasonline = reason === "undefined" || reason === undefined ? "" : "<br/>Reason: " + reason, 
 		durationline = duration === "Indefinite" ? "": " for " + duration_time + " " + timeplurality(duration_time,duration_unit),
 		display = "The server has been " + sortofsilence + "d by " + srcname + durationline + "!" + reasonline;
-	silence.options.silence = {};
-	silence.options.silence = {
+	silence.silences = {};
+	silence.silences = {
 		"level": level,
 		"silencer": lowerSrcName,
 		"reason": reason,
@@ -21,7 +22,7 @@ silence.silence = function (srcname, level, type, reason, duration_time, duratio
 		"duration": duration,
 		"enddate": enddate
 	}
-	sys.writeToFile("script_silenceoptions.json", JSON.stringify(silence.options));
+	sys.writeToFile("script_silences.json", JSON.stringify(silence.silences));
 	if (type !== 1){ // silent silence check
 		if (global.auth !== undefined && silence.options.echo === "off") {
 			auth.echo(["mod", "admin", "owner"][level-1], display);
@@ -143,6 +144,12 @@ silence.commands = {
 			return;
 		}
 		if (silence.mutes[trgtname] !== undefined){
+			if (Number(new Date(silence.mutes[trgtname].enddate)) < Number(new Date())) {
+				delete silence.mutes[trgtname];
+				sys.writeToFile('script_mutes.json', JSON.stringify(silence.mutes));
+			}
+		}
+		if (silence.mutes[trgtname] !== undefined){
 			commanderror(src, "Sorry, " + members[trgtname] + " is undergoing a current mute.", channel);
 			return;
 		}
@@ -181,6 +188,12 @@ silence.commands = {
 		if (members[trgtname] === undefined){
 			commanderror(src, "Sorry, " + command[1] + " could not be found in the member database.", channel);
 			return;
+		}
+		if (silence.mutes[trgtname] !== undefined){
+			if (Number(new Date(silence.mutes[trgtname].enddate)) < Number(new Date())) {
+				delete silence.mutes[trgtname];
+				sys.writeToFile('script_mutes.json', JSON.stringify(silence.mutes));
+			}
 		}
 		if (silence.mutes[trgtname] === undefined){
 			commanderror(src, "Sorry, " + members[trgtname] + " is not currently muted.", channel);
@@ -272,15 +285,19 @@ silence.commands = {
 			commanderror(src, "Sorry, you do not have permission to use the silence command (mod command).", channel);
 			return;
 		}
-		if (silence.options.silence.level === 1){
+		if (Number(new Date(silence.silences.enddate)) < Number(new Date())){ 
+			silence.silences = {}; 
+			sys.writeToFile('script_silences.json', JSON.stringify(silence.silences)); 
+		} 
+		if (silence.silences.level === 1){
 			commanderror(src, "Sorry, you cannot use silence because silence is already in effect.", channel);
 			return;
 		}
-		if (silence.options.silence.level === 2 && sys.auth(src) < 2){
+		if (silence.silences.level === 2 && sys.auth(src) < 2){
 			commanderror(src, "Sorry, you cannot use silence because super silence is in effect.", channel);
 			return;
 		}
-		if (silence.options.silence.level === 3 && sys.auth(src) < 3){
+		if (silence.silences.level === 3 && sys.auth(src) < 3){
 			commanderror(src, "Sorry, you cannot use silence because mega silence is in effect.", channel);
 			return;
 		}
@@ -307,11 +324,15 @@ silence.commands = {
 			commanderror(src, "Sorry, you do not have permission to use the super silence command (admin command).", channel);
 			return;
 		}
-		if (silence.options.silence.level === 2){
+		if (Number(new Date(silence.silences.enddate)) < Number(new Date())){ 
+			silence.silences = {}; 
+			sys.writeToFile('script_silences.json', JSON.stringify(silence.silences)); 
+		} 
+		if (silence.silences.level === 2){
 			commanderror(src, "Sorry, you cannot use super silence because super silence is already in effect.", channel);
 			return;
 		}
-		if (silence.options.silence.level === 3 && sys.auth(src) < 3){
+		if (silence.silences.level === 3 && sys.auth(src) < 3){
 			commanderror(src, "Sorry, you cannot use super silence because mega silence is in effect.", channel);
 			return;
 		}
@@ -338,7 +359,11 @@ silence.commands = {
 			commanderror(src, "Sorry, you do not have permission to use the mega silence command (owner command).", channel);
 			return;
 		}
-		if (silence.options.silence.level === 3){
+		if (Number(new Date(silence.silences.enddate)) < Number(new Date())){ 
+			silence.silences = {}; 
+			sys.writeToFile('script_silences.json', JSON.stringify(silence.silences)); 
+		} 
+		if (silence.silences.level === 3){
 			commanderror(src, "Sorry, you cannot use super silence because mega silence is already in effect.", channel);
 			return;
 		}
@@ -365,21 +390,25 @@ silence.commands = {
 			commanderror(src, "Sorry, you do not have permission to use the unsilence command (mod command).", channel);
 			return;
 		}
-		if (silence.options.silence.level === undefined){
+		if (Number(new Date(silence.silences.enddate)) < Number(new Date())){ 
+			silence.silences = {}; 
+			sys.writeToFile('script_silences.json', JSON.stringify(silence.silences)); 
+		} 
+		if (silence.silences.level === undefined){
 			commanderror(src, "Sorry, you cannot use unsilence because no silence is in effect.", channel);
 			return;				
 		}
-		if (silence.options.silence.level === 2 && sys.auth(src) < 2){
+		if (silence.silences.level === 2 && sys.auth(src) < 2){
 			commanderror(src, "Sorry, you cannot use unsilence because super silence is in effect.", channel);
 			return;
 		}
-		if (silence.options.silence.level === 3 && sys.auth(src) < 3){
+		if (silence.silences.level === 3 && sys.auth(src) < 3){
 			commanderror(src, "Sorry, you cannot use unsilence because mega silence is in effect.", channel);
 			return;
 		}
-		var reason = command[1], level = silence.options.silence.level;
-		silence.options.silence = {};
-		sys.writeToFile("script_silenceoptions.json", JSON.stringify(silence.options));
+		var reason = command[1], level = silence.silences.level;
+		silence.silences = {};
+		sys.writeToFile("script_silences.json", JSON.stringify(silence.silences));
 		if (command.length > 1){
 			command.splice(0,1);
 			reason = command.join("*");
@@ -395,21 +424,21 @@ silence.commands = {
 	},
 	silencesettings: function (src, channel, command) {
 		var current_date = new Date();
-		if (Number(new Date(silence.options.silence.enddate)) < Number(current_date)){
-			silence.options.silence = {};
-			sys.writeToFile('script_silenceoptions.json',JSON.stringify(silence.options));
+		if (Number(new Date(silence.silences.enddate)) < Number(current_date)){
+			silence.silences = {};
+			sys.writeToFile('script_silences.json',JSON.stringify(silence.silences));
 		}
-		var duration = converttime(Number(silence.options.silence.duration)*1000), timeleft = converttime(new Date(silence.options.silence.enddate) - current_date);
-		if (silence.options.silence.duration === "Indefinite"){
+		var duration = converttime(Number(silence.silences.duration)*1000), timeleft = converttime(new Date(silence.silences.enddate) - current_date);
+		if (silence.silences.duration === "Indefinite"){
 			duration = "Indefinite";
 			timeleft = "Unknown";
 		}
 		var display = "<tr><td><b> Silence Echo: </b>" + silence.options.echo + "</td></tr>"
 		+ "<tr><td><b> Auto-Update Settings: </b>" + silence.options.autoupdatesettings + "</td></tr>";
-		if (Object.keys(silence.options.silence).length !== 0){
+		if (Object.keys(silence.silences).length !== 0){
 			display += "<tr><td><b> Silence: </b> on <br/>"
-			+ "<b>+Type: </b>" + ["regular", "super", "mega"][silence.options.silence.level-1] + " <b>+Silenced by:</b> " + members[silence.options.silence.silencer] + " <b>+Reason:</b> " + silence.options.silence.reason + " <b>+Start Date:</b> <small>"  + silence.options.silence.startdate + "</small><br/>"
-			+ "<b>+Duration:</b> " + duration + " <b>+End Date:</b> <small>" + silence.options.silence.enddate + "</small> <b>+Time Left:</b> " + timeleft + "</td></tr>"
+			+ "<b>+Type: </b>" + ["regular", "super", "mega"][silence.silences.level-1] + " <b>+Silenced by:</b> " + members[silence.silences.silencer] + " <b>+Reason:</b> " + silence.silences.reason + " <b>+Start Date:</b> <small>"  + silence.silences.startdate + "</small><br/>"
+			+ "<b>+Duration:</b> " + duration + " <b>+End Date:</b> <small>" + silence.silences.enddate + "</small> <b>+Time Left:</b> " + timeleft + "</td></tr>"
 		}
 		else {
 			display += "<tr><td><b>Silence:</b> off  </td></tr>";
@@ -425,6 +454,12 @@ silence.commands = {
 		if (members[trgtname] === undefined){
 			commanderror(src, "Sorry, " + command[1] + " could not be found in the member database.", channel);
 			return;
+		}
+		if (silence.mutes[trgtname] !== undefined){
+			if (Number(new Date(silence.mutes[trgtname].enddate)) < Number(new Date())) {
+				delete silence.mutes[trgtname];
+				sys.writeToFile('script_mutes.json', JSON.stringify(silence.mutes));
+			}
 		}
 		if (silence.mutes[trgtname] !== undefined){
 			commanderror(src, "Sorry, " + members[trgtname] + " is undergoing a current mute.", channel);
@@ -533,13 +568,13 @@ silence.commands = {
 	}
 }
 
-/* Mute Checks */
+/* Silence Checks */
 var timed_silence_check = "\u000A"
 + "\t\tvar current_date = new Date();\u000A"
-+ "\t\tif(silence.options.silence.level > sys.auth(src) ){\u000A"
-+ "\t\t\tif (Number(new Date(silence.options.silence.enddate)) < Number(current_date)){\u000A"
-+ "\t\t\t\tsilence.options.silence = {};\u000A"
-+ "\t\t\t\tsys.writeToFile('script_silenceoptions.json',JSON.stringify(silence.options));\u000A"
++ "\t\tif(silence.silences.level > sys.auth(src) ){\u000A"
++ "\t\t\tif (Number(new Date(silence.silences.enddate)) < Number(current_date)){\u000A"
++ "\t\t\t\tsilence.silences = {};\u000A"
++ "\t\t\t\tsys.writeToFile('script_silences.json',JSON.stringify(silence.silences));\u000A"
 + "\t\t\t}\u000A"
 + "\t\t\telse {\u000A"
 + "\t\t\t\tcommanderror(src, 'Sorry, your auth group is currently silenced.', channel);\u000A"
