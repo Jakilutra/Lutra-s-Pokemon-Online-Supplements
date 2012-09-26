@@ -53,13 +53,12 @@ if (message.options !== undefined){
 /* Message Commands */
 message.commands = {
 	messagecommands: function (src, channel, command) {
-		var osymbol = "", asymbol = "", msymbol = "", usymbol = "", cusymbol = "", srcname = sys.name(src), color = namecolor(src);
+		var osymbol = "", asymbol = "", msymbol = "", usymbol = "", srcname = sys.name(src), color = namecolor(src);
 		if (global.auth !== undefined){
 			osymbol = auth.options["owner"].image;
 			asymbol = auth.options["admin"].image;
 			msymbol = auth.options["mod"].image;
 			usymbol = auth.options["user"].image;
-			cusymbol = auth.options["chanuser"].image;
 		}
 		var display = typecommands
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/aumsettings</font><font color='darkred'> value</font></b>: if <b>value</b> is 0 or 1 - auto-updates: no settings or all settings respectively. </td></tr>" 
@@ -69,9 +68,9 @@ message.commands = {
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/ghtml</font><font color='darkred'> message</font></b>: sends an html message into the main chat - in <b>channel</b> if a name of a channel is specified. <b>message</b> is any text.</td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/msettings</font></b>: displays the message settings. </td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/im</font><font color='darkred'> to1*to2...*toN</font><font color='darkblue'>:message</font></b>: messages <b>to1,to2..toN</b> (players from 1 to N) through the server with <b>message</b>.</td></tr>"
-		+ "<tr><td>" + cusymbol + "<b><font color='darkgreen'>/me</font><font color='darkred'> message</font></b>: sends <font color='" +  color + "'><b><i>*** " + srcname +  " message</i></b></font> into the main chat of the channel you use this in. <b>message</b> is any text.</td></tr>"
-		+ "<tr><td>" + cusymbol + "<b><font color='darkgreen'>/imp</font><font color='darkred'> name</font><font color='darkblue'>:message</font></b>: sends <b><font color='" +  color + "'>name:</font> message <small><i>impersonation by " + srcname + "</i></small></b> into the main chat of the channel you use this in. <b>name</b> is any text with at most 20 characters. <b>message</b> is any text.</td></tr>"
-		+ "<tr><td>" + cusymbol + "<b><font color='darkgreen'>/reverse</font><font color='darkred'> message</font></b>: sends <b>message</b> in reverse into the main chat of the channel you use this in.</td></tr>";
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/me</font><font color='darkred'> message</font></b>: sends <font color='" +  color + "'><b><i>*** " + srcname +  " message</i></b></font> into the main chat of the channel you use this in. <b>message</b> is any text.</td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/imp</font><font color='darkred'> name</font><font color='darkblue'>:message</font></b>: sends <b><font color='" +  color + "'>name:</font> message <small><i>impersonation by " + srcname + "</i></small></b> into the main chat of the channel you use this in. <b>name</b> is any text with at most 20 characters. <b>message</b> is any text.</td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/reverse</font><font color='darkred'> message</font></b>: sends <b>message</b> in reverse into the main chat of the channel you use this in.</td></tr>";
 		commanddisplay(src, "Message Commands", display, channel);
 	},
 	me: function (src, channel, command) {
@@ -101,6 +100,12 @@ message.commands = {
 	imp: function(src, channel, command){
 		command = command.slice(1).join("*").split(":");
 		var name = command[0], message = command[1], color = namecolor(src), srcname = sys.name(src);
+		if (name === "undefined"){
+			name = "";
+		}
+		if (message === undefined){
+			message = "";
+		}
 		if (name.length > 20){
 			commanderror(src, "Sorry, you must specify a name with at most 20 characters.", channel);
 			return;

@@ -17,6 +17,20 @@ disconnect.kick = function (src, trgt, reason){
 	sys.quickCall(function () {sys.kick(trgt);}, 200);
 }
 
+/* Punch Function */
+disconnect.punch = function (src, trgt, reason){
+	var srcname = sys.name(src), trgtname = sys.name(trgt), 
+	reasonline = reason === undefined ? "" : "<br/>Reason: " + reason,
+	display = trgtname + " has been punched from the server by " + srcname + "!" + reasonline;
+	if (global.auth !== undefined && disconnect.options.echo === "off") {
+		auth.echo("mod", display);
+	}
+	else {
+		disconnect.echo(display);		
+	}
+	sys.quickCall(function () {sys.disconnect(trgt);}, 200);
+}
+
 /* Ban Function */
 disconnect.ban = function (srcname, trgtname, type, reason, duration_time, duration_unit) {
 	if (type === 0){
@@ -97,7 +111,7 @@ if (disconnect.options !== undefined){
 /* Disconnect Commands */
 disconnect.commands = {
 	disconnectcommands: function (src, channel, command) {
-		var osymbol = "", asymbol = "", msymbol = "", usymbol = "";
+		var osymbol = "", asymbol = "", msymbol = "", usymbol = "", srcname = sys.name(src), color = namecolor(src);
 		if (global.auth !== undefined){
 			osymbol = auth.options["owner"].image;
 			asymbol = auth.options["admin"].image;
@@ -107,16 +121,24 @@ disconnect.commands = {
 		var display = typecommands
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/adecho</font><font color='darkred'> status</font></b>: turns announcing by disconnect echo <b>status</b>. <b>status</b> is either on or off.</td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/audsettings</font><font color='darkred'> value</font></b>: if <b>value</b> is 0 or 1 - auto-updates: no settings or all settings respectively. </td></tr>" 
-		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/udsettings</font></b>: updates the disconnect settings according to the auto-update disconnect setting. </td></tr>" 
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/udsettings</font></b>: updates the disconnect settings according to the auto-update disconnect setting. </td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/setdie</font><font color='darkred'> html</font></b>: saves the default die message as <b>html</b>. </td></tr>" 
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/setbreak</font><font color='darkred'> html</font></b>: saves the default break message as <b>html</b>. </td></tr>" 		
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/silentban</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/silentban</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: silent bans <b>player</b> indefinitely or for <b>time unit</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/silentkick</font><font color='darkred'> player</font></b>: silent kicks <b>player</b> from the server.</td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/silentpunch</font><font color='darkred'> player</font></b>: silent disconnects <b>player</b> from the server.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/ban</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/ban</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: bans <b>player</b> indefinitely or for <b>time unit</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/unban</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b>: unbans <b>player</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/bans</font></b>: displays a table of server bans.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/clearbans</font></b>: clears all server bans.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/kick</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b>: kicks <b>player</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
+		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/punch</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b>: disconnects <b>player</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/decho</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the disconnect echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>"
-		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/dsettings</font></b>: displays the disconnect settings. </td></tr>";
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/dsettings</font></b>: displays the disconnect settings. </td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/exit</font></b>: silent kicks you from the server. </td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/die</font><font color='darkred'> message</font></b>: sends <b><font color=" + color + ">~" + sys.name(src) + "</font> message</b> into the main chat of the channel you use this in and then kicks you from the server. If no message is specified, the default message is chosen. </td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/disconnect</font></b>: silent disconnects you from the server. </td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/break</font><font color='darkred'> message</font></b>: sends <b><font color=" + color + ">#" + sys.name(src) + "</font> message</b> into the main chat of the channel you use this in and then disconnects you from the server. If no message is specified, the default message is chosen. </td></tr>";
 		commanddisplay(src, "Disconnect Commands", display, channel);
 	},
 	kick: function (src, channel, command) {
@@ -359,7 +381,9 @@ disconnect.commands = {
 	},
 	dsettings: function(src, channel, command) {
 		var display = "<tr><td><b> Disconnect Echo: </b>" + disconnect.options.echo + "</td></tr>"
-		+ "<tr><td><b> Auto-Update Settings: </b>" + disconnect.options.autoupdatesettings + "</td></tr>";
+		+ "<tr><td><b> Auto-Update Settings: </b>" + disconnect.options.autoupdatesettings + "</td></tr>"
+		+ "<tr><td><b> Die Message: </b>" + escapehtml(disconnect.options.die) + "</td></tr>"
+		+ "<tr><td><b> Break Message: </b>" + escapehtml(disconnect.options["break"]) + "</td></tr>";
 		commanddisplay(src, "Disconnect Settings", display, channel);
 	},
 	silentban: function (src, channel, command){
@@ -437,6 +461,108 @@ disconnect.commands = {
 		}
 		else {
 			disconnect.echo("The disconnect auto-update settings has been changed to " + command[1] + " by " + sys.name(src) + "!", -1)
+		}
+	},
+	exit: function (src, channel, command){
+		sys.kick(src);
+	},
+	disconnect: function (src, channel, command){
+		sys.disconnect(src);
+	},
+	punch: function (src, channel, command) {
+		if (sys.auth(src) < 1) {
+			commanderror(src, "Sorry, you do not have permission to use the punch command (mod command).", channel);
+			return;
+		}
+		var trgt = sys.id(command[1]);
+		if (trgt === undefined){
+			commanderror(src, "Sorry, " + command[1] + " is not currently on the server.", channel);
+			return;
+		}
+		if (src == trgt){
+			commanderror(src, "Sorry, you are unable to punch yourself.", channel);
+			return;
+		}
+		var trgtname = sys.name(trgt);
+		if (sys.auth(src) <= sys.auth(trgt)){
+			commanderror(src, "Sorry, you are unable to punch " + trgtname + " because their auth level is not below yours.", channel);
+			return;
+		}
+		var reason = command[2];
+		if (command.length > 2){
+			command.splice(0,2);
+			reason = command.join("*");
+		}
+		disconnect.punch(src, trgt, reason);
+	},
+	silentpunch: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the silent punch command (owner command).", channel);
+			return;
+		}
+		var trgt = sys.id(command[1]);
+		if (trgt === undefined){
+			commanderror(src, "Sorry, " + command[1] + " is not currently on the server.", channel);
+			return;
+		}
+		sys.disconnect(trgt);
+	},
+	die: function (src, channel, command) {
+		var color = namecolor(src), message = "<font color=" + color + "><timestamp/> <b>~" + sys.name(src) + "</font></b> ";
+		if (command[1] === "undefined"){
+			message += disconnect.options.die;
+		}
+		else {
+			message += "<b>" + escapehtml(command.slice(1).join("*")) + "</b>";
+		}
+		sys.sendHtmlAll(message, channel);
+		sys.quickCall(function () {sys.kick(src);}, 200);
+	},
+	'break': function (src, channel, command) {
+		var color = namecolor(src), message = "<font color=" + color + "><timestamp/> <b>#" + sys.name(src) + "</font></b> ";
+		if (command[1] === "undefined"){
+			message += disconnect.options["break"];
+		}
+		else {
+			message += "<b>" + escapehtml(command.slice(1).join("*")) + "</b>";
+		}
+		sys.sendHtmlAll(message, channel);
+		sys.quickCall(function () {sys.disconnect(src);}, 200);
+	},
+	setdie: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the set die default message command (owner command).", channel);
+			return;
+		}
+		if (command[1] === "undefined"){
+			commanderror(src, "Sorry, you do not specify a default message for die. e.g \"/setdie 's PC blew up.\" ", channel);
+			return;
+		}
+		var message = command.slice(1).join("*");
+		disconnect.options.die = message;
+		if (global.auth !== undefined && disconnect.options.echo === "off") {
+			auth.echo("owner", "The die message was changed to: " + escapehtml(message) + " by " + sys.name(src) + ".", -1);
+		}
+		else {
+			disconnect.echo("The die message was changed to: " + escapehtml(message) + " by " + sys.name(src) + ".", -1)
+		}
+	},
+	setbreak: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the set break default message command (owner command).", channel);
+			return;
+		}
+		if (command[1] === "undefined"){
+			commanderror(src, "Sorry, you do not specify a default message for break. e.g \"/setbreak 's connection froze.\" ", channel);
+			return;
+		}
+		var message = command.slice(1).join("*");
+		disconnect.options["break"] = message;
+		if (global.auth !== undefined && disconnect.options.echo === "off") {
+			auth.echo("owner", "The break message was changed to: " + escapehtml(message) + " by " + sys.name(src) + ".", -1);
+		}
+		else {
+			disconnect.echo("The break message was changed to: " + escapehtml(message) + " by " + sys.name(src) + ".", -1)
 		}
 	}
 }
