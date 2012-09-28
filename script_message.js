@@ -79,6 +79,13 @@ message.commands = {
 		message = message === "undefined" ? "": message;
 		sys.sendHtmlAll("<font color =" + color + "><timestamp /><b><i>*** " + sys.name(src) + "</i></b></font> " + escapehtml(message).fontcolor(color).italics(), channel);
 	},
+	attack: function(src,channel,command){
+		var srcname = sys.name(src);
+		var message="<timestamp/><font color=\""+namecolor(src)+"\">"+srcname+"</font>"; //<font color="namecolor(src)">srcname</font>
+		messaege+=" has used <u><b>"+sys.move(Math.floor((Math.random()*599)+1))+"</b></u> on "; //the move name itself
+		message+="<font color=\""+escapehtml(command)+"\">"+command+"</font>"; //<font color="escapehtml(command)">command</font>
+		sys.sendHtmlAll(message, channel);
+	}
 	ghtml: function (src, channel, command) {
 		if (sys.auth(src) < 1){
 			commanderror(src, "Sorry, you do not have permission to use the global html command (mod command).", channel);
