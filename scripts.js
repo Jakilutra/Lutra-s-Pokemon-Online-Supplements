@@ -433,7 +433,7 @@
 		/* Command Execution */
 		if (message[0] === "/" && /\w/g.test(message)) {
 			sys.stopEvent();
-			sys.sendHtmlMessage(src, "<font color='silver'><b>command: " + escapehtml(message) + "</b></font>", channel);
+			sys.sendHtmlMessage(src, "<font color='silver'><timestamp/><b>command: " + escapehtml(message) + "</b></font>", channel);
 			var command = message.substr(1, message.length).split(' '), index;
 			commandused = false;
 			commandtry("global", src, channel, command);

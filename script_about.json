@@ -1,12 +1,12 @@
 {
-	"script_name": "Lutra's Server Script",
-	"version_name": "Aipom learns Swift! Special!",
-	"version_number": "A.22S",
-	"version_date": "24th September 2012",
-	"script_repo_link": "https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Supplements",
-	"script_info_link": "https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Supplements/wiki/PO-Server-Scripts",
-	"major_contributors": ["Lutra"],
-	"minor_contributors": ["Intel_iX", "TheUnknownOne", "Swimming95"],
-	"specialthanks": ["coyotte508", "Lamperi", "Mystra", "NeO", "Juno", "nesan", "kupo", "SkarmPiss", "GaryTheGengar", "raygun"],
-	"latest": "Command and Shortcut messages now in silver. Silences now in own json which doesn't update. Timed silences, mutes and bans are now checked for when (un)silencing, (un)muting and (un)banning."
+    "script_name": "Lutra's Server Script",
+    "version_name": "Aipom learns Screech!",
+    "version_number": "A.25",
+    "version_date": "26th September 2012",
+    "script_repo_link": "https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Supplements",
+    "script_info_link": "https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Supplements/wiki/PO-Server-Scripts",
+    "major_contributors": ["Lutra"],
+    "minor_contributors": ["Intel_iX", "TheUnknownOne", "Swimming95"],
+    "specialthanks": ["coyotte508", "Lamperi", "Mystra", "NeO", "Juno", "nesan", "kupo", "SkarmPiss", "GaryTheGengar", "raygun"],
+    "latest": "Added /exit, /disconnect, /punch, /silentpunch, /die, /break, /setdie, /setbreak."
 }
