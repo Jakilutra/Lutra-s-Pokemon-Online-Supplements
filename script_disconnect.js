@@ -130,7 +130,8 @@ disconnect.commands = {
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/ban</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/ban</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: bans <b>player</b> indefinitely or for <b>time unit</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/unban</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b>: unbans <b>player</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/bans</font></b>: displays a table of server bans.</td></tr>"
-		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/clearbans</font></b>: clears all server bans.</td></tr>"
+		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/clearbans</font></b>: clears all server bans.</td></tr>";
+		var display2 = typecommands
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/kick</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b>: kicks <b>player</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/punch</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b>: disconnects <b>player</b> from the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/decho</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the disconnect echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>"
@@ -139,7 +140,8 @@ disconnect.commands = {
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/die</font><font color='darkred'> message</font></b>: sends <b><font color=" + color + ">~" + sys.name(src) + "</font> message</b> into the main chat of the channel you use this in and then kicks you from the server. If no message is specified, the default message is chosen. </td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/disconnect</font></b>: silent disconnects you from the server. </td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/break</font><font color='darkred'> message</font></b>: sends <b><font color=" + color + ">#" + sys.name(src) + "</font> message</b> into the main chat of the channel you use this in and then disconnects you from the server. If no message is specified, the default message is chosen. </td></tr>";
-		commanddisplay(src, "Disconnect Commands", display, channel);
+		commanddisplay(src, "Disconnect Commands (Part 1)", display, channel);
+		commanddisplay(src, "Disconnect Commands (Part 2)", display2, channel);
 	},
 	kick: function (src, channel, command) {
 		if (sys.auth(src) < 1) {

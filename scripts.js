@@ -142,13 +142,20 @@
 		}
 		print ("Case sensitive names loaded.");
 	}
-	memberscase();
+	if (global.members === undefined){
+		memberscase();
+	}
 	
 	/* Add Case Sensitive Name Function */	
 	membersadd = function (srcname) {
 		if (members[srcname] === undefined) {
 			members[srcname.toLowerCase()] = srcname;
 		}
+	}
+	
+	/* Online Players Object */
+	if (global.playersonline === undefined){
+		playersonline = {};
 	}
 	
 	/* Connect Status Function */	
@@ -285,16 +292,12 @@
 	
 	/* Prepend Command Function */
 	prependcommand = function (object, command, code){
-		if (global[object] !== undefined){
-			sys.delayedCall( function(){var body = code + functbody(global[object].commands[command]), args = functargs(global[object].commands[command]); global[object].commands[command] = new Function([args], body);}, 1);
-		}
+			sys.delayedCall( function(){if (global[object] !== undefined){ var body = code + functbody(global[object].commands[command]), args = functargs(global[object].commands[command]); global[object].commands[command] = new Function([args], body);}}, 1);
 	}
 	
 	/* Append Command Function */
 	appendcommand = function (object, command, code){
-		if (global[object] !== undefined){
-			sys.delayedCall( function(){var body = functbody(global[object].commands[command]) + code, args = functargs(global[object].commands[command]); global[object].commands[command] = new Function([args], body);}, 1);
-		}
+			sys.delayedCall( function(){if (global[object] !== undefined){var body = functbody(global[object].commands[command]) + code, args = functargs(global[object].commands[command]); global[object].commands[command] = new Function([args], body);}}, 1);
 	}
 	
 	/* Loading External JavaScript Files */
@@ -456,6 +459,9 @@
 		/* LogIn Notifications */
 		var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 mediumorchid stop:0.5 papayawhip); color: black;'><tr><th><font color='black'><small>Note: All messages sent with this background, silver coloured or labelled with \"Personal Message\" will be messages sent to you directly.</small></font></th></tr><tr><td><center><b><big>Type: <font color='darkgreen'>/Commands</font> into a channel's main chat to view a list of commands.</big></b></center></td></tr></table>";
 		sys.sendHtmlMessage(src, display);
+		
+		/* Set Player Object */
+		playersonline[src] = {};
 	},
 	beforeChannelJoin: function (src, channel) {},
 	afterChannelJoin: function (src, channel) {},

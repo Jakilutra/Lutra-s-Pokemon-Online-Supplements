@@ -3,6 +3,7 @@ silence = {};
 set(construction.source, "mutes", "silence", "mutes");
 set(construction.source, "silences", "silence", "silences");
 set(construction.source, "silenceoptions", "silence", "options");
+silence.auto_mute_players = [];
 
 /* Silence Function */
 silence.silence = function (srcname, level, type, reason, duration_time, duration_unit) {
@@ -119,10 +120,14 @@ silence.commands = {
 		var display = typecommands
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/asilecho</font><font color='darkred'> status</font></b>: turns announcing by silence echo <b>status</b>. <b>status</b> is either on or off.</td></tr>" 
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/ausilencesettings</font><font color='darkred'> value</font></b>: if <b>value</b> is 0 or 1 - auto-updates: no settings or all settings respectively. </td></tr>" 
-		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/usilencesettings</font></b>: updates the silence settings according to the auto-update silence setting. </td></tr>" 
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/usilencesettings</font></b>: updates the silence settings according to the auto-update silence setting. </td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/amshield</font><font color='darkred'> value</font></b>: if <b>value</b> is 0, 1, 2, 3 or 4 - shields: all players from auto-mute including and above " + auth.options.user.name + ", " + auth.options.mod.name + ", " + auth.options.admin.name + ", " + auth.options.owner.name + " and auth level 4 respectively. </td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/ammax</font><font color='darkred'> value</font></b>: sets the auto-mute maximum message count as <b>value</b>. </td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/amrecover</font><font color='darkred'> decrement</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font></b>: sets the auto-mute recover message count as <b>decrement</b> and the recovery period as every <b>time unit</b>. </td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/ampunish</font><font color='darkred'> time</font><font color='darkblue'>*unit</font></b>: sets the auto-mute punishment period as <b>time unit</b>. </td></tr>" 		
 		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/megasilence</font><font color='darkred'> reason</font></b> or <b><font color='darkgreen'>/megasilence</font><font color='darkred'> time</font><font color='darkblue'>*unit</font><font color='darkviolet'>*reason</font></b>: megasilences the server indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
-		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/silentmute</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/silentmute</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: silent mutes <b>player</b> indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
-		+ "<tr><td>" + asymbol + "<b><font color='darkgreen'>/supersilence</font><font color='darkred'> reason</font></b> or <b><font color='darkgreen'>/supersilence</font><font color='darkred'> time</font><font color='darkblue'>*unit</font><font color='darkviolet'>*reason</font></b>: supersilences the server indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
+		+ "<tr><td>" + osymbol + "<b><font color='darkgreen'>/silentmute</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/silentmute</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: silent mutes <b>player</b> indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>";
+		var display2 = "<tr><td>" + asymbol + "<b><font color='darkgreen'>/supersilence</font><font color='darkred'> reason</font></b> or <b><font color='darkgreen'>/supersilence</font><font color='darkred'> time</font><font color='darkblue'>*unit</font><font color='darkviolet'>*reason</font></b>: supersilences the server indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/silence</font><font color='darkred'> reason</font></b> or <b><font color='darkgreen'>/silence</font><font color='darkred'> time</font><font color='darkblue'>*unit</font><font color='darkviolet'>*reason</font></b>: silences the server indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/unsilence</font><font color='darkred'> reason</font></b>: unsilences the server for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/mute</font><font color='darkred'> player</font><font color='darkblue'>*reason</font></b> or <b><font color='darkgreen'>/mute</font><font color='darkred'> player</font><font color='darkblue'>*time</font><font color='darkviolet'>*unit</font><font color='indigo'>*reason</font></b>: mutes <b>player</b> indefinitely or for <b>time unit</b> for <b>reason</b>. <b>reason</b> is optional.</td></tr>"
@@ -131,7 +136,8 @@ silence.commands = {
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/clearmutes</font></b>: clears all server mutes.</td></tr>"
 		+ "<tr><td>" + msymbol + "<b><font color='darkgreen'>/silecho</font><font color='darkred'> message</font><font color='darkblue'>*channel</font></b>: displays <b>message</b> with the silence echo announcement - in <b>channel</b> if a name of a channel is specified. </td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/silencesettings</font></b>: displays the silence settings. </td></tr>";
-		commanddisplay(src, "Silence Commands", display, channel);
+		commanddisplay(src, "Silence Commands (Part 1)", display, channel);
+		commanddisplay(src, "Silence Commands (Part 2)", display2, channel);
 	},
 	mute: function (src, channel, command){
 		if (sys.auth(src) < 1) {
@@ -253,7 +259,8 @@ silence.commands = {
 				duration = "Indefinite";
 				timeleft = "Unknown";
 			}
-			display += "<tr><td>" + members[index] + "</td><td>" + mutes[index].ip + "</td><td>" + members[mutes[index].muter] + "</td><td>" + mutes[index].reason + "</td><td><small>" + mutes[index].startdate + "</small></td><td>" + duration + "</td><td><small>" + mutes[index].enddate + "</small></td><td>" + timeleft +  "</td></tr>";
+			var muter = members[mutes[index].muter] === undefined ? mutes[index].muter : members[mutes[index].muter];
+			display += "<tr><td>" + members[index] + "</td><td>" + mutes[index].ip + "</td><td>" + muter + "</td><td>" + mutes[index].reason + "</td><td><small>" + mutes[index].startdate + "</small></td><td>" + duration + "</td><td><small>" + mutes[index].enddate + "</small></td><td>" + timeleft +  "</td></tr>";
 		}
 		if (mutedplayers === 0){
 			commanderror(src, "Sorry, the Mute List is currently empty.", channel);
@@ -434,7 +441,12 @@ silence.commands = {
 			timeleft = "Unknown";
 		}
 		var display = "<tr><td><b> Silence Echo: </b>" + silence.options.echo + "</td></tr>"
-		+ "<tr><td><b> Auto-Update Settings: </b>" + silence.options.autoupdatesettings + "</td></tr>";
+		+ "<tr><td><b> Auto-Update Settings: </b>" + silence.options.autoupdatesettings + "</td></tr>"
+		+ "<tr><td><b> Auto-Mute Shield: </b>" + silence.options.auto_mute_shield + "</td></tr>"
+		+ "<tr><td><b> Auto-Mute Maximum Count: </b>" + silence.options.auto_mute_maximum + "</td></tr>"
+		+ "<tr><td><b> Auto-Mute Recovery Count: </b>" + silence.options.auto_mute_decrement + "</td></tr>"
+		+ "<tr><td><b> Auto-Mute Recovery Time: </b>" + converttime(Number(silence.options.auto_mute_seconds)*1000) + "</td></tr>"
+		+ "<tr><td><b> Auto-Mute Punishment Time: </b>" + converttime(Number(silence.options.auto_mute_punish)*1000) + "</td></tr>";
 		if (Object.keys(silence.silences).length !== 0){
 			display += "<tr><td><b> Silence: </b> on <br/>"
 			+ "<b>+Type: </b>" + ["regular", "super", "mega"][silence.silences.level-1] + " <b>+Silenced by:</b> " + members[silence.silences.silencer] + " <b>+Reason:</b> " + silence.silences.reason + " <b>+Start Date:</b> <small>"  + silence.silences.startdate + "</small><br/>"
@@ -565,8 +577,100 @@ silence.commands = {
 		else {
 			silence.echo("The silence settings have been updated by " + sys.name(src) + "!", -1);
 		}
+	},
+	amshield: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the auto-mute shield command (owner command).", channel);
+			return;
+		}
+		if (command[1] !== "0" && command[1] !== "1" && command[1] !== "2" && command[1] !== "3" && command[1] !== "4"){
+			commanderror(src, "Sorry, you must specify either 0, 1, 2, 3 or 4 for the auto mute shield.", channel);
+			return;
+		}
+		silence.options.auto_mute_shield = command[1];
+		sys.writeToFile("script_silenceoptions.json", JSON.stringify(silence.options));
+		if (global.auth !== undefined && silence.options.echo === "off") {
+			auth.echo("owner", "The auto-mute shield has been changed to " + command[1] + " and above by " + sys.name(src) + "!", -1);
+		}
+		else {
+			silence.echo("The auto-mute shield has been changed to " + command[1] + " and above by " + sys.name(src) + "!", -1);
+		}
+	},
+	ammax: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the auto-mute maximum command (owner command).", channel);
+			return;
+		}
+		var max = parseInt(command[1]);
+		if (isNaN(max)){
+			commanderror(src, "Sorry, you must specify a number to be the auto-mute maximum message count.", channel);
+			return;
+		}
+		silence.options.auto_mute_maximum = String(max);
+		sys.writeToFile("script_silenceoptions.json", JSON.stringify(silence.options));
+		if (global.auth !== undefined && silence.options.echo === "off") {
+			auth.echo("owner", "The auto-mute maximum message count has been changed to " + String(max) + " by " + sys.name(src) + "!", -1);
+		}
+		else {
+			silence.echo("The auto-mute maximum message count has been changed to " + String(max) + " by " + sys.name(src) + "!", -1);
+		}	
+	},
+	amrecover: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the auto-mute recover command (owner command).", channel);
+			return;
+		}
+		var decrement = parseInt(command[1]), time = parseInt(command[2]), unit = command[3];
+		if (isNaN(decrement) || isNaN(time) || nottimeunit(unit)){
+			commanderror(src, "The auto-mute recover command is used with the following arguments: decrement*time*unit, e.g. \"/amrecover 8*10*seconds\"", channel);
+			return;
+		}
+		silence.options.auto_mute_decrement = decrement;
+		silence.options.auto_mute_seconds = converttoseconds(unit, time);
+		sys.writeToFile("script_silenceoptions.json", JSON.stringify(silence.options));
+		var display = "The auto-mute recover has been set to " + decrement + " per " + converttime(silence.options.auto_mute_seconds*1000) + " by " + sys.name(src) + ".";
+		if (global.auth !== undefined && silence.options.echo === "off") {
+			auth.echo("owner", display, -1);
+		}
+		else {
+			silence.echo(display, -1);
+		}
+	},
+	ampunish: function (src, channel, command) {
+		if (sys.auth(src) < 3) {
+			commanderror(src, "Sorry, you do not have permission to use the auto-mute punishment command (owner command).", channel);
+			return;
+		}
+		var time = parseInt(command[1]), unit = command[2];
+		if (isNaN(time) || nottimeunit(unit)){
+			commanderror(src, "The auto-mute punishment command is used with the following arguments: time*unit, e.g. \"/ampunish 5*minutes\"", channel);
+			return;
+		}
+		silence.options.auto_mute_punish = converttoseconds(unit, time);
+		sys.writeToFile("script_silenceoptions.json", JSON.stringify(silence.options));
+		var display = "The auto-mute punishment has been set to " + converttime(silence.options.auto_mute_punish*1000) + " by " + sys.name(src) + ".";
+		if (global.auth !== undefined && silence.options.echo === "off") {
+			auth.echo("owner", display, -1);
+		}
+		else {
+			silence.echo(display, -1);
+		}	
 	}
 }
+
+/* Add Silence/Mute Checks to Commands Function */
+silence.silencecommands = function (check){
+	var silencedcmds = {};
+	silencedcmds = {
+		auth: ["echo"], tiers: ["techo"], scripts: ["secho"], disconnect: ["decho"], silence: ["silecho"], message: ["ghtml", "me", "imp", "reverse"], create: ["crecho"]
+	}
+	var i,j;
+	for (i in silencedcmds){
+		for (j in silencedcmds[i]){
+			prependcommand(i, silencedcmds[i][j], check.replace("sys.stopEvent()", "return"));
+		}
+	}
+};
 
 /* Silence Checks */
 var timed_silence_check = "\u000A"
@@ -582,16 +686,7 @@ var timed_silence_check = "\u000A"
 + "\t\t\t}\u000A"
 + "\t\t}";
 append("beforeChatMessage", timed_silence_check);
-prependcommand("auth", "echo", timed_silence_check.replace("sys.stopEvent()", "return"));
-prependcommand("tiers", "techo", timed_silence_check.replace("sys.stopEvent()", "return"));
-prependcommand("scripts", "secho", timed_silence_check.replace("sys.stopEvent()", "return"));
-prependcommand("disconnect", "decho", timed_silence_check.replace("sys.stopEvent()", "return"));
-prependcommand("silence", "silecho", timed_silence_check.replace("sys.stopEvent()", "return"));
-prependcommand("message", "mecho", timed_silence_check.replace("sys.stopEvent()", "return"));
-prependcommand("message", "ghtml", timed_silence_check.replace("sys.stopEvent()", "return"));
-prependcommand("message", "me", timed_silence_check.replace("sys.stopEvent()", "return"));
-prependcommand("message", "imp", timed_silence_check.replace("sys.stopEvent()", "return"));
-prependcommand("message", "reverse", timed_silence_check.replace("sys.stopEvent()", "return"));
+silence.silencecommands(timed_silence_check);
 
 /* Mute Checks */
 var timed_mute_check = "\u000A"
@@ -611,13 +706,61 @@ var timed_mute_check = "\u000A"
 + "\t\t\tsys.writeToFile('script_mutes.json',JSON.stringify(silence.mutes));\u000A"
 + "\t\t}";
 append("beforeChatMessage", timed_mute_check);
-prependcommand("auth", "echo", timed_mute_check.replace("sys.stopEvent()", "return"));
-prependcommand("tiers", "techo", timed_mute_check.replace("sys.stopEvent()", "return"));
-prependcommand("scripts", "secho", timed_mute_check.replace("sys.stopEvent()", "return"));
-prependcommand("disconnect", "decho", timed_mute_check.replace("sys.stopEvent()", "return"));
-prependcommand("silence", "silecho", timed_mute_check.replace("sys.stopEvent()", "return"));
-prependcommand("message", "mecho", timed_mute_check.replace("sys.stopEvent()", "return"));
-prependcommand("message", "ghtml", timed_mute_check.replace("sys.stopEvent()", "return"));
-prependcommand("message", "me", timed_mute_check.replace("sys.stopEvent()", "return"));
-prependcommand("message", "imp", timed_mute_check.replace("sys.stopEvent()", "return"));
-prependcommand("message", "reverse", timed_mute_check.replace("sys.stopEvent()", "return"));
+silence.silencecommands(timed_mute_check);
+
+/* Auto Mute Step */
+var auto_mute_step = "\u000A"
++ "\t\tif (silence.options.auto_mute_shield !== '0'){\u000A"
++ "\t\t\tvar i;\u000A"
++ "\t\t\tfor (i in silence.auto_mute_players){\u000A"
++ "\t\t\t\tplayersonline[silence.auto_mute_players[i]].auto_mute_timer++;\u000A"
++ "\t\t\t\tif (playersonline[silence.auto_mute_players[i]].auto_mute_timer == silence.options.auto_mute_seconds){\u000A"
++ "\t\t\t\t\tplayersonline[silence.auto_mute_players[i]].auto_mute_count -= Number(silence.options.auto_mute_decrement);\u000A"
++ "\t\t\t\t\tplayersonline[silence.auto_mute_players[i]].auto_mute_timer = 0;\u000A"
++ "\t\t\t\t\tif (playersonline[silence.auto_mute_players[i]].auto_mute_count <= 0){\u000A"
++ "\t\t\t\t\t\tplayersonline[silence.auto_mute_players[i]].auto_mute_count = 0;\u000A"
++ "\t\t\t\t\t\tsilence.auto_mute_players.splice(i, 1);\u000A"
++ "\t\t\t\t\t}\u000A"
++ "\t\t\t\t}\u000A"
++ "\t\t\t}\u000A"
++ "\t\t}";
+append("step", auto_mute_step);
+
+/* Auto Mute LogIn */
+var auto_mute_login = "\u000A"
++ "\t\tplayersonline[src].auto_mute_count = 0;\u000A"
++ "\t\tplayersonline[src].auto_mute_timer = 0;";
+append("afterLogIn", auto_mute_login);
+
+/* Auto Mute Chat Message */
+var auto_mute_chatmessage = "\u000A"
++ "\t\tvar srcname = sys.name(src), lowerSrcName = sys.name(src).toLowerCase(), startdate = new Date();\u000A"
++ "\t\tif (playersonline[src] !== undefined){\u000A"
++ "\t\t\tif (silence.auto_mute_players.indexOf(src) === -1){\u000A"
++ "\t\t\t\tsilence.auto_mute_players.push(src);\u000A"
++ "\t\t\t}\u000A"
++ "\t\t\tplayersonline[src].auto_mute_count++;\u000A"
++ "\t\t\tif (playersonline[src].auto_mute_count > silence.options.auto_mute_maximum && sys.auth(src) < Number(silence.options.auto_mute_shield)){\u000A"
++ "\t\t\t\tif (silence.mutes[lowerSrcName] === undefined){\u000A"
++ "\t\t\t\t\tif (global.auth !== undefined && silence.options.echo === 'off') {\u000A"
++ "\t\t\t\t\t\tauth.echo('server', srcname + ' has been muted by the server for ' + converttime(Number(silence.options.auto_mute_punish)*1000) + '.<br/>Reason: Flooding');\u000A"
++ "\t\t\t\t\t}\u000A"
++ "\t\t\t\t\telse {\u000A"
++ "\t\t\t\t\t\tsilence.echo(srcname + ' has been muted by the server for ' + converttime(Number(silence.options.auto_mute_punish)*1000) + '.<br/>Reason: Flooding');\u000A"
++ "\t\t\t\t\t}\u000A"
++ "\t\t\t\t\tsilence.mutes[lowerSrcName] = {};\u000A"
++ "\t\t\t\t\tsilence.mutes[lowerSrcName] = {\u000A"
++ "\t\t\t\t\t\tip : sys.dbIp(srcname),\u000A"
++ "\t\t\t\t\t\tmuter : '~~Server~~',\u000A"
++ "\t\t\t\t\t\treason : 'Flooding',\u000A"
++ "\t\t\t\t\t\tstartdate : String(startdate),\u000A"
++ "\t\t\t\t\t\tduration : Number(silence.options.auto_mute_punish),\u000A"
++ "\t\t\t\t\t\tenddate: String(new Date(Number(startdate) + Number(silence.options.auto_mute_punish)*1000))\u000A"
++ "\t\t\t\t\t}\u000A"
++ "\t\t\t\t\tsilence.mutedips[sys.dbIp(srcname)] = true;\u000A"
++ "\t\t\t\t\tsys.writeToFile('script_mutes.json', JSON.stringify(silence.mutes));\u000A"
++ "\t\t\t\t}\u000A"
++ "\t\t\t\tsys.stopEvent();\u000A"
++ "\t\t\t}\u000A"
++ "\t\t}\u000A";
+prepend("beforeChatMessage", auto_mute_chatmessage);

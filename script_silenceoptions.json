@@ -1,4 +1,9 @@
 {
 	"autoupdatesettings": "1",
-	"echo": "off"
+	"echo": "off",
+	"auto_mute_shield": "1",
+	"auto_mute_maximum": "8",
+	"auto_mute_decrement": "8",
+	"auto_mute_seconds": "10",
+	"auto_mute_punish": "300"
 }
