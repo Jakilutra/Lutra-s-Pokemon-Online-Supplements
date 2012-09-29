@@ -662,7 +662,7 @@ silence.commands = {
 silence.silencecommands = function (check){
 	var silencedcmds = {};
 	silencedcmds = {
-		auth: ["echo"], tiers: ["techo"], scripts: ["secho"], disconnect: ["decho"], silence: ["silecho"], message: ["ghtml", "me", "imp", "reverse"], create: ["crecho"]
+		auth: ["echo"], tiers: ["techo"], scripts: ["secho"], disconnect: ["decho"], silence: ["silecho"], message: ["ghtml", "me", "attack", "imp", "reverse"], create: ["crecho"]
 	}
 	var i,j;
 	for (i in silencedcmds){

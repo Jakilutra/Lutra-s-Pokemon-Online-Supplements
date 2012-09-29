@@ -69,6 +69,7 @@ message.commands = {
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/msettings</font></b>: displays the message settings. </td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/im</font><font color='darkred'> to1*to2...*toN</font><font color='darkblue'>:message</font></b>: messages <b>to1,to2..toN</b> (players from 1 to N) through the server with <b>message</b>.</td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/me</font><font color='darkred'> message</font></b>: sends <font color='" +  color + "'><b><i>*** " + srcname +  " message</i></b></font> into the main chat of the channel you use this in. <b>message</b> is any text.</td></tr>"
+		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/attack</font><font color='darkred'> target</font></b>: sends <b><font color='" +  color + "'>" + srcname +  "</font><font style='font-family:lucida console' color='red'> has used <font color='goldenrod'> [random move]</font> on target!</font></b> into the main chat of the channel you use this in. <b>target</b> is any text.</td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/imp</font><font color='darkred'> name</font><font color='darkblue'>:message</font></b>: sends <b><font color='" +  color + "'>name:</font> message <small><i>impersonation by " + srcname + "</i></small></b> into the main chat of the channel you use this in. <b>name</b> is any text with at most 20 characters. <b>message</b> is any text.</td></tr>"
 		+ "<tr><td>" + usymbol + "<b><font color='darkgreen'>/reverse</font><font color='darkred'> message</font></b>: sends <b>message</b> in reverse into the main chat of the channel you use this in.</td></tr>";
 		commanddisplay(src, "Message Commands", display, channel);
@@ -79,12 +80,21 @@ message.commands = {
 		sys.sendHtmlAll("<font color =" + color + "><timestamp /><b><i>*** " + sys.name(src) + "</i></b></font> " + escapehtml(message).fontcolor(color).italics(), channel);
 	},
 	attack: function(src,channel,command){
+		if (command[1] === "undefined"){
+			command[1] = "the server";
+		}
 		var srcname = sys.name(src);
-		var message="<timestamp/><font color=\""+namecolor(src)+"\">"+srcname+"</font>"; //<font color="namecolor(src)">srcname</font>
-		message+=" has used <u><b>"+sys.move(Math.floor((Math.random()*599)+1))+"</b></u> on "; //the move name itself
-		message+="<font color=\""+escapehtml(command[1])+"\">"+command[1]+"</font>"; //<font color="escapehtml(command)">command</font>
+		var message="<timestamp/><b><font color=\""+namecolor(src)+"\">"+srcname+"</font>"; //<font color="namecolor(src)"><b>srcname</b></font>
+		message+="<font style='font-family:lucida console' color='red'> has used <u><font color='goldenrod'>"+sys.move(Math.floor((Math.random()*559)+1))+"</font></u> on </font>"; //the move name itself
+		var trgt = sys.id(command[1]);
+		if (trgt !== undefined){
+			message+="<font color=\""+namecolor(trgt)+"\">"+command[1]+"</font>!</b>"; //<font color="namecolor(trgt)">trgtname!</font>
+		}
+		else {
+			message+= command[1] + "!</b>"; //trgtname!</font>
+		}
 		sys.sendHtmlAll(message, channel);
-	}
+	},
 	ghtml: function (src, channel, command) {
 		if (sys.auth(src) < 1){
 			commanderror(src, "Sorry, you do not have permission to use the global html command (mod command).", channel);
