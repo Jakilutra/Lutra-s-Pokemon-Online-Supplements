@@ -39,6 +39,7 @@ if (create.options !== undefined){
 	create.updatejsons();
 }
 
+/* Create Commands */
 create.commands = {
 	createcommands: function (src, channel, command) {
 		var osymbol = "", asymbol = "", msymbol = "", usymbol = "", srcname = sys.name(src), color = namecolor(src);

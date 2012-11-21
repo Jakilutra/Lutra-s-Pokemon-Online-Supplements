@@ -161,7 +161,7 @@
 	/* Connect Status Function */	
 	connectstatus = function (name){
 		var id = sys.id(name), index,
-			connectstatus = id === undefined ? " <font color='red'><b><small>Offline</small></b></font> " : " <font color='green'><b><small>Online</small></b></font> ",
+			connectstatus = id === undefined ? " <b><small><font color='red'>Offline</font> Last Online: " + sys.dbLastOn(name) + "</small></b> ": " <b><small><font color='green'>Online</font> Session ID: " + id + "</small></b> ",
 			color = id == undefined ? "none" : namecolor(id);
 		if (sys.battling(id)){
 			index = sys.dbAuth(name) + 8;
@@ -172,8 +172,7 @@
 		else {
 			index = sys.dbAuth(name) + 4;
 		}
-		id = id != undefined ? id : "N/A";
-		return authimage(index) + " <b><font color='" + color + "'>" + name + "</b>" + connectstatus + "<b><small>Session ID: " + id + "</small></b> ";
+		return authimage(index) + " <b><font color='" + color + "'>" + name + "</b>" + connectstatus;
 	}
 
 	/* Server Icon Function */
@@ -496,6 +495,8 @@
 	attemptToSpectateBattle: function (src, battler1, battler2) {},
 	beforeSpectateBattle: function (src, battler1, battler2) {},
 	afterSpectateBattle: function (src, battler1, battler2) {},
+	beforeBattleMessage: function (src, message){},
+	afterBattleMessage: function (src, message){},
 	beforeBattleEnded: function (winner, loser, result, battle) {},
 	afterBattleEnded: function (winner, loser, result, battle) {}
 })

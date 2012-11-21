@@ -70,7 +70,7 @@ if (tiers.options !== undefined){
 
 /* Tiers Announcement Function */
 tiers.echo = function (text, channel) {
-	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 royalblue, stop:0.5 dodgerblue); color:white;'><tr><td><center><b><big>" + text + "</big></b><small> - Tiers Announcement </small></center></td></tr></table>";
+	var display = "<timestamp/><table width='100%' style='background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0.1 dodgerblue, stop:0.5 royalblue); color:white;'><tr><td><center><b><big>" + text + "</big></b><small> - Tiers Announcement </small></center></td></tr></table>";
 	if (channel > -1) {
 		sys.sendHtmlAll(display, channel);
 	}

@@ -1,12 +1,12 @@
 {
     "script_name": "Lutra's Server Script",
-    "version_name": "Aipom learns Screech! Special!",
-    "version_number": "A.25S",
-    "version_date": "29th September 2012",
+    "version_name": "Aipom learns Agility!",
+    "version_number": "A.29",
+    "version_date": "21st November 2012",
     "script_repo_link": "https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Supplements",
     "script_info_link": "https://github.com/Jakilutra/Lutra-s-Pokemon-Online-Supplements/wiki/PO-Server-Scripts",
     "major_contributors": ["Lutra", "Swimming95"],
     "minor_contributors": ["Intel_iX", "TheUnknownOne"],
     "specialthanks": ["coyotte508", "Lamperi", "Mystra", "NeO", "Juno", "nesan", "kupo", "SkarmPiss", "GaryTheGengar", "raygun"],
-    "latest": "Fixed some things with silences. Added /amshield, /ammax, /amrecover, /ampunish and auto-muting. Also added /attack."
+    "latest": "Allowed mutes, silences and bans to be overwritten; and non-existing members be able to be unmuted and unbanned. Improved connect status (added Last Online, removed session ID N/A). Added /ladderscommands. Small fix on /attack."
 }

@@ -81,17 +81,17 @@ message.commands = {
 	},
 	attack: function(src,channel,command){
 		if (command[1] === "undefined"){
-			command[1] = "the server";
+			command[1] = "The Server";
 		}
 		var srcname = sys.name(src);
-		var message="<timestamp/><b><font color=\""+namecolor(src)+"\">"+srcname+"</font>"; //<font color="namecolor(src)"><b>srcname</b></font>
-		message+="<font style='font-family:lucida console' color='red'> has used <u><font color='goldenrod'>"+sys.move(Math.floor((Math.random()*559)+1))+"</font></u> on </font>"; //the move name itself
+		var message="<font color=\""+namecolor(src)+"\"><timestamp/><b>"+srcname+"</b></font>"; //<font color="namecolor(src)"><b>srcname</b></font>
+		message+="<b><font style='font-family:lucida console' color='red'> has used <u><font color='goldenrod'>"+sys.move(Math.floor((Math.random()*559)+1))+"</font></u> on </font></b>"; //the move name itself
 		var trgt = sys.id(command[1]);
 		if (trgt !== undefined){
-			message+="<font color=\""+namecolor(trgt)+"\">"+command[1]+"</font>!</b>"; //<font color="namecolor(trgt)">trgtname!</font>
+			message+="<b><font color=\""+namecolor(trgt)+"\">"+command[1]+"</font>!</b>"; //<font color="namecolor(trgt)">trgtname!</font>
 		}
 		else {
-			message+= command[1] + "!</b>"; //trgtname!</font>
+			message+= "<b>" + command[1] + "!</b>"; //trgtname!</font>
 		}
 		sys.sendHtmlAll(message, channel);
 	},

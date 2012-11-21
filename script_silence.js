@@ -149,16 +149,6 @@ silence.commands = {
 			commanderror(src, "Sorry, " + command[1] + " could not be found in the member database.", channel);
 			return;
 		}
-		if (silence.mutes[trgtname] !== undefined){
-			if (Number(new Date(silence.mutes[trgtname].enddate)) < Number(new Date())) {
-				delete silence.mutes[trgtname];
-				sys.writeToFile('script_mutes.json', JSON.stringify(silence.mutes));
-			}
-		}
-		if (silence.mutes[trgtname] !== undefined){
-			commanderror(src, "Sorry, " + members[trgtname] + " is undergoing a current mute.", channel);
-			return;
-		}
 		if (sys.ip(src) === sys.dbIp(trgtname)){
 			commanderror(src, "Sorry, you are unable to mute yourself.", channel);
 			return;
@@ -190,11 +180,8 @@ silence.commands = {
 			commanderror(src, "Sorry, you do not have permission to use the unmute command (mod command).", channel);
 			return;
 		}
-		var srcname = sys.name(src), trgtname = command[1].toLowerCase();
-		if (members[trgtname] === undefined){
-			commanderror(src, "Sorry, " + command[1] + " could not be found in the member database.", channel);
-			return;
-		}
+		var srcname = sys.name(src), trgtname = command[1].toLowerCase(), 
+		displayed_name = members[trgtname] === undefined ? command[1] : members[trgtname];
 		if (silence.mutes[trgtname] !== undefined){
 			if (Number(new Date(silence.mutes[trgtname].enddate)) < Number(new Date())) {
 				delete silence.mutes[trgtname];
@@ -202,7 +189,7 @@ silence.commands = {
 			}
 		}
 		if (silence.mutes[trgtname] === undefined){
-			commanderror(src, "Sorry, " + members[trgtname] + " is not currently muted.", channel);
+			commanderror(src, "Sorry, " + displayed_name + " is not currently muted.", channel);
 			return;
 		}
 		if (silence.mutes[trgtname].ip === sys.ip(src) || trgtname === sys.name(src).toLowerCase()){
@@ -226,8 +213,8 @@ silence.commands = {
 			command.splice(0,2);
 			reason = command.join("*");
 		}
-		var reasonline = reason === undefined ? "" : "<br/>Reason: " + reason, 
-		display = members[trgtname] + " has been unmuted by " + srcname + "!" + reasonline;
+		var reasonline = reason === undefined ? "" : "<br/>Reason: " + reason,
+		display = displayed_name + " has been unmuted by " + srcname + "!" + reasonline;
 		if (global.auth !== undefined && silence.options.echo === "off") {
 			auth.echo("mod", display);
 		}
@@ -296,10 +283,6 @@ silence.commands = {
 			silence.silences = {}; 
 			sys.writeToFile('script_silences.json', JSON.stringify(silence.silences)); 
 		} 
-		if (silence.silences.level === 1){
-			commanderror(src, "Sorry, you cannot use silence because silence is already in effect.", channel);
-			return;
-		}
 		if (silence.silences.level === 2 && sys.auth(src) < 2){
 			commanderror(src, "Sorry, you cannot use silence because super silence is in effect.", channel);
 			return;
@@ -335,10 +318,6 @@ silence.commands = {
 			silence.silences = {}; 
 			sys.writeToFile('script_silences.json', JSON.stringify(silence.silences)); 
 		} 
-		if (silence.silences.level === 2){
-			commanderror(src, "Sorry, you cannot use super silence because super silence is already in effect.", channel);
-			return;
-		}
 		if (silence.silences.level === 3 && sys.auth(src) < 3){
 			commanderror(src, "Sorry, you cannot use super silence because mega silence is in effect.", channel);
 			return;
@@ -370,10 +349,6 @@ silence.commands = {
 			silence.silences = {}; 
 			sys.writeToFile('script_silences.json', JSON.stringify(silence.silences)); 
 		} 
-		if (silence.silences.level === 3){
-			commanderror(src, "Sorry, you cannot use super silence because mega silence is already in effect.", channel);
-			return;
-		}
 		var reason;
 		if (command.length > 2){
 			var time = parseInt(command[1]), timeunit = command[2].toLowerCase();
@@ -421,7 +396,7 @@ silence.commands = {
 			reason = command.join("*");
 		}
 		var reasonline = reason === "undefined" ? "" : "<br/>Reason: " + reason, 
-		display = "The server has been unsilenced by " + sys.name(src) + "!" + reasonline;
+			display = "The server has been unsilenced by " + sys.name(src) + "!" + reasonline;
 		if (global.auth !== undefined && silence.options.echo === "off") {
 			auth.echo(["mod", "admin", "owner"][level-1], display);
 		}
@@ -465,16 +440,6 @@ silence.commands = {
 		var trgtname = command[1].toLowerCase();
 		if (members[trgtname] === undefined){
 			commanderror(src, "Sorry, " + command[1] + " could not be found in the member database.", channel);
-			return;
-		}
-		if (silence.mutes[trgtname] !== undefined){
-			if (Number(new Date(silence.mutes[trgtname].enddate)) < Number(new Date())) {
-				delete silence.mutes[trgtname];
-				sys.writeToFile('script_mutes.json', JSON.stringify(silence.mutes));
-			}
-		}
-		if (silence.mutes[trgtname] !== undefined){
-			commanderror(src, "Sorry, " + members[trgtname] + " is undergoing a current mute.", channel);
 			return;
 		}
 		var reason;

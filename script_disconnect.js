@@ -191,16 +191,6 @@ disconnect.commands = {
 			commanderror(src, "Sorry, " + command[1] + " could not be found in the member database.", channel);
 			return;
 		}
-		if (disconnect.bans[trgtname] !== undefined){
-			if (Number(new Date(disconnect.bans[trgtname].enddate)) < Number(new Date())) {
-				delete disconnect.bans[trgtname];
-				sys.writeToFile('script_bans.json', JSON.stringify(disconnect.bans));
-			}
-		}
-		if (disconnect.bans[trgtname] !== undefined || sys.banList().indexOf(trgtname) !== -1){
-			commanderror(src, "Sorry, " + members[trgtname] + " is undergoing a current ban.", channel);
-			return;
-		}
 		if (sys.ip(src) === sys.dbIp(trgtname)){
 			commanderror(src, "Sorry, you are unable to ban yourself.", channel);
 			return;
@@ -208,6 +198,9 @@ disconnect.commands = {
 		if (sys.auth(src) <= sys.maxAuth(sys.dbIp(trgtname))){
 			commanderror(src, "Sorry, you are unable to ban " + members[trgtname] + " because their maximum auth level is not below your current.", channel);
 			return;
+		}
+		if (sys.banList().indexOf(trgtname) !== -1){
+			sys.unban(trgtname);
 		}
 		var reason;
 		if (command.length > 3){
@@ -232,11 +225,8 @@ disconnect.commands = {
 			commanderror(src, "Sorry, you do not have permission to use the unban command (admin command).", channel);
 			return;
 		}
-		var srcname = sys.name(src), trgtname = command[1].toLowerCase(), banlist = sys.banList();
-		if (members[trgtname] === undefined){
-			commanderror(src, "Sorry, " + command[1] + " could not be found in the member database.", channel);
-			return;
-		}
+		var srcname = sys.name(src), trgtname = command[1].toLowerCase(), banlist = sys.banList(),
+		displayed_name = members[trgtname] === undefined ? command[1] : members[trgtname];
 		if (disconnect.bans[trgtname] !== undefined){
 			if (Number(new Date(disconnect.bans[trgtname].enddate)) < Number(new Date())) {
 				delete disconnect.bans[trgtname];
@@ -244,7 +234,7 @@ disconnect.commands = {
 			}
 		}
 		if (disconnect.bans[trgtname] === undefined && banlist.indexOf(trgtname) === -1){
-			commanderror(src, "Sorry, " + members[trgtname] + " is not currently banned.", channel);
+			commanderror(src, "Sorry, " + displayed_name + " is not currently banned.", channel);
 			return;
 		}
 		if (banlist.indexOf(trgtname) !== -1){
@@ -268,7 +258,7 @@ disconnect.commands = {
 			reason = command.join("*");
 		}
 		var reasonline = reason === undefined ? "" : "<br/>Reason: " + reason, 
-		display = members[trgtname] + " has been unbanned from the server by " + srcname + "!" + reasonline;
+		display = displayed_name + " has been unbanned from the server by " + srcname + "!" + reasonline;
 		if (global.auth !== undefined && disconnect.options.echo === "off") {
 			auth.echo("admin", display);
 		}
@@ -398,15 +388,8 @@ disconnect.commands = {
 			commanderror(src, "Sorry, " + command[1] + " could not be found in the member database.", channel);
 			return;
 		}
-		if (disconnect.bans[trgtname] !== undefined){
-			if (Number(new Date(disconnect.bans[trgtname].enddate)) < Number(new Date())) {
-				delete disconnect.bans[trgtname];
-				sys.writeToFile('script_bans.json', JSON.stringify(disconnect.bans));
-			}
-		}
-		if (disconnect.bans[trgtname] !== undefined || sys.banList().indexOf(trgtname) !== -1){
-			commanderror(src, "Sorry, " + members[trgtname] + " is undergoing a current ban.", channel);
-			return;
+		if (sys.banList().indexOf(trgtname) !== -1){
+			sys.unban(trgtname);
 		}
 		var reason;
 		if (command.length > 3){
